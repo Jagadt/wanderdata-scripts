@@ -33,6 +33,7 @@ sensors_plots <- function(variables) {
     df$date <- date(df$posixct)
     df$hour <- hour(df$posixct)
     df <- df[df$date >= args[1],]
+    present.date <- args[2]
     
     first.date <- head(df, n=1)$date
     last.date <- tail(df, n=1)$date
@@ -44,7 +45,7 @@ sensors_plots <- function(variables) {
     
     if (sensor.name == 'barometer') {
       unit <- 'hPa'
-      unit.label <- 'Pressure'
+      unit.label <- 'Atmospheric pressure'
     } else if (sensor.name == 'lightmeter') {
       unit <- 'lx'
       unit.label <- 'Light intensity'
@@ -53,8 +54,9 @@ sensors_plots <- function(variables) {
     }
     
     p <- ggplot() +
-      geom_smooth(data=summarized.values, aes(x = posixct, y = n), linetype = 1, method = "loess", span = 0.35, color = '#6d7d03') +
+      geom_smooth(data=subset(summarized.values, posixct <= present.date), aes(x = posixct, y = n), linetype = 2, method = "lm", span = 1.0, color = '#6d7d03') +
       geom_point(data=summarized.values ,aes(x = posixct,y=n), alpha = 0.3) +
+      geom_smooth(data=subset(summarized.values, posixct >= present.date), aes(x = posixct, y = n), linetype = 1, method = "loess", span = 0.1, color = '#6d7d03') +
       scale_x_datetime(date_labels = "%Y-%m-%d", date_breaks="1 day") +
       labs(title=sprintf("%s value (%s) according to my phone", unit.label, unit),
            subtitle = sprintf("From %s until %s", first.date, last.date)) +
