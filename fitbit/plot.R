@@ -20,6 +20,7 @@ create_activity_level_plots <- function(variables) {
     print(f)
     activity.df <- read.csv(sprintf("~/Development/wanderdata-scripts/fitbit/data/%s.csv", f))
     print(skim(activity.df))
+    print(sum(activity.df$value))
     activity.df$level <- f
     df <- rbind(df, activity.df)
   }
@@ -128,6 +129,42 @@ create_activity_plots <- function() {
     ggsave(sprintf("%s%s_%s_%s_%s.png", plots_dir, activity.name, 'plot', first_date, last_date), plot = p, 
            width = 12, height = 6.82, units = 'in')
   }
+}
+
+create_distance_steps_plots <- function() {
+  print("create_distance_steps_plots")
+  # produce activity plots
+  distance.df <- read.csv("~/Development/wanderdata-scripts/fitbit/data/distance.csv")
+  steps.df <- read.csv("~/Development/wanderdata-scripts/fitbit/data/steps.csv")
+  distance.df$metric <- "distance"
+  steps.df$metric <- "steps"
+  df <- rbind(distance.df, steps.df)
+  #df <- newsongs.hour.ratio <- merge(x = distance.df, y = steps.df, by = "dateTime",suffixes = c('.distance', '.steps'), all = TRUE)
+  
+  first_date <- head(df, n=1)$dateTime
+  last_date <- tail(df, n=1)$dateTime
+  df$dateTime <- as.Date(df$dateTime)
+  
+  
+  p <- ggplot() +
+    geom_line(data=subset(df,dateTime<=as.character(first_date)),aes(x=dateTime,y=value, color = metric)) +
+    geom_point(data=subset(df,dateTime<=as.character(first_date)),aes(x=dateTime,y=value)) +
+    geom_line(data=subset(df,dateTime>=as.character(first_date)),aes(x=dateTime,y=value, color = metric)) +
+    geom_point(data=subset(df,dateTime>=as.character(first_date)),aes(x=dateTime,y=value)) +
+    scale_y_continuous(sec.axis= sec_axis(~./2, name="Steps"), trans = "log10") +
+    scale_x_date(date_labels = "%Y-%m-%d", date_breaks="1 day") +
+    bbc_style() +
+    theme(axis.title = element_text(size = 18), 
+          plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"),
+          axis.text.x = element_text(angle = 45, hjust = 1)) +
+    labs(title="My Fitbit's distance (km) and steps values (in log scale)",
+         subtitle = sprintf("From %s until %s", first_date, last_date)) +
+    ylab("Distance") +
+    xlab("Value")
+  
+  ggsave(sprintf("%s%s_%s_%s.png", plots_dir, "distance_steps_plot", first_date, last_date), plot = p, 
+          width = 12, height = 6.82, units = 'in')
+
 }
 
 create_activity_level_plots()
