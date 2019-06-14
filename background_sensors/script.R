@@ -5,6 +5,7 @@ if (length(args)==0) {
 } else if (length(args)==1) {
   # starting day
   print(args[1])
+  print(args[2])
 }
 
 setwd("~/Development/wanderdata-scripts/background_sensors")
@@ -15,11 +16,13 @@ require(scales)
 require(dplyr)
 require(ggplot2)
 require(bbplot)
+require(skimr)
 
 data_dir <- 'data/'
 plots_dir <- 'plots/'
 
 sensors_plots <- function(variables) {
+  print("Sensors plots")
   for (f in list.files(data_dir)) {
     unit <- ''
     unit.label <- ''
@@ -34,6 +37,8 @@ sensors_plots <- function(variables) {
     df$hour <- hour(df$posixct)
     df <- df[df$date >= args[1],]
     present.date <- args[2]
+    
+    print(skim(df))
     
     first.date <- head(df, n=1)$date
     last.date <- tail(df, n=1)$date
@@ -73,6 +78,7 @@ sensors_plots <- function(variables) {
 }
 
 daily_lx_plot <- function() {
+  print("Daily lx plot")
   df <- read.csv(sprintf("%s/lightmeter_background.csv", data_dir), header = FALSE, stringsAsFactors = FALSE)
   colnames(df) <- c('ts', 'value')
   
@@ -88,6 +94,8 @@ daily_lx_plot <- function() {
     select(value, hour) %>%
     group_by(hour) %>%
     mutate(n = mean(value))
+  
+  print(skim(df))
   
   p <- ggplot() +
     geom_line(data=median.hourly.value, aes(x=hour, y=n), linetype=1, color='#6d7d03') +
