@@ -1,12 +1,14 @@
+import argparse
 import fitbit
 import common
-import argparse
+import datetime
 import os
 import pandas as pd
+import requests
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--base_date', '-bd', help="Starting date", type=str,
-                    default='2019-05-28')
+                    default='2019-06-06')
 parser.add_argument('--access_token', '-at', help="Fitbit Access Token", type=str)
 parser.add_argument('--refresh_token', '-rt', help="Fitbit Refresh Token", type=str)
 args = parser.parse_args()
@@ -26,6 +28,8 @@ result = client.time_series(resource='foods/log/water', base_date=base_date,
 df = pd.DataFrame(result['foods-log-water'])
 common.append_to_csv('data/water', df)
 
+# get sleep data
+common.append_to_csv('data/sleep', common.get_sleep_data(client, base_date))
 
 # activities to retrieve
 activities = ['steps', 'calories', 'distance', 'minutesSedentary',
