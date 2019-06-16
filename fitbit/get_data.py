@@ -34,7 +34,7 @@ common.append_to_csv('data/sleep', common.get_sleep_data(client, base_date))
 # activities to retrieve
 activities = ['steps', 'calories', 'distance', 'minutesSedentary',
               'minutesLightlyActive', 'minutesFairlyActive',
-              'minutesVeryActive', 'floors', 'elevation']
+              'minutesVeryActive', 'elevation']
 
 # this loop gets the activities data, convert it to DataFrame and saves it to csv
 for act in activities:

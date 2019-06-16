@@ -1,0 +1,76 @@
+[1] "minutesSedentary"
+Skim summary statistics
+ n obs: 10 
+ n variables: 2 
+
+── Variable type:factor ────────────────────────────────────────────────────────
+ variable missing complete  n n_unique                     top_counts ordered
+ dateTime       0       10 10       10 201: 1, 201: 1, 201: 1, 201: 1   FALSE
+
+── Variable type:integer ───────────────────────────────────────────────────────
+ variable missing complete  n  mean    sd  p0 p25 p50   p75 p100     hist
+    value       0       10 10 709.1 82.36 607 632 713 773.5  814 ▇▁▅▁▁▂▅▅
+[1] 7091
+[1] "minutesLightlyActive"
+Skim summary statistics
+ n obs: 10 
+ n variables: 2 
+
+── Variable type:factor ────────────────────────────────────────────────────────
+ variable missing complete  n n_unique                     top_counts ordered
+ dateTime       0       10 10       10 201: 1, 201: 1, 201: 1, 201: 1   FALSE
+
+── Variable type:integer ───────────────────────────────────────────────────────
+ variable missing complete  n  mean    sd  p0 p25   p50   p75 p100     hist
+    value       0       10 10 191.5 48.96 116 160 190.5 226.5  266 ▃▃▃▇▇▁▇▃
+[1] 1915
+[1] "minutesFairlyActive"
+Skim summary statistics
+ n obs: 10 
+ n variables: 2 
+
+── Variable type:factor ────────────────────────────────────────────────────────
+ variable missing complete  n n_unique                     top_counts ordered
+ dateTime       0       10 10       10 201: 1, 201: 1, 201: 1, 201: 1   FALSE
+
+── Variable type:integer ───────────────────────────────────────────────────────
+ variable missing complete  n mean    sd p0 p25  p50 p75 p100     hist
+    value       0       10 10 32.7 16.09 18  21 26.5  41   69 ▇▃▁▃▂▁▁▂
+[1] 327
+[1] "minutesVeryActive"
+Skim summary statistics
+ n obs: 10 
+ n variables: 2 
+
+── Variable type:factor ────────────────────────────────────────────────────────
+ variable missing complete  n n_unique                     top_counts ordered
+ dateTime       0       10 10       10 201: 1, 201: 1, 201: 1, 201: 1   FALSE
+
+── Variable type:integer ───────────────────────────────────────────────────────
+ variable missing complete  n mean    sd p0 p25  p50 p75 p100     hist
+    value       0       10 10 21.8 28.11  8  10 13.5  17  101 ▇▁▁▁▁▁▁▁
+[1] 218
+[1] "distance.csv"
+Skim summary statistics
+ n obs: 10 
+ n variables: 2 
+
+── Variable type:Date ──────────────────────────────────────────────────────────
+ variable missing complete  n        min        max     median n_unique
+ dateTime       0       10 10 2019-06-06 2019-06-15 2019-06-10       10
+
+── Variable type:numeric ───────────────────────────────────────────────────────
+ variable missing complete  n mean   sd   p0  p25  p50  p75 p100     hist
+    value       0       10 10 5.11 1.82 2.93 3.52 5.09 6.71 7.63 ▇▅▁▁▁▅▅▂
+[1] "elevation.csv"
+Skim summary statistics
+ n obs: 10 
+ n variables: 2 
+
+── Variable type:Date ──────────────────────────────────────────────────────────
+ variable missing complete  n        min        max     median n_unique
+ dateTime       0       10 10 2019-06-06 2019-06-15 2019-06-10       10
+
+── Variable type:integer ───────────────────────────────────────────────────────
+ variable missing complete  n mean    sd p0 p25 p50 p75 p100     hist
+    value       0       10 10 95.1 83.62 18  48  71 106  295 ▇▃▃▁▂▁▁▂

@@ -35,14 +35,17 @@ create_activity_level_plots <- function(variables) {
           plot.title = element_text(family = 'Helvetica', size = 28, face = "bold", color = "#222222"),
           plot.subtitle = element_text(family = 'Helvetica', size = 22, margin = ggplot2::margin(9, 0, 9, 0)),
           axis.text = element_text(family = 'Helvetica', size = 18, color = "#222222"),
-          axis.title.x = element_text(family = 'Helvetica', size = 14, color = "#222222"),
-          axis.title.y = element_text(family = 'Helvetica', size = 14, color = "#222222")) +
+          axis.title.x = element_text(family = 'Helvetica', size = 18, color = "#222222"),
+          axis.title.y = element_text(family = 'Helvetica', size = 18, color = "#222222"),
+          legend.text=element_text(size=14),
+          legend.position = "top", legend.text.align = 0, legend.background = ggplot2::element_blank(),
+          legend.title = ggplot2::element_blank(), legend.key = ggplot2::element_blank()) +
     labs(title="My Fitbit's activity values boxplot",
          subtitle = sprintf("From %s until %s", first_date, last_date)) +
     xlab("Level") + ylab("Minutes")
   
-  ggsave(sprintf("%s%s_%s_%s.png", plots_dir,'activity_levels_boxplot', first_date, last_date), plot = p, 
-         width = 14, height = 8, units = 'in')
+  ggsave(sprintf("%s%s_%s_%s.jpg", plots_dir,'activity_levels_boxplot', first_date, last_date), plot = p, 
+         width = 13, height = 7, units = 'in')
   
   p <- ggplot() +
     geom_line(data=subset(df,dateTime<=as.character(first_date)),aes(x=dateTime,y=value, color=level),
@@ -59,8 +62,8 @@ create_activity_level_plots <- function(variables) {
     xlab('Date') + ylab('Value') +
     theme(plot.margin = unit(c(1.0,1.5,1.0,0.5), "cm")) 
   
-  ggsave(sprintf("%s%s_%s_%s.png", plots_dir,'activity_levels_values', first_date, last_date), plot = p, 
-         width = 12, height = 6.82, units = 'in')
+  ggsave(sprintf("%s%s_%s_%s.jpg", plots_dir,'activity_levels_values', first_date, last_date), plot = p, 
+         width = 10, height = 5, units = 'in')
 }
 
 # this function produces the plots of the different activities
@@ -105,8 +108,8 @@ create_activity_plots <- function() {
            subtitle = sprintf("From %s until %s", first_date, last_date)) +
       xlab("") + ylab("Minutes")
     
-    ggsave(sprintf("%s%s_%s_%s_%s.png", plots_dir, activity.name, 'boxplot', first_date, last_date), plot = p,
-           width = 12, height = 6.82, units = 'in')
+    ggsave(sprintf("%s%s_%s_%s_%s.jpg", plots_dir, activity.name, 'boxplot', first_date, last_date), plot = p,
+           width = 10, height = 5, units = 'in')
 
 
     
@@ -126,8 +129,8 @@ create_activity_plots <- function() {
       theme(plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm")) +
       bbc_style()
     
-    ggsave(sprintf("%s%s_%s_%s_%s.png", plots_dir, activity.name, 'plot', first_date, last_date), plot = p, 
-           width = 12, height = 6.82, units = 'in')
+    ggsave(sprintf("%s%s_%s_%s_%s.jpg", plots_dir, activity.name, 'plot', first_date, last_date), plot = p, 
+           width = 10, height = 5, units = 'in')
   }
 }
 
@@ -162,8 +165,8 @@ create_distance_steps_plots <- function() {
     ylab("Distance") +
     xlab("Value")
   
-  ggsave(sprintf("%s%s_%s_%s.png", plots_dir, "distance_steps_plot", first_date, last_date), plot = p, 
-          width = 12, height = 6.82, units = 'in')
+  ggsave(sprintf("%s%s_%s_%s.jpg", plots_dir, "distance_steps_plot", first_date, last_date), plot = p, 
+          width = 10, height = 5, units = 'in')
 
 }
 
