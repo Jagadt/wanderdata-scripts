@@ -30,7 +30,8 @@ def get_sleep_data(client, base_date):
                                        sleep_activity.get('efficiency'), 
                                        sleep_activity.get('startTime'), 
                                        sleep_activity.get('endTime'),
-                                       sleep_activity.get('timeInBed')))
+                                       sleep_activity.get('timeInBed'),
+                                       sleep_activity.get('minutesAsleep')))
 
     return pd.DataFrame(sleep_data, columns=['date', 'efficiency', 'startTime', 
-                        'endTime', 'timeInBed'])
+                        'endTime', 'timeInBed', 'minutesAsleep'])

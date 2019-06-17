@@ -3,6 +3,8 @@ setwd("~/Development/wanderdata-scripts/fitbit")
 require(ggplot2)
 require(bbplot)
 require(skimr)
+require(parsedate)
+require(reshape2)
 
 data_dir <- 'data/'
 plots_dir <- 'plots/'
@@ -139,6 +141,8 @@ create_distance_steps_plots <- function() {
   # produce activity plots
   distance.df <- read.csv("~/Development/wanderdata-scripts/fitbit/data/distance.csv")
   steps.df <- read.csv("~/Development/wanderdata-scripts/fitbit/data/steps.csv")
+  print("Steps")
+  print(skim(steps.df))
   distance.df$metric <- "distance"
   steps.df$metric <- "steps"
   df <- rbind(distance.df, steps.df)
@@ -147,14 +151,14 @@ create_distance_steps_plots <- function() {
   first_date <- head(df, n=1)$dateTime
   last_date <- tail(df, n=1)$dateTime
   df$dateTime <- as.Date(df$dateTime)
-  
+  print(cor(distance.df$value, steps.df$value))
   
   p <- ggplot() +
     geom_line(data=subset(df,dateTime<=as.character(first_date)),aes(x=dateTime,y=value, color = metric)) +
     geom_point(data=subset(df,dateTime<=as.character(first_date)),aes(x=dateTime,y=value)) +
     geom_line(data=subset(df,dateTime>=as.character(first_date)),aes(x=dateTime,y=value, color = metric)) +
     geom_point(data=subset(df,dateTime>=as.character(first_date)),aes(x=dateTime,y=value)) +
-    scale_y_continuous(sec.axis= sec_axis(~./2, name="Steps"), trans = "log10") +
+    scale_y_continuous(sec.axis= sec_axis(~.*1, name="Steps"), trans = "log10") +
     scale_x_date(date_labels = "%Y-%m-%d", date_breaks="1 day") +
     bbc_style() +
     theme(axis.title = element_text(size = 18), 
@@ -164,11 +168,91 @@ create_distance_steps_plots <- function() {
          subtitle = sprintf("From %s until %s", first_date, last_date)) +
     ylab("Distance") +
     xlab("Value")
+
   
   ggsave(sprintf("%s%s_%s_%s.jpg", plots_dir, "distance_steps_plot", first_date, last_date), plot = p, 
-          width = 10, height = 5, units = 'in')
+          width = 12, height = 6, units = 'in')
 
+}
+
+create_sleep_plots <- function() {
+  print("create_sleep_plots")
+  # produce activity plots
+  df <- read.csv("~/Development/wanderdata-scripts/fitbit/data/sleep.csv", stringsAsFactors = FALSE)
+  df$date <- date(df$date)
+  
+  df$start.time.posixct <-as.POSIXct(df$startTime, format="%Y-%m-%dT%H:%M:%OS")
+  df$end.time.posixct <-as.POSIXct(df$endTime, format="%Y-%m-%dT%H:%M:%OS")
+  
+  
+  df$decimal.start <- hour(df$start.time.posixct) + minute(df$start.time.posixct)/60
+  df$decimal.end <- hour(df$end.time.posixct) + minute(df$end.time.posixct)/60
+  
+  print(skim(df))
+  
+  first_date <- head(df, n=1)$date
+  last_date <- tail(df, n=1)$date
+  
+  df.times <- data.frame(dateTime = df$date, startTime = df$decimal.start, endTime = df$decimal.end)
+  
+  df.times <- melt(df.times, id.vars = c("dateTime"))
+  
+  p <- ggplot() +
+    geom_line(data=df.times, aes(x = dateTime, y = value, color = variable)) +
+    geom_point(data=df.times ,aes(x=dateTime,y=value)) +
+    bbc_style() +
+    scale_x_date(date_labels = "%Y-%m-%d", date_breaks="1 day") +
+    scale_y_continuous(breaks = round(seq(min(df.times$value), max(df.times$value), by = 2))) +
+    theme(axis.title = element_text(size = 18), 
+          plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"),
+          axis.text.x = element_text(angle = 45, hjust = 1)) +
+    labs(title="My sleeping times (start and end) according to Fitbit",
+         subtitle = sprintf("From %s until %s", first_date, last_date)) +
+    ylab("Hour") +
+    xlab("Date")
+  
+  ggsave(sprintf("%s%s_%s_%s.jpg", plots_dir, "sleep_start_end_times", first_date, last_date), plot = p, 
+         width = 12, height = 6, units = 'in')
+  
+  p <- ggplot() +
+    geom_line(data=df, aes(x=date,y=minutesAsleep), color = "#6d7d03") +
+    geom_point(data=df ,aes(x=date,y=minutesAsleep)) +
+    bbc_style() +
+    scale_x_date(date_labels = "%Y-%m-%d", date_breaks="1 day") +
+    theme(axis.title = element_text(size = 18), 
+          plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"),
+          axis.text.x = element_text(angle = 45, hjust = 1)) +
+    labs(title="My minutes asleep according to Fitbit",
+         subtitle = sprintf("From %s until %s", first_date, last_date)) +
+    ylab("Minutes") +
+    xlab("Date")
+  
+  ggsave(sprintf("%s%s_%s_%s.jpg", plots_dir, "sleepy_minutes", first_date, last_date), plot = p, 
+         width = 12, height = 6, units = 'in')
+  
+  
+  p <- ggplot(df, aes(x=date, y=minutesAsleep)) + 
+    geom_boxplot(aes(group=1), fill = "#6d7d03") +
+    theme(plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"), 
+          plot.title = element_text(family = 'Helvetica', size = 28, face = "bold", color = "#222222"),
+          plot.subtitle = element_text(family = 'Helvetica', size = 22, margin = ggplot2::margin(9, 0, 9, 0)),
+          axis.text = element_text(family = 'Helvetica', size = 18, color = "#222222"),
+          axis.title.x = element_text(family = 'Helvetica', size = 18, color = "#222222"),
+          axis.title.y = element_text(family = 'Helvetica', size = 18, color = "#222222"),
+          legend.text=element_text(size=14),
+          legend.position = "top", legend.text.align = 0, legend.background = ggplot2::element_blank(),
+          legend.title = ggplot2::element_blank(), legend.key = ggplot2::element_blank()) +
+    labs(title="My minutes asleep boxplot",
+         subtitle = sprintf("From %s until %s", first_date, last_date)) +
+    ylab("Minutes") +
+    xlab("Date")
+  
+  ggsave(sprintf("%s%s_%s_%s.jpg", plots_dir,'sleepy_minutes_boxplot', first_date, last_date), plot = p, 
+         width = 13, height = 7, units = 'in')
+  
 }
 
 create_activity_level_plots()
 create_activity_plots()
+create_distance_steps_plots()
+create_sleep_plots()
