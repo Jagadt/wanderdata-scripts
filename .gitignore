@@ -1,3 +1,5 @@
 .DS_Store
 fitbit/Makefile
 spotify/Makefile
+weather/Makefile
+fitbit/__pycache__/*
