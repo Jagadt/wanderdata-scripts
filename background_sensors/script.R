@@ -72,7 +72,7 @@ sensors_plots <- function(variables) {
           geom_smooth(data=subset(summarized.values, posixct > present.date && posixct < last.date), aes(x = posixct, y = n), linetype = 1, method = "loess", span = 0.1, color = '#6d7d03') +
           scale_x_datetime(date_breaks="1 day") +
           labs(title=sprintf("%s value (%s) according to my phone", unit.label, unit),
-               subtitle = sprintf("From %s until %s", first.date, last.date.label)) +
+               subtitle = sprintf("From %s until %s", first.date, args[3])) +
           xlab('Date') + ylab(unit) +
           bbc_style() +
           theme(plot.margin = unit(c(1.0,1.5,1.0,0.5), "cm")) +
@@ -109,7 +109,7 @@ daily_lx_plot <- function() {
     geom_line(data=median.hourly.value, aes(x=hour, y=n), linetype=1, color='#6d7d03') +
     geom_point(data=median.hourly.value ,aes(x=hour,y=n), alpha=0.3) +
     labs(title="Average light intensity (lx) value by hour according to my phone",
-         subtitle = sprintf("From %s until %s", first.date, last.date)) +
+         subtitle = sprintf("From %s until %s", first.date, args[3])) +
     bbc_style() +
     xlab('Date') + ylab(unit) +
     theme(plot.margin = unit(c(1.0,1.5,1.0,0.5), "cm")) 
