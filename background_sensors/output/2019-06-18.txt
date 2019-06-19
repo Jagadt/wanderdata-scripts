@@ -1,0 +1,77 @@
+[1] "Sensors plots"
+[1] "barometer_background.csv"
+[1] "2019-06-06"
+[1] "2019-06-16"
+Skim summary statistics
+ n obs: 2726 
+ n variables: 5 
+
+── Variable type:Date ──────────────────────────────────────────────────────────
+ variable missing complete    n        min        max     median n_unique
+     date       0     2726 2726 2019-06-06 2019-06-15 2019-06-10        9
+
+── Variable type:integer ───────────────────────────────────────────────────────
+ variable missing complete    n  mean   sd p0 p25 p50 p75 p100     hist
+     hour       0     2726 2726 13.75 6.29  0  10  14  18   23 ▅▁▂▆▇▇▅▇
+
+── Variable type:numeric ───────────────────────────────────────────────────────
+ variable missing complete    n   mean    sd     p0    p25    p50    p75   p100
+        n       0     2726 2726 885.56  4.51 855.47 882.61 885.26 887.32 894.92
+    value       0     2726 2726 882.76 26.67 633.79 882.71 885.01 887.47 895.01
+     hist
+ ▁▁▁▁▁▇▆▃
+ ▁▁▁▁▁▁▁▇
+
+── Variable type:POSIXct ───────────────────────────────────────────────────────
+ variable missing complete    n        min        max     median n_unique
+  posixct       0     2726 2726 2019-06-06 2019-06-15 2019-06-10     2721
+[1] "lightmeter_background.csv"
+[1] "2019-06-06"
+[1] "2019-06-16"
+Skim summary statistics
+ n obs: 3357 
+ n variables: 5 
+
+── Variable type:Date ──────────────────────────────────────────────────────────
+ variable missing complete    n        min        max     median n_unique
+     date       0     3357 3357 2019-06-06 2019-06-15 2019-06-09       10
+
+── Variable type:integer ───────────────────────────────────────────────────────
+ variable missing complete    n  mean   sd p0 p25 p50 p75 p100     hist
+     hour       0     3357 3357 14.37 6.45  0  11  15  19   23 ▃▁▁▅▆▆▅▇
+
+── Variable type:numeric ───────────────────────────────────────────────────────
+ variable missing complete    n   mean      sd p0 p25   p50   p75     p100
+        n       0     3357 3357 449.58 2193.65  0   0 21.24 78.18 32030.75
+    value       0     3357 3357 705.44 3458.93  0   0 16.15 81.58 32768   
+     hist
+ ▇▁▁▁▁▁▁▁
+ ▇▁▁▁▁▁▁▁
+
+── Variable type:POSIXct ───────────────────────────────────────────────────────
+ variable missing complete    n        min        max     median n_unique
+  posixct       0     3357 3357 2019-06-06 2019-06-15 2019-06-09     3335
+[1] "Daily lx plot"
+Skim summary statistics
+ n obs: 3823 
+ n variables: 5 
+
+── Variable type:Date ──────────────────────────────────────────────────────────
+ variable missing complete    n        min        max     median n_unique
+     date       0     3823 3823 2019-06-06 2019-06-17 2019-06-09       12
+
+── Variable type:integer ───────────────────────────────────────────────────────
+ variable missing complete    n     mean        sd      p0      p25      p50
+     hour       0     3823 3823 14.52         6.31 0       11       15      
+       ts       0     3823 3823  1.6e+09 306207.01 1.6e+09  1.6e+09  1.6e+09
+      p75     p100     hist
+ 20       23       ▃▁▁▆▆▆▆▇
+  1.6e+09  1.6e+09 ▇▇▇▃▃▆▃▅
+
+── Variable type:numeric ───────────────────────────────────────────────────────
+ variable missing complete    n   mean      sd p0 p25  p50   p75  p100     hist
+    value       0     3823 3823 624.47 3249.54  0   0 13.6 78.18 32768 ▇▁▁▁▁▁▁▁
+
+── Variable type:POSIXct ───────────────────────────────────────────────────────
+ variable missing complete    n        min        max     median n_unique
+  posixct       0     3823 3823 2019-06-06 2019-06-17 2019-06-09     3796
