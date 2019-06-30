@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>To download</name>
+    <Style id="icon-1899-0288D1-nodesc-normal">
+      <IconStyle>
+        <color>ffd18802</color>
+        <scale>1</scale>
+        <Icon>
+          <href>http://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-1899-0288D1-nodesc-highlight">
+      <IconStyle>
+        <color>ffd18802</color>
+        <scale>1</scale>
+        <Icon>
+          <href>http://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-1899-0288D1-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-0288D1-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-0288D1-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Placemark>
+      <name>Sentosa</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          103.8303209,1.2494041,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Gardens by the Bay</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          103.8636132,1.2815683,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Marina Bay Sands Singapore</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          103.8607526,1.2833965,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Clarke Quay</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          103.8467181,1.2881554,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Boat Quay</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          103.8496039,1.286609,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Robertson Quay</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          103.8373696,1.2913414,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Hong San See Temple</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          103.8408622,1.293284,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Buddha Tooth Relic Temple</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          103.8445218,1.2813361,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Orchard Road</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          103.8380766,1.301674,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Singapore Botanic Gardens</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          103.8159136,1.3138397,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Pokémon</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          103.9891197,1.3598078,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Jewel Changi Airport</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          103.9894983,1.3596424,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Merlion</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          103.8545014,1.2867892,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Siloso Beach</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          103.8133333,1.2533333,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Tanjong Beach</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          103.8293833,1.2417001,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>ION Sky</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          103.831767,1.304052,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Emerald Hill Road</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          103.839546,1.3036696,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>East Coast Park</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          103.9121866,1.3007842,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>MacRitchie Reservoir</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          103.8223506,1.3447621,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>TreeTop Walk</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          103.8125215,1.3607287,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Mount Faber Park</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          103.8174964,1.2737864,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>The Istana</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          103.8434067,1.2994688,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Masjid Sultan</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          103.8592161,1.3018439,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Sri Veeramakaliamman Temple</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          103.8522345,1.3079983,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Fort Serapong</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          103.834075,1.250458,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Mount Serapong</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          103.8338889,1.2508333,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Makansutra Gluttons Bay</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          103.8568863,1.2895026,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Satay by the Bay</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          103.8685936,1.2823359,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Hong Kong Soya Sauce Noodle</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          103.8429582,1.2830967,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>ION Orchard Mall</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          103.8319701,1.3039937,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>The Good Beer Company</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          103.7840697,1.2915407,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Smith Street Taps</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          103.8430923,1.2825863,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Singapore Visitor Centre</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          103.838816,1.3016419,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Bukit Timah Nature Reserve</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          103.7769454,1.3540562,0
+        </coordinates>
+      </Point>
+    </Placemark>
+  </Document>
+</kml>
