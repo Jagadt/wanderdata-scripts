@@ -74,8 +74,9 @@ map %>% ggmap() +
         axis.text.x  = element_text(size = 14),
         axis.text.y  = element_text(size = 14),
         axis.title.x = element_text(size = 14),
-        axis.title.y = element_text(size = 14)) +
-  xlab("Longtitude") + ylab("Latitude") +
+        axis.title.y = element_text(size = 14),
+        plot.margin = unit(c(1.0,1.5,1.0,0.5), "cm")) +
+  xlab("Longitude") + ylab("Latitude") +
   ggtitle("Singapore Plan Clusters", subtitle = 'Where each cluster (color) represents one day')
   
 map.sentosa <- get_googlemap(center=c(103.81749, 1.27378) , zoom = 13, maptype = 'roadmap', size = c(640, 640), scale = 2) 
@@ -90,8 +91,8 @@ map.sentosa %>% ggmap() +
         axis.text.y  = element_text(size = 14),
         axis.title.x = element_text(size = 14),
         axis.title.y = element_text(size = 14)) +
-  xlab("Longtitude") + ylab("Latitude") +
-  ggtitle("Singapore Plan Clusters  #1", subtitle = 'Sentosa Island Area')
+  xlab("Longitude") + ylab("Latitude") +
+  ggtitle("Singapore Plan Clusters #1", subtitle = 'Sentosa Island Area')
 
 map.downtown <- get_googlemap(center=c(103.85921, 1.30184) , zoom = 13, maptype = 'roadmap', size = c(640, 640), scale = 2) 
 map.downtown %>% ggmap() +
@@ -105,8 +106,8 @@ map.downtown %>% ggmap() +
         axis.text.y  = element_text(size = 14),
         axis.title.x = element_text(size = 14),
         axis.title.y = element_text(size = 14)) +
-  xlab("Longtitude") + ylab("Latitude") +
-  ggtitle("Singapore Plan Clusters  #2", subtitle = 'Downtown Area')
+  xlab("Longitude") + ylab("Latitude") +
+  ggtitle("Singapore Plan Clusters #2", subtitle = 'Downtown Area')
 
 map.natural.reserve <- get_googlemap(center=c(103.81252, 1.36072) , zoom = 13, maptype = 'roadmap', size = c(640, 640), scale = 2) 
 map.natural.reserve %>% ggmap() +
@@ -120,8 +121,8 @@ map.natural.reserve %>% ggmap() +
         axis.text.y  = element_text(size = 14),
         axis.title.x = element_text(size = 14),
         axis.title.y = element_text(size = 14)) +
-  xlab("Longtitude") + ylab("Latitude") +
-  ggtitle("Singapore Plan Clusters  #1", subtitle = 'Natural Reserve Area')
+  xlab("Longitude") + ylab("Latitude") +
+  ggtitle("Singapore Plan Clusters #3", subtitle = 'Natural Reserve Area')
 
 map.airport <- get_googlemap(center='changi airport' , zoom = 15, maptype = 'roadmap', size = c(640, 640), scale = 2) 
 map.airport %>% ggmap() +
@@ -136,7 +137,7 @@ map.airport %>% ggmap() +
         axis.title.x = element_text(size = 14),
         axis.title.y = element_text(size = 14)) +
   xlab('Longtitude') + ylab('Latitude') +
-  ggtitle("Singapore Plan Cluster  #3", subtitle = "Changi Airport Area")
+  ggtitle("Singapore Plan Cluster #4", subtitle = "Changi Airport Area")
 
 
 # clustering information
