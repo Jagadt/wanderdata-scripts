@@ -5,9 +5,21 @@ require(bbplot)
 require(skimr)
 require(parsedate)
 require(reshape2)
+require(lubridate)
 
 data_dir <- 'data/'
 plots_dir <- 'plots/'
+
+args = commandArgs(trailingOnly=TRUE)
+args <- c('2019-06-16', '2019-06-28')
+
+if (length(args)==0) {
+  stop("At least one argument must be supplied (input file).n", call.=FALSE)
+} else {
+  # starting day
+  print(args[1])
+  print(args[2])
+}
 
 # this function produces the plots of the different activity levels
 create_activity_level_plots <- function(variables) {
@@ -26,8 +38,10 @@ create_activity_level_plots <- function(variables) {
     activity.df$level <- f
     df <- rbind(df, activity.df)
   }
+
   
   df$dateTime <- as.Date(df$dateTime)
+  df <- df[df$dateTime >= args[1] & df$dateTime < args[2],]
   first_date <- head(df, n=1)$dateTime
   last_date <- tail(df, n=1)$dateTime
   
@@ -92,9 +106,10 @@ create_activity_plots <- function() {
     print(f)
     
     df <- read.csv(sprintf("%s/%s", data_dir, f))
+    df$dateTime <- as.Date(df$dateTime)
+    df <- df[df$dateTime >= args[1] & df$dateTime < args[2],]
     first_date <- head(df, n=1)$dateTime
     last_date <- tail(df, n=1)$dateTime
-    df$dateTime <- as.Date(df$dateTime)
     
     print(skim(df))
     
@@ -145,12 +160,12 @@ create_distance_steps_plots <- function() {
   print(skim(steps.df))
   distance.df$metric <- "distance"
   steps.df$metric <- "steps"
+
   df <- rbind(distance.df, steps.df)
-  #df <- newsongs.hour.ratio <- merge(x = distance.df, y = steps.df, by = "dateTime",suffixes = c('.distance', '.steps'), all = TRUE)
-  
+  df$dateTime <- as.Date(df$dateTime)
+  df <- df[df$dateTime >= args[1] & df$dateTime < args[2],]
   first_date <- head(df, n=1)$dateTime
   last_date <- tail(df, n=1)$dateTime
-  df$dateTime <- as.Date(df$dateTime)
   print(cor(distance.df$value, steps.df$value))
   
   p <- ggplot() +
@@ -180,6 +195,7 @@ create_sleep_plots <- function() {
   # produce activity plots
   df <- read.csv("~/Development/wanderdata-scripts/fitbit/data/sleep.csv", stringsAsFactors = FALSE)
   df$date <- date(df$date)
+  df <- df[df$date >= args[1] & df$date < args[2],]
   
   df$start.time.posixct <-as.POSIXct(df$startTime, format="%Y-%m-%dT%H:%M:%OS")
   df$end.time.posixct <-as.POSIXct(df$endTime, format="%Y-%m-%dT%H:%M:%OS")
