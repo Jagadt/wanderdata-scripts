@@ -34,7 +34,6 @@ sensors_plots <- function(variables) {
     colnames(df) <- c('ts', 'value')
     
     
-    
     df$posixct <- parsedate::parse_date(df$ts)
     df$date <- date(df$posixct)
     df$hour <- hour(df$posixct)
@@ -69,7 +68,7 @@ sensors_plots <- function(variables) {
     p <- ggplot() +
           # geom_smooth(data=subset(summarized.values, posixct <= present.date), aes(x = posixct, y = n), linetype = 2, method = "lm", span = 1.0, color = '#6d7d03') +
           geom_point(data=subset(summarized.values, posixct > present.date && posixct < last.date) ,aes(x = posixct,y=n), alpha = 0.3) +
-          geom_smooth(data=subset(summarized.values, posixct > present.date && posixct < last.date), aes(x = posixct, y = n), linetype = 1, method = "loess", span = 0.1, color = '#6d7d03') +
+          geom_smooth(data=subset(summarized.values, posixct > present.date && posixct < last.date), aes(x = posixct, y = n), linetype = 1, method = "loess", span = 0.05, color = '#6d7d03') +
           scale_x_datetime(date_breaks="1 day") +
           labs(title=sprintf("%s value (%s) according to my phone", unit.label, unit),
                subtitle = sprintf("From %s until %s", first.date, args[3])) +
@@ -118,5 +117,66 @@ daily_lx_plot <- function() {
          width = 14, height = 6.82, units = 'in')
 }
 
+lx_weather_cloudiness <- function() {
+  print("Daily lx plot")
+  df <- read.csv(sprintf("%s/lightmeter_background.csv", data_dir), header = FALSE, stringsAsFactors = FALSE)
+  colnames(df) <- c('ts', 'value')
+  
+  df$posixct <- parsedate::parse_date(df$ts)
+  df$date <- date(df$posixct)
+  df$hour <- hour(df$posixct)
+  df <- df[df$date >= args[1] & df$date < args[3],]
+  
+  first.date <- head(df, n=1)$date
+  last.date <- tail(df, n=1)$date
+  
+  weather.df <- read.csv("../weather/df.csv", stringsAsFactors = FALSE)
+  weather.df$posixct <- parsedate::parse_date(weather.df$dt)
+  weather.df$date <- date(weather.df$posixct)
+  weather.df$hour <- hour(weather.df$posixct)
+  
+  values.df <- data.frame(hour=numeric(),
+                          value=numeric(), 
+                          level=character(), 
+                          stringsAsFactors=FALSE) 
+  
+  median.daily.value <- df %>%
+    select(value, date) %>%
+    group_by(date) %>%
+    summarize(n = median(value))
+  median.daily.value$level <- 'lx'
+  median.daily.value$lx <- NULL
+  median.daily.value$value <- NULL
+  values.df <- rbind(values.df, median.daily.value)
+  
+  cloudiness.median.hourly.value <- weather.df %>%
+    select(cloudiness, date) %>%
+    group_by(date) %>%
+    summarize(n = median(cloudiness))
+  cloudiness.median.hourly.value$level <- 'cloudiness'
+  cloudiness.median.hourly.value$cloudiness <- NULL
+  values.df <- rbind(values.df, cloudiness.median.hourly.value)
+  
+  
+  colnames(values.df) <- c('daydate', 'n', 'level' )
+  
+  p <- ggplot() +
+    geom_line(data=values.df, aes(x=daydate, y=n, color=level), linetype=1) +
+    geom_point(data=values.df ,aes(x=daydate,y=n), alpha=0.3) +
+    scale_y_continuous(sec.axis= sec_axis(~.*1, name="lx"), trans = "log10") +
+    labs(title="Daily median light intensity (lx) and cloudiness values",
+         subtitle = sprintf("From %s until %s", first.date, args[3])) +
+    bbc_style() +
+    xlab('Hour') + ylab('Value') +
+    theme(plot.margin = unit(c(1.0,1.5,1.0,0.5), "cm"),
+          axis.title = element_text(size = 18),
+          axis.text.x = element_text(angle = 90)) +
+    scale_x_date(breaks = values.df$daydate) 
+  
+  ggsave(sprintf("%s%s_%s_%s.jpg", plots_dir, "lx_cloudiness" , first.date, args[3]), plot = p, 
+         width = 14, height = 6.82, units = 'in')
+}
+
 sensors_plots()
 daily_lx_plot()
+lx_weather_cloudiness()
