@@ -16,8 +16,9 @@ SELECT
 FROM
   `{}`
 WHERE
-  PlayedAt >= '{}'
-""".format(sys.argv[1], sys.argv[3])
+  PlayedAt >= '{}' AND
+  PlayedAt < '{}'
+""".format(sys.argv[1], sys.argv[3], sys.argv[4])
 df = pandas_gbq.read_gbq(query, project_id=sys.argv[2],
                          dialect='standard')
 

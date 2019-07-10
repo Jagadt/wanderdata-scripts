@@ -1,0 +1,34 @@
+Skim summary statistics
+ n obs: 9 
+ n variables: 2 
+
+── Variable type:Date ──────────────────────────────────────────────────────────
+ variable missing complete n        min        max     median n_unique
+     date       0        9 9 2019-06-19 2019-06-27 2019-06-23        9
+
+── Variable type:numeric ───────────────────────────────────────────────────────
+ variable missing complete n  mean    sd p0 p25 p50 p75 p100     hist
+        n       0        9 9 13.67 13.11  0   1  10  25   36 ▇▂▂▂▁▅▁▂
+[1] 123
+# A tibble: 6 x 3
+  MainArtistName         n percentage
+  <chr>              <int>      <dbl>
+1 Tyler, The Creator    87     70.7  
+2 GoldLink               3      2.44 
+3 Apparat                2      1.63 
+4 21 Savage              1      0.813
+5 Above & Beyond         1      0.813
+6 Alan Silvestri         1      0.813
+# A tibble: 10 x 3
+   Name                       n percentage
+   <chr>                  <int>      <dbl>
+ 1 EARFQUAKE                 11       8.94
+ 2 I THINK                   10       8.13
+ 3 RUNNING OUT OF TIME       10       8.13
+ 4 ARE WE STILL FRIENDS?      9       7.32
+ 5 NEW MAGIC WAND             8       6.50
+ 6 A BOY IS A GUN*            7       5.69
+ 7 IGOR'S THEME               7       5.69
+ 8 PUPPET                     7       5.69
+ 9 WHAT'S GOOD                7       5.69
+10 GONE, GONE / THANK YOU     6       4.88

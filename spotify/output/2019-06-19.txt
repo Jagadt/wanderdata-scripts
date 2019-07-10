@@ -1,0 +1,30 @@
+Skim summary statistics
+ n obs: 7 
+ n variables: 2 
+
+── Variable type:Date ──────────────────────────────────────────────────────────
+ variable missing complete n        min        max     median n_unique
+     date       0        7 7 2019-06-06 2019-06-12 2019-06-09        7
+
+── Variable type:numeric ───────────────────────────────────────────────────────
+ variable missing complete n  mean    sd p0 p25 p50  p75 p100     hist
+        n       0        7 7 12.86 11.04  0 5.5  11 18.5   31 ▇▁▇▁▇▁▁▃
+[1] 90
+# A tibble: 6 x 3
+  MainArtistName         n percentage
+  <chr>              <int>      <dbl>
+1 Tyler, The Creator    41      45.6 
+2 Alan Silvestri        29      32.2 
+3 GoldLink               4       4.44
+4 Armin van Buuren       1       1.11
+5 Avantasia              1       1.11
+6 Bad Bunny              1       1.11
+# A tibble: 6 x 3
+  Name                n percentage
+  <chr>           <int>      <dbl>
+1 Porch               8       8.89
+2 A BOY IS A GUN*     4       4.44
+3 EARFQUAKE           4       4.44
+4 I THINK             4       4.44
+5 NEW MAGIC WAND      4       4.44
+6 PUPPET              4       4.44
