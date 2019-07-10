@@ -79,7 +79,7 @@ create_activity_level_plots <- function(variables) {
     theme(plot.margin = unit(c(1.0,1.5,1.0,0.5), "cm")) 
   
   ggsave(sprintf("%s%s_%s_%s.jpg", plots_dir,'activity_levels_values', first_date, last_date), plot = p, 
-         width = 10, height = 5, units = 'in')
+         width = 11, height = 5, units = 'in')
 }
 
 # this function produces the plots of the different activities
@@ -112,24 +112,6 @@ create_activity_plots <- function() {
     last_date <- tail(df, n=1)$dateTime
     
     print(skim(df))
-    
-    p <- ggplot(df, aes(x="", y=value)) + 
-      geom_boxplot(fill="#6d7d03") +
-      theme(plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"), 
-            plot.title = element_text(family = 'Helvetica', size = 28, face = "bold", color = "#222222"),
-            plot.subtitle = element_text(family = 'Helvetica', size = 22, margin = ggplot2::margin(9, 0, 9, 0)),
-            axis.text = element_text(family = 'Helvetica', size = 18, color = "#222222"),
-            axis.title.x = element_text(family = 'Helvetica', size = 14, color = "#222222"),
-            axis.title.y = element_text(family = 'Helvetica', size = 14, color = "#222222")) +
-      labs(title=sprintf("\"%s\"%s boxplot", activity.name, unit),
-           subtitle = sprintf("From %s until %s", first_date, last_date)) +
-      xlab("") + ylab("Minutes")
-    
-    ggsave(sprintf("%s%s_%s_%s_%s.jpg", plots_dir, activity.name, 'boxplot', first_date, last_date), plot = p,
-           width = 10, height = 5, units = 'in')
-
-
-    
     
     p <- ggplot() +
       geom_line(data=subset(df,dateTime<=as.character(first_date)),aes(x=dateTime,y=value),
