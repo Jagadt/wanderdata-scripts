@@ -3,3 +3,4 @@ fitbit/Makefile
 spotify/Makefile
 weather/Makefile
 fitbit/__pycache__/*
+*-checkpoint.ipynb
