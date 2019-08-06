@@ -8,7 +8,7 @@ import requests
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--base_date', '-bd', help="Starting date", type=str,
-                    default='2019-06-16')
+                    default='2019-07-04')
 parser.add_argument('--access_token', '-at', help="Fitbit Access Token", type=str)
 parser.add_argument('--refresh_token', '-rt', help="Fitbit Refresh Token", type=str)
 args = parser.parse_args()
