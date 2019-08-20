@@ -11,7 +11,7 @@ data_dir <- 'data/'
 plots_dir <- 'plots/'
 
 args = commandArgs(trailingOnly=TRUE)
-args <- c('2019-06-16', '2019-06-28')
+# args <- c('2019-06-16', '2019-06-28')
 
 if (length(args)==0) {
   stop("At least one argument must be supplied (input file).n", call.=FALSE)

@@ -35,3 +35,17 @@ def get_sleep_data(client, base_date):
 
     return pd.DataFrame(sleep_data, columns=['date', 'efficiency', 'startTime', 
                         'endTime', 'timeInBed', 'minutesAsleep'])
+
+
+def get_intraday_steps_data(client, start_date, end_date):
+    start = datetime.datetime.strptime(start_date, '%Y-%m-%d')
+    end = datetime.datetime.strptime(end_date, '%Y-%m-%d')
+    delta = end - start
+    dates = [start + datetime.timedelta(days=i) for i in range(delta.days + 1)]
+    steps_data = []
+    for date in dates:
+        single_day_steps = client.intraday_time_series('activities/steps', base_date=date, detail_level='15min')
+        for entry in single_day_steps.get('activities-steps-intraday').get('dataset'):
+            steps_data.append((date, entry.get('time'), entry.get('value')))
+
+    return pd.DataFrame(steps_data, columns=['date', 'time', 'value'])
