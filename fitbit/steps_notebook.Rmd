@@ -1,0 +1,127 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+require(ggplot2)
+require(bbplot)
+require(skimr)
+require(parsedate)
+require(reshape2)
+require(lubridate)
+require(dplyr)
+```
+
+```{r}
+df <- read.csv("~/Development/wanderdata-scripts/fitbit/data/steps.csv", stringsAsFactors = FALSE)
+df <- df[df$dateTime >= '2019-07-09' & df$dateTime < '2019-08-02',]
+
+df$region[df$dateTime >= '2019-07-09' & df$dateTime <= '2019-07-17'] <- 'Kuala Lumpur'
+df$region[df$dateTime >= '2019-07-17' & df$dateTime <= '2019-07-21'] <- 'Cameron Highlands'
+df$region[df$dateTime >= '2019-07-21' & df$dateTime <= '2019-07-26'] <- 'George Town'
+df$region[df$dateTime >= '2019-07-26'] <- 'Langkawi'
+
+df$dateTime <- as.Date(df$dateTime)
+```
+
+
+```{r}
+print(skim(df))
+```
+
+
+```{r}
+ggplot(df, aes(x=dateTime, y=value)) +
+  geom_line() +
+  geom_point(size=4) +
+  scale_x_date(date_labels = "%Y-%m-%d", date_breaks="1 day") +
+  bbc_style() +
+  labs(title="title",
+       subtitle = "subtitle") +
+  theme(axis.title = element_text(size = 24), 
+        plot.margin = unit(c(1.0,1.5,1.0,1.0), "cm"),
+        axis.text.x = element_text(hjust = 1, angle = 45),
+        axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0))) +
+  xlab('Date') + ylab('Value') +
+  theme(plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"))
+```
+
+
+```{r}
+ggplot(df, aes(x=value)) +
+  geom_histogram(bins = 10) +
+  labs(title="title",
+       subtitle = "subtitle") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  xlab('Date') + ylab('Value') +
+  theme(plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm")) +
+  bbc_style()
+```
+
+
+```{r}
+ggplot(df, aes(y=value)) +
+  geom_boxplot() +
+  labs(title="title",
+       subtitle = "subtitle") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  xlab('Date') + ylab('Value') +
+  theme(plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm")) +
+  bbc_style()
+```
+
+
+```{r}
+ggplot(df, aes(x=dateTime, y=value, color=region)) +
+  geom_line(aes(group=1)) +
+  geom_point(size=4) +
+  scale_x_date(date_labels = "%Y-%m-%d", date_breaks="1 day") +
+  labs(title="title",
+       subtitle = "subtitle") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  xlab('Date') + ylab('Value') +
+  theme(plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm")) +
+  bbc_style()
+```
+
+```{r}
+steps.mean.sd.region <- df %>%
+  select(value, region) %>%
+  group_by(region) %>%
+  summarize(mean = mean(value), SD = sd(value))
+
+steps.mean.sd.region.long <- melt(steps.mean.sd.region, id.vars = c("region"))
+
+ggplot(steps.mean.sd.region.long, aes(x=variable, y=value)) +
+  geom_bar(aes(fill=variable), stat = "identity") +
+  facet_grid(. ~ region) +
+  labs(title="title",
+       subtitle = "subtitle") +
+  xlab('Date') + ylab('Value') +
+  bbc_style() +
+  theme(axis.title = element_text(size = 24), 
+        plot.margin = unit(c(1.0,1.5,1.0,1.0), "cm"),
+        axis.text.x = element_text(hjust = 1, angle = 45),
+        axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)))
+```
+
+
+```{r}
+df$region <- as.factor(df$region)
+df$region <- factor(df$region, levels = c("Kuala Lumpur", "Cameron Highlands", "George Town", "Langkawi"))
+ggplot(df, aes(x=dateTime, y=value, color=region)) +
+  geom_line(aes(group=1)) +
+  geom_point(size=4) +
+  scale_x_date(date_labels = "%Y-%m-%d", date_breaks="1 day") +
+  labs(title="title",
+       subtitle = "subtitle") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  xlab('Date') + ylab('Value') +
+  theme(plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm")) +
+  bbc_style()
+```
+
+
+
