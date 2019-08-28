@@ -1,6 +1,8 @@
 ---
 title: "R Notebook"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
 ---
 
 
@@ -12,6 +14,7 @@ require(parsedate)
 require(reshape2)
 require(lubridate)
 require(dplyr)
+require(prophet)
 ```
 
 ```{r}
@@ -23,6 +26,9 @@ df$region[df$dateTime >= '2019-07-17' & df$dateTime <= '2019-07-21'] <- 'Cameron
 df$region[df$dateTime >= '2019-07-21' & df$dateTime <= '2019-07-26'] <- 'George Town'
 df$region[df$dateTime >= '2019-07-26'] <- 'Langkawi'
 
+df$region <- as.factor(df$region)
+df$region <- factor(df$region, levels = c("Kuala Lumpur", "Cameron Highlands", "George Town", "Langkawi"))
+
 df$dateTime <- as.Date(df$dateTime)
 ```
 
@@ -32,96 +38,245 @@ print(skim(df))
 ```
 
 
-```{r}
-ggplot(df, aes(x=dateTime, y=value)) +
+```{r, fig.width = 10, fig.height = 7}
+p <- ggplot(df, aes(x=dateTime, y=value)) +
   geom_line() +
   geom_point(size=4) +
   scale_x_date(date_labels = "%Y-%m-%d", date_breaks="1 day") +
   bbc_style() +
-  labs(title="title",
-       subtitle = "subtitle") +
+  labs(title="Steps taken from July 9, 2019 until August 1",
+       subtitle = "As registered by Fitbit") +
   theme(axis.title = element_text(size = 24), 
-        plot.margin = unit(c(1.0,1.5,1.0,1.0), "cm"),
+        plot.margin = unit(c(1.0,1.5,1.0,1.0), 'cm'),
         axis.text.x = element_text(hjust = 1, angle = 45),
         axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0))) +
   xlab('Date') + ylab('Value') +
-  theme(plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"))
+  theme(plot.margin = unit(c(1.0,1.0,1.0,0.5), 'cm'))
+print(p)
 ```
 
+```{r}
+ggsave('plots/steps/overall.jpg', plot = p, 
+           width = 15, height = 8, units = 'in')
+```
 
 ```{r}
-ggplot(df, aes(x=value)) +
-  geom_histogram(bins = 10) +
-  labs(title="title",
-       subtitle = "subtitle") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+p <- ggplot(df, aes(x=value)) +
+  geom_histogram(bins = 20) +
+  geom_vline(xintercept=mean(df$value)) +
+  labs(title="Histogram of my steps taken from July 9, 2019 until August 1",
+       subtitle = "As registered by Fitbit") +
   xlab('Date') + ylab('Value') +
-  theme(plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm")) +
-  bbc_style()
+  bbc_style() +
+  theme(axis.title = element_text(size = 24), 
+        plot.margin = unit(c(1.0,1.5,1.0,1.0), 'cm'),
+        axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)),
+        axis.text.x = element_text(angle = 45, hjust = 1))
+print(p)
 ```
 
+```{r}
+ggsave('plots/steps/hist.jpg', plot = p, 
+           width = 15, height = 8, units = 'in')
+```
 
 ```{r}
-ggplot(df, aes(y=value)) +
+p <- ggplot(df, aes(y=value)) +
   geom_boxplot() +
-  labs(title="title",
-       subtitle = "subtitle") +
+  labs(title="Histogram of my steps taken from July 9, 2019 until August 1",
+       subtitle = "As registered by Fitbit") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   xlab('Date') + ylab('Value') +
-  theme(plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm")) +
-  bbc_style()
+  bbc_style() +
+  theme(axis.title = element_text(size = 24), 
+        plot.margin = unit(c(1.0,1.5,1.0,1.0), 'cm'),
+        axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)),
+        axis.text.x = element_text(angle = 45, hjust = 1))
+print(p)
 ```
 
-
 ```{r}
-ggplot(df, aes(x=dateTime, y=value, color=region)) +
-  geom_line(aes(group=1)) +
-  geom_point(size=4) +
-  scale_x_date(date_labels = "%Y-%m-%d", date_breaks="1 day") +
-  labs(title="title",
-       subtitle = "subtitle") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  xlab('Date') + ylab('Value') +
-  theme(plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm")) +
-  bbc_style()
+ggsave('plots/steps/boxplot.jpg', plot = p, 
+           width = 15, height = 8, units = 'in')
 ```
 
 ```{r}
 steps.mean.sd.region <- df %>%
   select(value, region) %>%
   group_by(region) %>%
-  summarize(mean = mean(value), SD = sd(value))
+  summarize(sum = sum(value), mean = mean(value), SD = sd(value), median = median(value))
 
-steps.mean.sd.region.long <- melt(steps.mean.sd.region, id.vars = c("region"))
+print(steps.mean.sd.region)
+```
 
-ggplot(steps.mean.sd.region.long, aes(x=variable, y=value)) +
-  geom_bar(aes(fill=variable), stat = "identity") +
-  facet_grid(. ~ region) +
-  labs(title="title",
-       subtitle = "subtitle") +
-  xlab('Date') + ylab('Value') +
+```{r}
+p <- ggplot(steps.mean.sd.region, aes(x=region, y=sum)) +
+  geom_bar(stat = "identity") +
+  labs(title="Steps taken in each region",
+       subtitle = "From July 9, 2019 until August 1") +
+  xlab('Date') + ylab('Steps') +
   bbc_style() +
   theme(axis.title = element_text(size = 24), 
-        plot.margin = unit(c(1.0,1.5,1.0,1.0), "cm"),
-        axis.text.x = element_text(hjust = 1, angle = 45),
+        plot.margin = unit(c(1.0,1.5,1.0,1.0), 'cm'),
         axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)))
+print(p)
+```
+
+```{r}
+ggsave('plots/steps/steps_per_region.jpg', plot = p, 
+           width = 15, height = 8, units = 'in')
 ```
 
 
 ```{r}
-df$region <- as.factor(df$region)
-df$region <- factor(df$region, levels = c("Kuala Lumpur", "Cameron Highlands", "George Town", "Langkawi"))
-ggplot(df, aes(x=dateTime, y=value, color=region)) +
+steps.mean.sd.region$sum <- NULL
+steps.mean.sd.region.long <- melt(steps.mean.sd.region, id.vars = c("region"))
+
+p <- ggplot(steps.mean.sd.region.long, aes(x=variable, y=value)) +
+  geom_bar(aes(fill=variable), stat = "identity") +
+  facet_grid(. ~ region) +
+  labs(title="Stats of steps taken in each region",
+       subtitle = "Mean, Standard Deviation, and Median") +
+  xlab('Date') + ylab('Stat') +
+  bbc_style() +
+  theme(axis.title = element_text(size = 24), 
+        plot.margin = unit(c(1.0,1.5,1.0,1.0), 'cm'),
+        axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)))
+print(p)
+```
+
+
+```{r}
+ggsave('plots/steps/mean_per_region.jpg', plot = p, 
+           width = 15, height = 8, units = 'in')
+```
+
+
+
+```{r}
+p <- ggplot(df, aes(x=dateTime, y=value, color=region)) +
   geom_line(aes(group=1)) +
   geom_point(size=4) +
   scale_x_date(date_labels = "%Y-%m-%d", date_breaks="1 day") +
-  labs(title="title",
-       subtitle = "subtitle") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  xlab('Date') + ylab('Value') +
-  theme(plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm")) +
+  labs(title="Steps walked in each region",
+       subtitle = "As detected by Fitbit") +
+  xlab('Date') + ylab('Steps') +
+  bbc_style() +
+  theme(axis.title = element_text(size = 24),
+        plot.margin = unit(c(1.0,1.0,1.0,0.5), 'cm'),
+        axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)),
+        axis.text.x = element_text(angle = 45, hjust = 1))
+print(p)
+```
+
+```{r}
+ggsave('plots/steps/steps_per_region_line.jpg', plot = p, 
+           width = 15, height = 8, units = 'in')
+```
+
+## Prophet
+```{r}
+values.by.day <- df %>%
+  select(dateTime, value) 
+
+colnames(values.by.day) <- c('ds', 'y')
+m <- prophet(values.by.day)
+future <- make_future_dataframe(m, periods = 10)
+forecast <- predict(m, future)
+plot(m, forecast) +
+  bbc_style()
+```
+```{r}
+prophet_plot_components(m, forecast) +
   bbc_style()
 ```
 
+
+```{r}
+forecast
+```
+
+```{r}
+steps_intraday <- read.csv("~/Development/wanderdata-scripts/fitbit/data/steps_intraday.csv")
+steps_intraday$posixct <- as.POSIXct(paste(steps_intraday$date, steps_intraday$time), tz='Asia/Kuala_Lumpur')
+steps_intraday$hour <- strptime(steps_intraday$time, format="%H:%M:%S")$hour
+values.by.hour <- steps_intraday %>%
+  select(date, hour, value) %>%
+  group_by(date, hour) %>%
+  summarise(value = sum(value))
+```
+
+```{r}
+values.by.hour <- data.frame(ds=steps_intraday$posixct, y=steps_intraday$value)
+# attr(values.by.hour$ds, "tzone") <- "Asia/Kuala_Lumpur"
+m <- prophet(values.by.hour)
+#future <- make_future_dataframe(m, periods = 24*7, freq = 60)
+forecast <- predict(m, values.by.hour)
+
+attr(m$history$ds,"tzone") <- "Asia/Kuala_Lumpur"
+attr(m$history.dates,"tzone") <- "Asia/Kuala_Lumpur"
+attr(m$changepoints,"tzone") <- "Asia/Kuala_Lumpur"
+attr(m$start,"tzone") <- "Asia/Kuala_Lumpur"
+
+
+mplot(m, forecast) +
+  bbc_style()
+```
+
+```{r}
+prophet_plot_components(m, forecast)
+```
+
+```{r}
+prophet_plot_components(m, forecast)
+```
+
+```{r}
+prophet:::plot_weekly(m)
+```
+
+```{r}
+prophet::predict_seasonal_components(m, values.by.hour)
+```
+
+
+
+
+## Regression
+```{r}
+distance.df <- read.csv("~/Development/wanderdata-scripts/fitbit/data/distance.csv")
+steps.df <- read.csv("~/Development/wanderdata-scripts/fitbit/data/steps.csv")
+ds.df <- merge(distance.df, steps.df, by = 'dateTime')
+ds.df$dateTime <- NULL
+colnames(ds.df) <- c('distance', 'steps')
+lm.model <- lm(steps ~ ., data = ds.df)
+plot(lm.model)
+summary(lm.model)
+
+
+plot(ds.df$steps, ds.df$distance)
+```
+
+
+
+```{r}
+values.by.hour.summarized <- steps_intraday %>%
+  select(date, hour, value) %>%
+  group_by(date, hour) %>%
+  summarise(value = sum(value))
+```
+
+```{r}
+plot(values.by.hour.summarized$hour, values.by.hour.summarized$value)
+```
+
+```{r}
+values.by.hour.summarized$date <- NULL
+rm <- lm(values.by.hour.summarized$value ~ ., data = values.by.hour.summarized)
+```
+```{r}
+plot(values.by.hour.summarized$hour, values.by.hour.summarized$value)
+abline(rm)
+```
 
 
