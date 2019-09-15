@@ -1,0 +1,226 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+setwd("~/Development/wanderdata-scripts/recap")
+
+require(ggplot2)
+require(bbplot)
+require(skimr)
+require(parsedate)
+require(reshape2)
+require(lubridate)
+require(dplyr)
+
+data_dir <- 'data/'
+plots_dir <- 'plots/'
+
+args = commandArgs(trailingOnly=TRUE)
+args <- c('2019-05-28', '2019-09-04')
+first.date <- '2019-05-28'
+last.date <- '2019-09-04'
+```
+
+```{r}
+locations <- read.csv("~/Development/wanderdata-scripts/recap/locations.csv")
+locations$posixct <-parse_date(locations$Date)
+locations$dateTime <- date(locations$posixct)
+locations$Country <- as.factor(locations$Country)
+locations$region <- factor(locations$Country, levels = c("Austria", "Germany", "Singapore", "Malaysia",  "Thailand", 
+                                                 "Cambodia"))
+```
+
+
+## Steps
+```{r}
+steps.df <- read.csv("~/Development/wanderdata-scripts/fitbit/data/steps.csv")
+print(skim(steps.df))
+```
+
+
+```{r}
+steps.df$dateTime <- as.Date(steps.df$dateTime)
+steps.df <- steps.df[steps.df$dateTime >= args[1] & steps.df$dateTime <= args[2],]
+steps.df <- join(steps.df, locations, by="dateTime")
+
+p <- ggplot(steps.df, aes(x=dateTime, y=value, color=Country)) +
+  geom_line(aes(group=1)) +
+  geom_point() +
+  scale_y_continuous(sec.axis= sec_axis(~.*1, name="Steps"), trans = "log10") +
+  scale_x_date(date_labels = "%Y-%m-%d", date_breaks="1 week") +
+  bbc_style() +
+  theme(axis.title = element_text(size = 18), 
+        plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"),
+        axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(title="My Fitbit's distance (km) and steps values (in log scale)",
+       subtitle = sprintf("From %s until %s", first_date, last_date)) +
+  ylab("Distance") +
+  xlab("Value")
+
+print(p)
+
+
+ggsave(sprintf("%s%s_%s_%s.jpg", plots_dir, "steps_plot", first_date, last_date), plot = p, 
+       width = 12, height = 6, units = 'in')
+```
+## Distance
+```{r}
+distance.df <- read.csv("~/Development/wanderdata-scripts/fitbit/data/distance.csv")
+print(skim(distance.df))
+```
+
+
+```{r}
+distance.df$dateTime <- as.Date(distance.df$dateTime)
+distance.df <- distance.df[distance.df$dateTime >= args[1] & distance.df$dateTime <= args[2],]
+distance.df <- join(distance.df, locations, by="dateTime")
+
+p <- ggplot(distance.df, aes(x=dateTime, y=value, color=Country)) +
+  geom_line(aes(group=1)) +
+  geom_point() +
+  scale_y_continuous(sec.axis= sec_axis(~.*1, name="Steps"), trans = "log10") +
+  scale_x_date(date_labels = "%Y-%m-%d", date_breaks="1 week") +
+  bbc_style() +
+  theme(axis.title = element_text(size = 18), 
+        plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"),
+        axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(title="My Fitbit's distance (km) values",
+       subtitle = sprintf("From %s until %s", first_date, last_date)) +
+  ylab("Distance") +
+  xlab("Value")
+
+print(p)
+
+
+ggsave(sprintf("%s%s_%s_%s.jpg", plots_dir, "steps_plot", first_date, last_date), plot = p, 
+       width = 12, height = 6, units = 'in')
+```
+
+
+```{r}
+barometer.df <- read.csv("~/Development/wanderdata-scripts/recap/data/barometer_background.csv", header = FALSE, stringsAsFactors = FALSE)
+colnames(barometer.df) <- c('ts', 'value')
+barometer.df$posixct <- parsedate::parse_date(barometer.df$ts)
+barometer.df$dateTime <- date(barometer.df$posixct)
+barometer.df$hour <- hour(barometer.df$posixct)
+barometer.df <- barometer.df[barometer.df$date >= first.date & barometer.df$date < last.date,]
+barometer.df <- left_join(barometer.df, locations, by="dateTime")
+```
+
+
+```{r}
+summarized.barometer.df <- barometer.df %>%
+      select(posixct.x, value, dateTime, hour, Country) %>%
+      group_by(dateTime, hour) %>%
+      summarise(median.barometer = median(value))
+```
+
+
+```{r}
+p <- ggplot(summarized.barometer.df, aes(x=posixct.x, y=n, color=Country)) +
+          geom_point(alpha = 0.3) +
+          geom_smooth(linetype = 1, method = "loess", span = 0.05, color = '#6d7d03') +
+          scale_x_datetime(date_breaks="1 week") +
+          labs(title=sprintf("%s value (%s) according to my phone", "Atmospheric Pressure", "hPa"),
+               subtitle = sprintf("From %s until %s", first.date, last.date)) +
+          xlab('Date') + ylab(unit) +
+          bbc_style() +
+          theme(plot.margin = unit(c(1.0,1.5,1.0,0.5), "cm")) +
+          theme(axis.text.x = element_text(angle = 90))
+print(p)
+```
+
+
+```{r}
+weather.df <- read.csv("~/Development/wanderdata-scripts/weather/df.csv", stringsAsFactors = FALSE)
+weather.df$posixct <- parsedate::parse_date(weather.df$dt)
+weather.df$dateTime <- date(weather.df$posixct)
+weather.df$hour <- hour(weather.df$posixct)
+weather.df <- weather.df[weather.df$dateTime >= first.date & weather.df$dateTime < last.date,]
+weather.df <- left_join(weather.df, locations, by="dateTime")
+#weather.df <- left_join(weather.df, summarized.barometer.df, by="dateTime")
+```
+
+```{r}
+weather.summarized.df <- weather.df %>%
+      select(temp, dateTime, hour, Country) %>%
+      group_by(dateTime, hour) %>%
+      summarise(avg.temp = mean(temp))
+
+weather.summarized.df <- left_join(weather.summarized.df, locations, by="dateTime")
+weather.summarized.df$Location <- NULL
+weather.summarized.df$region <- NULL
+weather.summarized.df$Date <- NULL
+weather.summarized.df$posixct <- NULL
+weather.summarized.df$avg.temp <-weather.summarized.df$avg.temp - 273.15
+weather.summarized.df$posixct <-as.POSIXct(paste0(weather.summarized.df$dateTime, ' ', weather.summarized.df$hour, ':00'), format="%Y-%m-%d %H:%M")
+
+
+
+
+# from Kelvin to C
+
+```
+
+```{r}
+p <- ggplot(weather.summarized.df, aes(x=posixct, y=avg.temp, color=Country)) +
+          geom_point(alpha = 0.3) +
+          geom_smooth(linetype = 1, method = "loess", span = 0.05, color = '#6d7d03') +
+          scale_x_datetime(date_breaks="1 week") +
+          labs(title=sprintf("%s value (%s) according to my phone", "Atmospheric Pressure", "hPa"),
+               subtitle = sprintf("From %s until %s", first.date, last.date)) +
+          xlab('Date') + ylab(unit) +
+          bbc_style() +
+          theme(plot.margin = unit(c(1.0,1.5,1.0,0.5), "cm")) +
+          theme(axis.text.x = element_text(angle = 90))
+print(p)
+```
+
+```{r}
+weather.summarized.df <- inner_join(weather.summarized.df, summarized.barometer.df, by=c("dateTime", "hour"))
+```
+
+
+```{r}
+p <- ggplot(weather.summarized.df, aes(x=posixct, y=median.barometer, color=Country)) +
+          geom_point(alpha = 0.3) +
+          geom_smooth(linetype = 1, method = "loess", span = 0.05, color = '#6d7d03') +
+          scale_x_datetime(date_breaks="1 week") +
+          labs(title=sprintf("%s value (%s) according to my phone", "Atmospheric Pressure", "hPa"),
+               subtitle = sprintf("From %s until %s", first.date, last.date)) +
+          xlab('Date') + ylab(unit) +
+          bbc_style() +
+          theme(plot.margin = unit(c(1.0,1.5,1.0,0.5), "cm")) +
+          theme(axis.text.x = element_text(angle = 90))
+print(p)
+```
+
+
+
+```{r}
+# Pressure altitude, https://en.wikipedia.org/wiki/Pressure_altitude#cite_note-1
+weather.summarized.df$pressureAltitude <- 145366.45 * (1- (weather.summarized.df$median.barometer/1013)^0.190284)
+# convert from ft to m.
+weather.summarized.df$pressureAltitude <- weather.summarized.df$pressureAltitude * 0.3048
+```
+
+```{r}
+p <- ggplot(weather.summarized.df, aes(x=posixct, y=pressureAltitude, color=Country)) +
+          geom_point(alpha = 0.3) +
+          geom_smooth(linetype = 1, method = "loess", span = 0.05, color = '#6d7d03') +
+          scale_x_datetime(date_breaks="1 week") +
+          labs(title=sprintf("%s value (%s) according to my phone", "Atmospheric Pressure", "hPa"),
+               subtitle = sprintf("From %s until %s", first.date, last.date)) +
+          xlab('Date') + ylab(unit) +
+          bbc_style() +
+          theme(plot.margin = unit(c(1.0,1.5,1.0,0.5), "cm")) +
+          theme(axis.text.x = element_text(angle = 90))
+print(p)
+```
+
+
+
+
