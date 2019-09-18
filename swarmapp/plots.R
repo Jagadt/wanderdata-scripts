@@ -8,6 +8,7 @@ require(lubridate)
 require(parsedate)
 
 df <- fromJSON('~/Development/wanderdata-scripts/swarmapp/data/checkins.json')
+
 # json to dataframe
 df <- flatten(df)
 
@@ -68,30 +69,32 @@ map.downtown %>% ggmap() +
 
 
 top.categories <- df %>%
-  select(category, hour) %>%
+  select(category) %>%
   group_by(category) %>%
-  mutate(n = n()) %>%
+  summarise(n = n()) %>%
   arrange(n, desc(n))
-
 
 ggplot(top.categories, aes(x=reorder(category, -n), y=n)) +
   geom_bar(stat = 'identity') +
-  ggtitle("Histogram of sentiment values", 
-          subtitle = "Calculated from a sample of tweets containing the hashtag #RickyRenunció") +
+  ggtitle("My check-ins categories")+
   bbc_style() +
-  xlab("score") +
-  ylab("count") +
+  xlab("Category") +
+  ylab("Check-ins") +
   theme(axis.title = element_text(size = 24), 
         plot.margin = unit(c(1.0,1.5,1.0,1.0), "cm"),
         axis.text.x = element_text(hjust = 1, angle = 90),
         axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0))) 
 
+top.categories.hour <- df %>%
+  select(category, hour) %>%
+  group_by(category) %>%
+  mutate(n = n()) %>%
+  arrange(n, desc(n))
 
-ggplot(top.categories[top.categories$n > 3,], aes(factor(category), hour)) +
+ggplot(top.categories.hour[top.categories.hour$n > 1,], aes(factor(category), hour)) +
   geom_violin() +
   geom_point() +
-  ggtitle("Histogram of sentiment values", 
-          subtitle = "Calculated from a sample of tweets containing the hashtag #RickyRenunció") +
+  ggtitle("Check-ins times of my top categories") +
   bbc_style() +
   xlab("Category") +
   ylab("Hour") +
