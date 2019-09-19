@@ -1,0 +1,68 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+require(ggplot2)
+require(bbplot)
+require(ggcal)
+require(dplyr)
+require(sugrrants)
+require(tidyr)
+require(parsedate)
+require(lubridate)
+
+```
+
+
+```{r}
+setwd("~/Development/wanderdata-scripts/recap")
+```
+
+
+```{r}
+df <- read.csv("~/Development/wanderdata-scripts/recap/locations.csv")
+df$posixct <-parse_date(df$Date)
+df$date <- date(df$posixct)
+df$Country <- factor(df$Country, levels = c("Austria", "Germany", "Singapore", "Malaysia",  "Thailand", 
+                                                 "Cambodia"))
+```
+
+
+```{r}
+df %>% 
+  group_by(Country) %>%
+  summarise(n = n()) %>%
+  arrange(desc(n))
+```
+
+```{r}
+daily <- df %>%
+  group_by(date) %>%
+  summarise(n=n()) %>% mutate(date = as.Date(date)) %>%
+  complete(date = seq.Date(min(date), max(date), by="day"))
+daily[is.na(daily)] <- 0
+
+```
+
+```{r}
+calendar <- daily %>%
+  frame_calendar(x = 1, y = 1, date = date, calendar = "monthly")
+```
+
+
+```{r}
+p <- ggcal(calendar$date, as.factor(potato.calendar$Country)) +
+  scale_fill_discrete(na.value="gray70") +
+  ggtitle("Visited countries") +
+  theme(plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"),
+        plot.title = element_text(family = 'Helvetica', size = 28, face = "bold", color = "#222222"),
+        axis.text = element_text(family = 'Helvetica', size = 18, color = "#222222"),
+        strip.text.x = element_text(family = 'Helvetica', size = 14, color = "#222222", hjust=0, face="bold"))
+print(p)
+ggsave('calendar.jpg', plot = p, 
+       width = 12, height = 6, units = 'in')
+
+```
+
