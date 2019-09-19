@@ -21,8 +21,6 @@ require(scales)
 data_dir <- 'data/'
 plots_dir <- 'plots/'
 
-args = commandArgs(trailingOnly=TRUE)
-args <- c('2019-05-28', '2019-09-04')
 first.date <- '2019-05-28'
 last.date <- '2019-09-04'
 ```
@@ -32,8 +30,8 @@ locations <- read.csv("~/Development/wanderdata-scripts/recap/locations.csv")
 locations$posixct <-parse_date(locations$Date)
 locations$dateTime <- date(locations$posixct)
 locations$Country <- as.factor(locations$Country)
-locations$Country <- factor(locations$Country, levels = c("Austria", "Germany", "Singapore", "Malaysia",  "Thailand", 
-                                                 "Cambodia"))
+locations$Country <- factor(locations$Country, levels = c('Austria', 'Germany', 'Singapore', 'Malaysia',  'Thailand', 
+                                                 'Cambodia'))
 ```
 
 
@@ -45,14 +43,14 @@ steps.df <- read.csv("~/Development/wanderdata-scripts/fitbit/data/steps.csv")
 
 ```{r}
 steps.df$dateTime <- as.Date(steps.df$dateTime)
-steps.df <- steps.df[steps.df$dateTime >= args[1] & steps.df$dateTime <= args[2],]
-steps.df <- left_join(steps.df, locations, by="dateTime")
+steps.df <- steps.df[steps.df$dateTime >= first.date & steps.df$dateTime <= last.date,]
+steps.df <- left_join(steps.df, locations, by = 'dateTime')
 print(skim(steps.df))
 print(sum(steps.df$value))
 print(sd(steps.df$value))
 
-steps.df$Country <- factor(steps.df$Country, levels = c("Austria", "Germany", "Singapore", "Malaysia",  "Thailand", 
-                                                 "Cambodia"))
+steps.df$Country <- factor(steps.df$Country, levels = c('Austria', 'Germany', 'Singapore', 'Malaysia',  'Thailand', 
+                                                 'Cambodia'))
 ```
 
 
@@ -60,17 +58,17 @@ steps.df$Country <- factor(steps.df$Country, levels = c("Austria", "Germany", "S
 p <- ggplot(steps.df, aes(x=dateTime, y=value, color=Country)) +
   geom_line(aes(group=1)) +
   geom_point() +
-  scale_y_continuous(breaks= pretty_breaks()) +
-  scale_x_date(date_labels = "%Y-%m-%d", date_breaks="1 week") +
+  scale_y_continuous(breaks = pretty_breaks()) +
+  scale_x_date(date_labels = '%Y-%m-%d', date_breaks='1 week') +
   bbc_style() +
   theme(axis.title = element_text(size = 18), 
-        plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"),
+        plot.margin = unit(c(1.0, 1.0, 1.0, 0.5), 'cm'),
         axis.text.x = element_text(angle = 45, hjust = 1)) +
   guides(colour = guide_legend(nrow = 1)) +
   labs(title="My Fitbit's steps values",
        subtitle = sprintf("From %s until %s", first.date, last.date)) +
-  ylab("Steps") +
-  xlab("Value")
+  ylab('Steps') +
+  xlab('Value')
 
 print(p)
 
@@ -85,12 +83,12 @@ p <- ggplot(steps.df, aes(x=value)) +
   geom_vline(xintercept=mean(steps.df$value)) +
   bbc_style() +
   theme(axis.title = element_text(size = 18), 
-        plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"),
+        plot.margin = unit(c(1.0, 1.0, 1.0, 0.5), 'cm'),
         axis.text.x = element_text(hjust = 1)) +
   labs(title="Histogram of my Fitbit's steps",
        subtitle = sprintf("From %s until %s", first.date, last.date)) +
   ylab("Distance") +
-  xlab("Value")
+  xlab('Value')
 
 print(p)
 
@@ -102,22 +100,22 @@ ggsave(sprintf("%s%s_%s_%s.jpg", plots_dir, "steps_histogram", first.date, last.
 ```{r}
 distance.df <- read.csv("~/Development/wanderdata-scripts/fitbit/data/distance.csv")
 distance.df$dateTime <- as.Date(distance.df$dateTime)
-distance.df <- distance.df[distance.df$dateTime >= args[1] & distance.df$dateTime <= args[2],]
-distance.df <- left_join(distance.df, locations, by="dateTime")
+distance.df <- distance.df[distance.df$dateTime >= first.date & distance.df$dateTime <= last.date,]
+distance.df <- left_join(distance.df, locations, by='dateTime')
 
 p <- ggplot(distance.df, aes(x=dateTime, y=value, color=Country)) +
   geom_line(aes(group=1)) +
   geom_point() +
-  scale_x_date(date_labels = "%Y-%m-%d", date_breaks="1 week") +
+  scale_x_date(date_labels = "%Y-%m-%d", date_breaks='1 week') +
   bbc_style() +
   theme(axis.title = element_text(size = 18), 
-        plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"),
+        plot.margin = unit(c(1.0, 1.0, 1.0, 0.5), 'cm'),
         axis.text.x = element_text(angle = 45, hjust = 1)) +
   guides(colour = guide_legend(nrow = 1)) +
   labs(title="My Fitbit's distance (km) values",
        subtitle = sprintf("From %s until %s", first.date, last.date)) +
-  ylab("Distance") +
-  xlab("Value")
+  ylab('Distance') +
+  xlab('Value')
 
 print(p)
 
@@ -138,7 +136,7 @@ barometer.df$posixct <- parsedate::parse_date(barometer.df$ts)
 barometer.df$dateTime <- date(barometer.df$posixct)
 barometer.df$hour <- hour(barometer.df$posixct)
 barometer.df <- barometer.df[barometer.df$date >= first.date & barometer.df$date < last.date,]
-barometer.df <- left_join(barometer.df, locations, by="dateTime")
+barometer.df <- left_join(barometer.df, locations, by='dateTime')
 ```
 
 
@@ -156,8 +154,8 @@ weather.df$posixct <- parsedate::parse_date(weather.df$dt)
 weather.df$dateTime <- date(weather.df$posixct)
 weather.df$hour <- hour(weather.df$posixct)
 weather.df <- weather.df[weather.df$dateTime >= first.date & weather.df$dateTime < last.date,]
-weather.df <- left_join(weather.df, locations, by="dateTime")
-#weather.df <- left_join(weather.df, summarized.barometer.df, by="dateTime")
+weather.df <- left_join(weather.df, locations, by='dateTime')
+#weather.df <- left_join(weather.df, summarized.barometer.df, by='dateTime')
 ```
 
 ```{r}
@@ -166,7 +164,7 @@ weather.summarized.df <- weather.df %>%
       group_by(dateTime, hour) %>%
       summarise(avg.temp = mean(temp))
 
-weather.summarized.df <- left_join(weather.summarized.df, locations, by="dateTime")
+weather.summarized.df <- left_join(weather.summarized.df, locations, by='dateTime')
 weather.summarized.df$Location <- NULL
 weather.summarized.df$region <- NULL
 weather.summarized.df$Date <- NULL
@@ -178,13 +176,13 @@ weather.summarized.df.no.de <- weather.summarized.df[weather.summarized.df$dateT
 ```
 
 ```{r}
-p <- ggplot(weather.summarized.df.no.de, aes(x=posixct, y=avg.temp, color=Country)) +
+p <- ggplot(weather.summarized.df.no.de, aes(x = posixct, y = avg.temp, color = Country)) +
           geom_point(alpha = 0.5) +
-          geom_smooth(linetype = 1, method = "loess", span = 0.05, color = '#6d7d03') +
-          scale_x_datetime(date_breaks="1 week") +
+          geom_smooth(linetype = 1, method = 'loess', span = 0.05, color = '#6d7d03') +
+          scale_x_datetime(date_breaks = '1 week') +
           bbc_style() +
           theme(axis.title = element_text(size = 18), 
-            plot.margin = unit(c(1.5,1.5,1.5,1.5), "cm"),
+            plot.margin = unit(c(1.5, 1.5, 1.5, 1.5), 'cm'),
             axis.text.x = element_text(angle = 45, hjust = 1)) +
           guides(colour = guide_legend(nrow = 1)) +
           xlab('Date') + 
@@ -199,29 +197,30 @@ ggsave(sprintf("%s%s_%s_%s.jpg", plots_dir, "temperature", first.date, last.date
 ```
 
 ```{r}
-weather.summarized.df <- inner_join(weather.summarized.df, summarized.barometer.df, by=c("dateTime", "hour"))
+weather.summarized.df <- inner_join(weather.summarized.df, summarized.barometer.df, by = c('dateTime', 'hour'))
 ```
 
 
 ```{r}
 p <- ggplot(weather.summarized.df, aes(x=posixct, y=median.barometer, color=Country)) +
           geom_point(alpha = 0.5) +
-          geom_smooth(linetype = 1, method = "loess", span = 0.05, color = '#6d7d03') +
-          scale_x_datetime(date_breaks="1 week") +
+          geom_smooth(linetype = 1, method = 'loess', span = 0.05, color = '#6d7d03') +
+          scale_x_datetime(date_breaks='1 week') +
           labs(title=sprintf("%s value (%s) according to my phone", "Atmospheric Pressure", "hPa"),
                subtitle = sprintf("From %s until %s", first.date, last.date)) +
-          xlab('Date') + ylab('Pressure') +
+          xlab('Date') + 
+          ylab('Pressure') +
           bbc_style() +
           theme(axis.title = element_text(size = 18), 
-                    plot.margin = unit(c(1.5,1.5,1.5,1.5), "cm"),
+                    plot.margin = unit(c(1.5, 1.5, 1.5, 1.5), 'cm'),
                     axis.text.x = element_text(angle = 45, hjust = 1)) +
           guides(colour = guide_legend(nrow = 1)) 
+
 print(p)
 
 ggsave(sprintf("%s%s_%s_%s.jpg", plots_dir, "hpa", first.date, last.date), plot = p, 
        width = 16, height = 8, units = 'in')
 ```
-
 
 
 ```{r}
@@ -234,16 +233,18 @@ weather.summarized.df$pressureAltitude <- weather.summarized.df$pressureAltitude
 ```{r}
 p <- ggplot() +
           geom_point(data=weather.summarized.df, aes(x=posixct, y=pressureAltitude, color=Country)) +
-          geom_smooth(data=weather.summarized.df, aes(x=posixct, y=pressureAltitude), linetype = 1, method = "loess", span = 0.05, color = '#6d7d03') +
-          scale_x_datetime(date_breaks="1 week") +
+          geom_smooth(data=weather.summarized.df, aes(x=posixct, y=pressureAltitude), linetype = 1, method = 'loess', span = 0.05, color = '#6d7d03') +
+          scale_x_datetime(date_breaks='1 week') +
           labs(title="Pressure altitude of visited places (in meters)",
                subtitle = sprintf("From %s until %s", first.date, last.date)) +
-          xlab('Date') + ylab('Pressure altitude') +
+          xlab('Date') + 
+          ylab('Pressure altitude') +
           bbc_style() +
           theme(axis.title = element_text(size = 18), 
-                    plot.margin = unit(c(1.5,1.5,1.5,1.5), "cm"),
+                    plot.margin = unit(c(1.5, 1.5, 1.5, 1.5), 'cm'),
                     axis.text.x = element_text(angle = 45, hjust = 1)) +
           guides(colour = guide_legend(nrow = 1)) 
+
 print(p)
 
 ggsave(sprintf("%s%s_%s_%s.jpg", plots_dir, "pressure_altitude", first.date, last.date), plot = p, 
@@ -274,14 +275,17 @@ insta.df <- insta.df %>%
 ```{r}
 p <- ggplot(insta.df, aes(x=posixct, y=value)) +
           geom_point(alpha = 0.3) +
-          geom_smooth(linetype = 1, method = "loess", span = 0.5, color = '#6d7d03') +
-          scale_x_datetime(date_breaks="1 week") +
+          geom_smooth(linetype = 1, method = 'loess', span = 0.5, color = '#6d7d03') +
+          bbc_style() +
+          scale_x_datetime(date_breaks='1 week') +
+          theme(axis.title = element_text(size = 18), 
+                plot.margin = unit(c(1.0, 1.0, 1.0, 0.5), 'cm'),
+                axis.text.x = element_text(angle = 45, hjust = 1)) +
+          guides(colour = guide_legend(nrow = 1)) +
           labs(title="Number of Instagram followers",
                subtitle = sprintf("From %s until %s", first.date, last.date)) +
-          xlab('Date') + ylab(unit) +
-          bbc_style() +
-          theme(plot.margin = unit(c(1.0,1.5,1.0,0.5), "cm")) +
-          theme(axis.text.x = element_text(angle = 90))
+          ylab('Followers') +
+          xlab('Date')
 print(p)
 ```
 
@@ -304,19 +308,19 @@ checkin.days <- swarm.df %>%
   select(dateTime) %>%
   group_by(dateTime) %>%
   summarize(n = n()) %>%
-  complete(dateTime = seq.Date(min(dateTime), max(dateTime), by="day"))
+  complete(dateTime = seq.Date(min(dateTime), max(dateTime), by = 'day'))
 
 checkin.days[is.na(checkin.days)] <- 0
-checkin.days <- left_join(checkin.days, locations, by="dateTime")
+checkin.days <- left_join(checkin.days, locations, by='dateTime')
 
 p <- ggplot(checkin.days, aes(x=dateTime, y=n, color=Country)) +
   geom_line(aes(group=1)) +
   geom_point() +
-  scale_x_date(date_labels = "%Y-%m-%d", date_breaks="1 week") +
+  scale_x_date(date_labels = '%Y-%m-%d', date_breaks='1 week') +
   scale_y_continuous(breaks= pretty_breaks()) +
   bbc_style() +
   theme(axis.title = element_text(size = 18), 
-        plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"),
+        plot.margin = unit(c(1.0, 1.0, 1.0, 0.5), 'cm'),
         axis.text.x = element_text(angle = 45, hjust = 1)) +
   guides(colour = guide_legend(nrow = 1)) +
   labs(title="Number of Swarm's check-ins",
@@ -336,7 +340,7 @@ ggsave(sprintf("%s%s_%s_%s.jpg", plots_dir, "swarm_checkins", first.date, last.d
 categories <- data.frame(category = character())
 for (i in 1:nrow(swarm.df)) {
   if (length(swarm.df[i,]$venue.categories[[1]]) == 0) {
-    categories <- rbind(categories, "Undefined")
+    categories <- rbind(categories, 'Undefined')
   } else {
     categories <- rbind(categories, swarm.df[i,]$venue.categories[[1]][2])
   }
@@ -351,15 +355,15 @@ top.categories <- swarm.df %>%
   arrange(n, desc(n)) %>%
   mutate(percentage=(n/nrow(.)) * 100)
 
-p <- ggplot(top.categories[top.categories$n > 3,], aes(x=reorder(category, -n), y=n)) +
+p <- ggplot(top.categories[top.categories$n > 3,], aes(x = reorder(category, -n), y = n)) +
   geom_bar(stat = 'identity') +
+  bbc_style() +
   ggtitle("My check-ins categories",
           subtitle=sprintf("From Swarm's check-ins created from %s until %s", first.date, last.date))+
-  bbc_style() +
   xlab("Category") +
   ylab("Check-ins") +
   theme(axis.title = element_text(size = 24), 
-        plot.margin = unit(c(1.5,1.5,1.5,1.5), "cm"),
+        plot.margin = unit(c(1.5, 1.5, 1.5, 1.5), 'cm'),
         axis.text.x = element_text(hjust = 1, angle = 45, size = 20),
         axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0))) +
   guides(colour = guide_legend(nrow = 1)) 
@@ -386,10 +390,10 @@ p <- ggplot(top.categories.hour[top.categories.hour$n > 5,], aes(factor(category
   ggtitle("Check-in times of my top categories",
           subtitle=sprintf("From Swarm's check-ins created from %s until %s", first.date, last.date)) +
   bbc_style() +
-  xlab("Category") +
-  ylab("Hour") +
+  xlab('Category') +
+  ylab('Hour') +
   theme(axis.title = element_text(size = 24), 
-        plot.margin = unit(c(1.5, 1.5, 1.5, 1.5), "cm"),
+        plot.margin = unit(c(1.5, 1.5, 1.5, 1.5), 'cm'),
         axis.text.x = element_text(angle = 45, hjust = 1, size = 18),
         axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)))
 
@@ -404,22 +408,22 @@ ggsave(sprintf("%s%s_%s_%s.jpg", plots_dir, "checkins_times", first.date, last.d
 ```{r}
 spotify.df <- read.csv("~/Development/wanderdata-scripts/spotify/data/df.csv", stringsAsFactors=FALSE)
 spotify.df$posixct <-parsedate::parse_date(spotify.df$PlayedAt)
-spotify.df$posixct <- with_tz(spotify.df$posixct, "UTC")
+spotify.df$posixct <- with_tz(spotify.df$posixct, 'UTC')
 spotify.df$dateTime <- as.Date(spotify.df$posixct)
-spotify.df <- spotify.df[spotify.df$dateTime >= args[1] & spotify.df$dateTime <= args[2],]
-spotify.df <- left_join(spotify.df, locations, by="dateTime")
+spotify.df <- spotify.df[spotify.df$dateTime >= first.date & spotify.df$dateTime <= last.date,]
+spotify.df <- left_join(spotify.df, locations, by = 'dateTime')
 
 determine.tz <- function(location) {
   switch (as.character(location),
-    "Germany" = return("CET"),
-    "Austria" = return("CET"),
-    "Singapore" = return("Asia/Singapore"),
-    "Thailand" = return("Asia/Bangkok"),
-    "Malaysia" = return("Asia/Kuala_Lumpur"),
-    "Cambodia" = return("Asia/Phnom_Penh"),
+    'Germany' = return('CET'),
+    'Austria' = return('CET'),
+    'Singapore' = return('Asia/Singapore'),
+    'Thailand' = return('Asia/Bangkok'),
+    'Malaysia' = return('Asia/Kuala_Lumpur'),
+    'Cambodia' = return('Asia/Phnom_Penh'),
   )
   
-  return("Invalid")
+  return('Invalid')
 }
 
 z <- spotify.df %>%
@@ -435,7 +439,7 @@ spotify.df$date <- date(spotify.df$local.posixct)
 songs.by.day <- spotify.df %>%
   group_by(date) %>%
   summarise(n = n()) %>%
-  complete(date = seq.Date(min(date), max(date), by="day"))
+  complete(date = seq.Date(min(date), max(date), by = 'day'))
 songs.by.day[is.na(songs.by.day)] <- 0
 ```
 
@@ -447,19 +451,20 @@ print(sum(songs.by.day$n))
 
 
 ```{r}
-p <- ggplot(data=songs.by.day, aes(x=date, y=n)) +
-  geom_line(linetype=1, color='#6d7d03') +
+p <- ggplot(data=songs.by.day, aes(x = date, y = n)) +
+  geom_line(linetype = 1, color = '#6d7d03') +
   geom_point() +
   scale_x_date(date_labels = '%Y-%m-%d', date_breaks='1 week') +
+  bbc_style() +
   labs(title="Number of songs I played on Spotify",
        subtitle = sprintf("From %s until %s", first.date, last.date)) +
-  bbc_style() +
+  xlab('Date') + 
+  ylab('Value') +
   theme(axis.title = element_text(size = 18), 
-        plot.margin = unit(c(1.0,1.5,1.0,1.0), "cm"),
+        plot.margin = unit(c(1.0, 1.5, 1.0, 1.0), 'cm'),
         axis.text.x = element_text(angle = 45, hjust = 1),
         axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0))) +
-  guides(colour = guide_legend(nrow = 1)) +
-  xlab('Date') + ylab('Value')
+  guides(colour = guide_legend(nrow = 1)) 
 
 print(p)
 
@@ -469,7 +474,6 @@ ggsave(sprintf("%s%s_%s_%s.jpg", plots_dir,'played_songs', first.date, last.date
 
 
 ```{r}
-# top artists
 top.artists <- spotify.df %>%
   group_by(MainArtistName) %>%
   summarise(n = n()) %>%
@@ -482,52 +486,51 @@ print(head(top.artists))
 
 ```{r}
 p <- ggplot(head(top.artists, n=10), aes(x=reorder(MainArtistName, -n), y = n)) + 
-    geom_bar(stat="identity") +
-    ggtitle("Check-ins times of my top categories") +
+    geom_bar(stat='identity') +
     bbc_style() +
     theme(axis.title = element_text(size = 18), 
-          plot.margin = unit(c(1.5, 1.5, 1.5, 1.5), "cm"),
+          plot.margin = unit(c(1.5, 1.5, 1.5, 1.5), 'cm'),
           axis.text.x = element_text(angle = 45, hjust = 1)) +
           guides(colour = guide_legend(nrow = 1)) +
     labs(title="My top 10 most played artists on Spotify",
          subtitle = sprintf("From %s until %s", first.date, last.date)) +
-    ylab("Number of songs") +
-    xlab("Artist")
+    ylab('Number of songs') +
+    xlab('Artist')
   
 print(p)
 
-ggsave(sprintf("%s%s_%s_%s.jpg", plots_dir,'top_artists', first.date, last.date), plot = p, 
+ggsave(sprintf("%s%s_%s_%s.jpg", plots_dir,"top_artists", first.date, last.date), plot = p, 
        width = 15, height = 9, units = 'in')
 ```
 
 
 ```{r}
 # top songs
-spotify.df$SongAndArtist <- sprintf("%s (%s)", spotify.df$Name, spotify.df$MainArtistName)
+spotify.df$SongAndArtist <- sprintf('%s (%s)', spotify.df$Name, spotify.df$MainArtistName)
 top.songs <- spotify.df %>%
   group_by(SongAndArtist) %>%
   summarise(n = n()) %>%
   arrange(desc(n)) %>%
-  mutate(percentage=(n/nrow(spotify.df)) * 100)
+  mutate(percentage = (n/nrow(spotify.df)) * 100)
 
 print(head(top.songs, n = 10))
 ```
 
 ```{r}
 p <- ggplot(head(top.songs, n=15), aes(x=reorder(SongAndArtist, -n), y = n)) + 
-    geom_bar(stat="identity") +
+    geom_bar(stat = 'identity') +
     bbc_style() +
     theme(axis.title = element_text(size = 18), 
-          plot.margin = unit(c(2.0, 2.0, 2.0, 2.5), "cm"),
+          plot.margin = unit(c(2.0, 2.0, 2.0, 2.5), 'cm'),
           axis.text.x = element_text(angle = 45, hjust = 1, size = 14)) +
     labs(title="My top 10 most played songs on Spotify",
          subtitle = sprintf("From %s until %s", first.date, last.date)) +
-    ylab("Number of reproductions") +
-    xlab("Song")
+    ylab('Number of reproductions') +
+    xlab('Song')
 
 print(p)
 
-ggsave(sprintf("%s%s_%s_%s.jpg", plots_dir,'top_songs', first.date, last.date), plot = p, 
+ggsave(sprintf("%s%s_%s_%s.jpg", plots_dir,"top_songs", first.date, last.date), plot = p, 
        width = 18, height = 12, units = 'in')
 ```
 
@@ -536,8 +539,8 @@ ggsave(sprintf("%s%s_%s_%s.jpg", plots_dir,'top_songs', first.date, last.date), 
 ```{r}
 sleep.df <- read.csv("~/Development/wanderdata-scripts/fitbit/data/sleep.csv", stringsAsFactors = FALSE)
 sleep.df$dateTime <- date(sleep.df$date)
-sleep.df <- sleep.df[sleep.df$dateTime >= args[1] & sleep.df$dateTime <= args[2],]
-sleep.df <- left_join(sleep.df, locations, by="dateTime")
+sleep.df <- sleep.df[sleep.df$dateTime >= first.date & sleep.df$dateTime <= last.date,]
+sleep.df <- left_join(sleep.df, locations, by = 'dateTime')
 ```
 
 ```{r}
@@ -548,20 +551,20 @@ sleep.df %>%
 
 
 ```{r}
-p <- ggplot(sleep.df, aes(x=dateTime, y=minutesAsleep / 60, color=Country)) +
+p <- ggplot(sleep.df, aes(x = dateTime, y = minutesAsleep/60, color = Country)) +
   geom_line(aes(group=1)) +
   geom_point() +
-  scale_x_date(date_labels = "%Y-%m-%d", date_breaks="1 week") +
-  scale_y_continuous(breaks= pretty_breaks(n = 10)) +
+  scale_x_date(date_labels = '%Y-%m-%d', date_breaks = '1 week') +
+  scale_y_continuous(breaks = pretty_breaks(n = 10)) +
   bbc_style() +
   theme(axis.title = element_text(size = 18), 
-        plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"),
+        plot.margin = unit(c(1.0, 1.0, 1.0, 0.5), 'cm'),
         axis.text.x = element_text(angle = 45, hjust = 1)) +
   labs(title="My minutes asleep according to Fitbit",
          subtitle = sprintf("From %s until %s", first.date, last.date)) +
   guides(colour = guide_legend(nrow = 1)) +
-  ylab("Hours") +
-  xlab("Date") 
+  ylab('Hours') +
+  xlab('Date') 
 
 
 print(p)
