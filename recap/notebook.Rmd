@@ -155,7 +155,6 @@ weather.df$dateTime <- date(weather.df$posixct)
 weather.df$hour <- hour(weather.df$posixct)
 weather.df <- weather.df[weather.df$dateTime >= first.date & weather.df$dateTime < last.date,]
 weather.df <- left_join(weather.df, locations, by='dateTime')
-#weather.df <- left_join(weather.df, summarized.barometer.df, by='dateTime')
 ```
 
 ```{r}
