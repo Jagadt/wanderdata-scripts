@@ -11,7 +11,7 @@ import numpy as np
 import seaborn as sns
 
 # setting the Seaborn aesthetics.
-sns.set()
+sns.set(font_scale=1.5)
 
 df = pd.read_csv('data/start_times.csv', encoding='utf-8')
 X_train = df[['weekday', 'time']]
@@ -23,7 +23,7 @@ clf.fit(X_train)
 xx, yy = np.meshgrid(np.linspace(0, 8, 500), np.linspace(-2, 25, 500))
 Z = clf.decision_function(np.c_[xx.ravel(), yy.ravel()])
 Z = Z.reshape(xx.shape)
-plt.title("\"Sleeping Times\" Decision Boundary")
+plt.title("\"Sleep Times\" Decision Boundary")
 # comment out the next line to see the "ripples" of the boundary
 # plt.contourf(xx, yy, Z, levels=np.linspace(Z.min(), 0, 7), cmap=plt.cm.PuBu)
 a = plt.contour(xx, yy, Z, levels=[0], linewidths=2, colors='darkred')

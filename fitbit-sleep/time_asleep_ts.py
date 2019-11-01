@@ -7,7 +7,7 @@ import seaborn as sns
 from fbprophet import Prophet
 
 # setting the Seaborn aesthetics.
-sns.set()
+sns.set(font_scale=1.3)
 
 df = pd.read_csv('data/time_in_bed.csv')
 

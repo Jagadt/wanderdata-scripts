@@ -56,13 +56,18 @@ p <- ggplot(df, aes(x=start.hour)) +
   geom_vline(xintercept=median(df$start.hour)) +
   bbc_style() +
   theme(axis.title = element_text(size = 18), 
-        plot.margin = unit(c(1.0, 1.0, 1.0, 0.5), 'cm'),
+        plot.margin = unit(c(1.0, 1.0, 1.0, 0.5), "cm"),
         axis.text.x = element_text(hjust = 1)) +
-  labs(title="Sleeping start hour histogram",
+  labs(title="Sleep start time (hour) histogram",
        subtitle = sprintf("From %s until %s", first.date, last.date)) 
 
 print(p)
 ```
+```{r}
+ggsave('plots/sleep_start_hist.jpg', plot = p, 
+           width = 15, height = 8, units = 'in')
+```
+
 
 ```{r}
 p <- ggplot(df, aes(x=end.hour)) +
@@ -70,12 +75,18 @@ p <- ggplot(df, aes(x=end.hour)) +
   geom_vline(xintercept=median(df$end.hour)) +
   bbc_style() +
   theme(axis.title = element_text(size = 18), 
-        plot.margin = unit(c(1.0, 1.0, 1.0, 0.5), 'cm'),
+        plot.margin = unit(c(1.0, 1.0, 1.0, 0.5), "cm"),
         axis.text.x = element_text(hjust = 1)) +
-  labs(title="Sleeping end hour histogram",
-       subtitle = sprintf("From %s until %s", first.date, last.date)) 
+  labs(title="Sleep end time (hour) histogram",
+       subtitle = sprintf("From %s until %s", first.date, last.date)) +
+  xlab("Start hour")
 
 print(p)
+```
+
+```{r}
+ggsave('plots/sleep_end_hist.jpg', plot = p, 
+           width = 15, height = 8, units = 'in')
 ```
 
 ```{r}
@@ -84,10 +95,11 @@ p <- ggplot(df, aes(x=minutesAsleep/60)) +
   geom_vline(xintercept=mean(df$minutesAsleep/60)) +
   bbc_style() +
   theme(axis.title = element_text(size = 18), 
-        plot.margin = unit(c(1.0, 1.0, 1.0, 0.5), 'cm'),
+        plot.margin = unit(c(1.0, 1.0, 1.0, 0.5), "cm"),
         axis.text.x = element_text(hjust = 1)) +
   labs(title="Time asleep histogram",
-       subtitle = sprintf("From %s until %s", first.date, last.date)) 
+       subtitle = sprintf("From %s until %s", first.date, last.date)) +
+  xlab("End hour")
 
 print(p)
 ```
@@ -110,6 +122,10 @@ p <- ggplot() +
     xlab("Date")
 print(p)
 ```
+```{r}
+ggsave('plots/start_end_times_line.jpg', plot = p, 
+           width = 15, height = 8, units = 'in')
+```
 
 
 ```{r}
@@ -127,6 +143,10 @@ p <- ggplot() +
     xlab("Date")
 print(p)
 ```
+```{r}
+ggsave('plots/hours_slept.jpg', plot = p, 
+           width = 15, height = 8, units = 'in')
+```
 
 ```{r}
 p <- ggplot(df, aes(x=minutesAsleep)) +
@@ -137,12 +157,14 @@ p <- ggplot(df, aes(x=minutesAsleep)) +
      theme(axis.title = element_text(size = 18), 
           plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"),
           axis.text.x = element_text(angle = 45, hjust = 1)) +
-     labs(title="Minutes slept distribution",
-         subtitle = sprintf("From %s until %s", first.date, last.date))
+     labs(title="Minutes asleep distribution",
+         subtitle = "From 135 nights")+
+  xlab("Minutes asleep")
 print(p)
 ```
 ```{r}
-mode(trunc(df$minutesAsleep/60))
+ggsave('plots/minutes_slept_hist.jpg', plot = p, 
+           width = 15, height = 8, units = 'in')
 ```
 
 
@@ -150,11 +172,11 @@ mode(trunc(df$minutesAsleep/60))
   p <- ggplot(df, aes(x=date, y=minutesAsleep)) + 
     geom_boxplot(aes(group=1), fill = "#6d7d03") +
     theme(plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"), 
-          plot.title = element_text(family = 'Helvetica', size = 28, face = "bold", color = "#222222"),
-          plot.subtitle = element_text(family = 'Helvetica', size = 22, margin = ggplot2::margin(9, 0, 9, 0)),
-          axis.text = element_text(family = 'Helvetica', size = 18, color = "#222222"),
-          axis.title.x = element_text(family = 'Helvetica', size = 18, color = "#222222"),
-          axis.title.y = element_text(family = 'Helvetica', size = 18, color = "#222222"),
+          plot.title = element_text(family = "Helvetica", size = 28, face = "bold", color = "#222222"),
+          plot.subtitle = element_text(family = "Helvetica", size = 22, margin = ggplot2::margin(9, 0, 9, 0)),
+          axis.text = element_text(family = "Helvetica", size = 18, color = "#222222"),
+          axis.title.x = element_text(family = "Helvetica", size = 18, color = "#222222"),
+          axis.title.y = element_text(family = "Helvetica", size = 18, color = "#222222"),
           legend.text=element_text(size=14),
           legend.position = "top", legend.text.align = 0, legend.background = ggplot2::element_blank(),
           legend.title = ggplot2::element_blank(), legend.key = ggplot2::element_blank()) +
@@ -214,10 +236,16 @@ p <- ggplot(df, aes(x=minutesAwake)) +
      theme(axis.title = element_text(size = 18), 
           plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"),
           axis.text.x = element_text(angle = 45, hjust = 1)) +
-     labs(title="Minutes awake histogram",
-         subtitle = "Time elapsed before falling asleep")
+     labs(title="Minutes Wake Histogram",
+         subtitle = "Nightly time spent up") +
+  xlab("Minutes awakes")
 print(p)
 ```
+```{r}
+ggsave('plots/minutes_awake_histogram.jpg', plot = p, 
+           width = 15, height = 8, units = 'in')
+```
+
 
 ```{r}
 print(kurtosis(df$minutesAwake))
@@ -229,19 +257,23 @@ print(skim(df$minutesAwake))
   p <- ggplot(df, aes(x=date, y=minutesAwake)) + 
     geom_boxplot(aes(group=1), fill = "#6d7d03") +
     theme(plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"), 
-          plot.title = element_text(family = 'Helvetica', size = 28, face = "bold", color = "#222222"),
-          plot.subtitle = element_text(family = 'Helvetica', size = 22, margin = ggplot2::margin(9, 0, 9, 0)),
-          axis.text = element_text(family = 'Helvetica', size = 18, color = "#222222"),
-          axis.title.x = element_text(family = 'Helvetica', size = 18, color = "#222222"),
-          axis.title.y = element_text(family = 'Helvetica', size = 18, color = "#222222"),
+          plot.title = element_text(family = "Helvetica", size = 28, face = "bold", color = "#222222"),
+          plot.subtitle = element_text(family = "Helvetica", size = 22, margin = ggplot2::margin(9, 0, 9, 0)),
+          axis.text = element_text(family = "Helvetica", size = 18, color = "#222222"),
+          axis.title.x = element_text(family = "Helvetica", size = 18, color = "#222222"),
+          axis.title.y = element_text(family = "Helvetica", size = 18, color = "#222222"),
           legend.text=element_text(size=14),
           legend.position = "top", legend.text.align = 0, legend.background = ggplot2::element_blank(),
           legend.title = ggplot2::element_blank(), legend.key = ggplot2::element_blank()) +
-    labs(title="Minutes asleep",
-         subtitle = sprintf("From %s until %s", first.date, last.date)) +
+    labs(title="Minutes Awake Boxplot",
+         subtitle = "Nightly time spent up") +
     ylab("Minutes") +
     xlab("Date")
 print(p)
+```
+```{r}
+ggsave('plots/minutes_awake_boxplot.jpg', plot = p, 
+           width = 15, height = 8, units = 'in')
 ```
 
 ```{r}
@@ -261,11 +293,16 @@ p <- ggplot() +
     theme(axis.title = element_text(size = 18), 
           plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"),
           axis.text.x = element_text(angle = 45, hjust = 1)) +
-    labs(title="Starting sleeping time",
+    labs(title="Sleep Start Times by Day of the Week",
          subtitle = sprintf("From %s until %s", first.date, last.date)) +
     ylab("Hour") +
     xlab("Date")
 print(p)
+```
+
+```{r}
+ggsave('plots/start_sleep_weekday.jpg', plot = p, 
+           width = 15, height = 8, units = 'in')
 ```
 
 ```{r}
@@ -296,7 +333,7 @@ p <- ggplot() +
           plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"),
           axis.text.x = element_text(angle = 45, hjust = 1)) +
     labs(title="Time in bed",
-         subtitle = sprintf("From %s until %s", first_date, last_date)) +
+         subtitle = sprintf("From %s until %s", first.date, last.date)) +
     ylab("Hour") +
     xlab("Date")
 print(p)
@@ -310,7 +347,7 @@ p <- ggplot(df, aes(x=restlessPerMinuteSleeping)) +
   geom_vline(xintercept=mean(df$restlessPerMinuteSleeping)) +
   bbc_style() +
   theme(axis.title = element_text(size = 18), 
-        plot.margin = unit(c(1.0, 1.0, 1.0, 0.5), 'cm'),
+        plot.margin = unit(c(1.0, 1.0, 1.0, 0.5), "cm"),
         axis.text.x = element_text(hjust = 1)) +
   labs(title="Time asleep histogram",
        subtitle = sprintf("From %s until %s", first.date, last.date))
@@ -324,7 +361,7 @@ p <- ggplot(df, aes(x=restlessPerHourSleeping)) +
   geom_vline(xintercept=mean(df$restlessPerHourSleeping)) +
   bbc_style() +
   theme(axis.title = element_text(size = 18), 
-        plot.margin = unit(c(1.0, 1.0, 1.0, 0.5), 'cm'),
+        plot.margin = unit(c(1.0, 1.0, 1.0, 0.5), "cm"),
         axis.text.x = element_text(hjust = 1)) +
   labs(title="Restless moments per hour sleeping",
        subtitle = sprintf("From %s until %s", first.date, last.date))
