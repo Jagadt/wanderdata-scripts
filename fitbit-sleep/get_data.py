@@ -39,7 +39,6 @@ def get_sleep_data(client, base_date):
             # ignore naps
             if not sleep_activity.get('isMainSleep'):
                 continue
-            levels = sleep_activity.get('summary')
             sleep_data.append((sleep_activity.get('dateOfSleep'),
                                sleep_activity.get('efficiency'),
                                sleep_activity.get('startTime'),
