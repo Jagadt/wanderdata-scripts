@@ -4,3 +4,6 @@ spotify/Makefile
 weather/Makefile
 fitbit/__pycache__/*
 *-checkpoint.ipynb
+fitbit_steps/Makefile
+swarmapp/Makefile
+fitbit-sleep/Makefile

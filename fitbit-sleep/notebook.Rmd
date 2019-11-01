@@ -1,0 +1,339 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+require(skimr)
+require(parsedate)
+require(lubridate)
+require(reshape2)
+require(dplyr)
+require(ggplot2)
+require(bbplot)
+require(e1071)
+```
+
+```{r}
+df <- read.csv("~/Development/wanderdata-scripts/fitbit-sleep/data/df.csv")
+```
+
+
+
+```{r}
+df$date <- date(df$date)
+df$weekday <- weekdays(df$date)
+df$weekday <- factor(df$weekday, levels = c("Monday", "Tuesday", "Wednesday", "Thursday",  "Friday", 
+                                                 "Saturday", "Sunday"))
+df$start.time.posixct <-as.POSIXct(df$startTime, format="%Y-%m-%dT%H:%M:%OS")
+df$end.time.posixct <-as.POSIXct(df$endTime, format="%Y-%m-%dT%H:%M:%OS")
+
+# convert time to a numerical value e.g. 23:30 -> 32.50
+df$decimal.start <- hour(df$start.time.posixct) + minute(df$start.time.posixct)/60
+df$decimal.end <- hour(df$end.time.posixct) + minute(df$end.time.posixct)/60
+df$start.hour <- hour(df$start.time.posixct)
+df$end.hour <- hour(df$end.time.posixct)
+
+first.date <- head(df, n=1)$date
+last.date <- tail(df, n=1)$date
+
+df.times <- data.frame(dateTime = df$date, startTime = df$decimal.start, endTime = df$decimal.end)
+df.times <- melt(df.times, id.vars = c("dateTime"))
+mutate(df, diff = abs(decimal.start-lag(decimal.end)))
+df <- mutate(df, diffHours = abs(end.time.posixct-lead(start.time.posixct)))
+df$restlessPerMinuteSleeping <- df$restlessCount/df$minutesAsleep
+df$restlessPerHourSleeping <- df$restlessCount/(df$minutesAsleep/60)
+
+```
+
+```{r}
+skim(df)
+```
+
+```{r}
+p <- ggplot(df, aes(x=start.hour)) +
+  geom_histogram(bins = 30) +
+  geom_vline(xintercept=median(df$start.hour)) +
+  bbc_style() +
+  theme(axis.title = element_text(size = 18), 
+        plot.margin = unit(c(1.0, 1.0, 1.0, 0.5), 'cm'),
+        axis.text.x = element_text(hjust = 1)) +
+  labs(title="Sleeping start hour histogram",
+       subtitle = sprintf("From %s until %s", first.date, last.date)) 
+
+print(p)
+```
+
+```{r}
+p <- ggplot(df, aes(x=end.hour)) +
+  geom_histogram(bins = 30) +
+  geom_vline(xintercept=median(df$end.hour)) +
+  bbc_style() +
+  theme(axis.title = element_text(size = 18), 
+        plot.margin = unit(c(1.0, 1.0, 1.0, 0.5), 'cm'),
+        axis.text.x = element_text(hjust = 1)) +
+  labs(title="Sleeping end hour histogram",
+       subtitle = sprintf("From %s until %s", first.date, last.date)) 
+
+print(p)
+```
+
+```{r}
+p <- ggplot(df, aes(x=minutesAsleep/60)) +
+  geom_histogram(bins = 20) +
+  geom_vline(xintercept=mean(df$minutesAsleep/60)) +
+  bbc_style() +
+  theme(axis.title = element_text(size = 18), 
+        plot.margin = unit(c(1.0, 1.0, 1.0, 0.5), 'cm'),
+        axis.text.x = element_text(hjust = 1)) +
+  labs(title="Time asleep histogram",
+       subtitle = sprintf("From %s until %s", first.date, last.date)) 
+
+print(p)
+```
+
+
+```{r}
+# this is time in bed
+p <- ggplot() +
+    geom_line(data=df.times, aes(x = dateTime, y = value, color = variable)) +
+    geom_point(data=df.times ,aes(x = dateTime,y = value)) +
+    bbc_style() +
+    scale_x_date(date_labels = "%Y-%m-%d", date_breaks="1 week") +
+    scale_y_continuous(breaks = round(seq(min(df.times$value), max(df.times$value), by = 2))) +
+    theme(axis.title = element_text(size = 18), 
+          plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"),
+          axis.text.x = element_text(angle = 45, hjust = 1)) +
+    labs(title="My sleeping times (start and end) according to Fitbit",
+         subtitle = sprintf("From %s until %s", first.date, last.date)) +
+    ylab("Hour") +
+    xlab("Date")
+print(p)
+```
+
+
+```{r}
+p <- ggplot() +
+    geom_line(data=df, aes(x=date,y=minutesAsleep/60), color = "#6d7d03") +
+    geom_point(data=df ,aes(x=date,y=minutesAsleep/60)) +
+    bbc_style() +
+    scale_x_date(date_labels = "%Y-%m-%d", date_breaks="1 week") +
+    theme(axis.title = element_text(size = 18), 
+          plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"),
+          axis.text.x = element_text(angle = 45, hjust = 1)) +
+    labs(title="Hours slept per night",
+         subtitle = sprintf("From %s until %s", first.date, last.date)) +
+    ylab("Hours") +
+    xlab("Date")
+print(p)
+```
+
+```{r}
+p <- ggplot(df, aes(x=minutesAsleep)) +
+     geom_histogram(bins = 30, aes(y=..density..)) +
+     geom_vline(xintercept=mean(df$minutesAsleep), linetype="dashed", size=1) +
+     geom_density()+
+     bbc_style() +
+     theme(axis.title = element_text(size = 18), 
+          plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"),
+          axis.text.x = element_text(angle = 45, hjust = 1)) +
+     labs(title="Minutes slept distribution",
+         subtitle = sprintf("From %s until %s", first.date, last.date))
+print(p)
+```
+```{r}
+mode(trunc(df$minutesAsleep/60))
+```
+
+
+```{r}
+  p <- ggplot(df, aes(x=date, y=minutesAsleep)) + 
+    geom_boxplot(aes(group=1), fill = "#6d7d03") +
+    theme(plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"), 
+          plot.title = element_text(family = 'Helvetica', size = 28, face = "bold", color = "#222222"),
+          plot.subtitle = element_text(family = 'Helvetica', size = 22, margin = ggplot2::margin(9, 0, 9, 0)),
+          axis.text = element_text(family = 'Helvetica', size = 18, color = "#222222"),
+          axis.title.x = element_text(family = 'Helvetica', size = 18, color = "#222222"),
+          axis.title.y = element_text(family = 'Helvetica', size = 18, color = "#222222"),
+          legend.text=element_text(size=14),
+          legend.position = "top", legend.text.align = 0, legend.background = ggplot2::element_blank(),
+          legend.title = ggplot2::element_blank(), legend.key = ggplot2::element_blank()) +
+    labs(title="My minutes asleep boxplot",
+         subtitle = sprintf("From %s until %s", first.date, last.date)) +
+    ylab("Minutes") +
+    xlab("Date")
+print(p)
+```
+
+```{r}
+df.cor <- df[df$diffHours < 24,]
+df.cor$diffHoursNumeric <- as.numeric(df.cor$diffHours)
+df.cor <- df.cor[complete.cases(df.cor), ]
+cor(df.cor$diffHoursNumeric, df.cor$minutesAsleep)
+plot(df.cor$diffHoursNumeric, df.cor$minutesAsleep)
+cor.test(df.cor$diffHoursNumeric, df.cor$minutesAsleep)
+```
+
+```{r}
+p <- ggplot() +
+    geom_line(data=df, aes(x=date,y=minutesAfterWakeup), color = "#6d7d03") +
+    geom_point(data=df ,aes(x=date,y=minutesAfterWakeup)) +
+    bbc_style() +
+    scale_x_date(date_labels = "%Y-%m-%d", date_breaks="1 week") +
+    theme(axis.title = element_text(size = 18), 
+          plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"),
+          axis.text.x = element_text(angle = 45, hjust = 1)) +
+    labs(title="Minutes after wakeup",
+         subtitle = sprintf("From %s until %s", first.date, last.date)) +
+    ylab("Minutes") +
+    xlab("Date")
+print(p)
+```
+```{r}
+p <- ggplot() +
+    geom_line(data=df, aes(x=date,y=minutesAwake), color = "#6d7d03") +
+    geom_point(data=df ,aes(x=date,y=minutesAwake)) +
+    bbc_style() +
+    scale_x_date(date_labels = "%Y-%m-%d", date_breaks="1 week") +
+    theme(axis.title = element_text(size = 18), 
+          plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"),
+          axis.text.x = element_text(angle = 45, hjust = 1)) +
+    labs(title="Minutes awake",
+         subtitle = sprintf("From %s until %s", first.date, last.date)) +
+    ylab("Minutes") +
+    xlab("Date")
+print(p)
+```
+
+```{r}
+p <- ggplot(df, aes(x=minutesAwake)) +
+     geom_histogram(bins = 30, aes(y=..density..)) +
+     geom_vline(xintercept=mean(df$minutesAwake), linetype="dashed", size=1) +
+     geom_density()+
+     bbc_style() +
+     theme(axis.title = element_text(size = 18), 
+          plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"),
+          axis.text.x = element_text(angle = 45, hjust = 1)) +
+     labs(title="Minutes awake histogram",
+         subtitle = "Time elapsed before falling asleep")
+print(p)
+```
+
+```{r}
+print(kurtosis(df$minutesAwake))
+print(skewness(df$minutesAwake))
+print(skim(df$minutesAwake))
+```
+
+```{r}
+  p <- ggplot(df, aes(x=date, y=minutesAwake)) + 
+    geom_boxplot(aes(group=1), fill = "#6d7d03") +
+    theme(plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"), 
+          plot.title = element_text(family = 'Helvetica', size = 28, face = "bold", color = "#222222"),
+          plot.subtitle = element_text(family = 'Helvetica', size = 22, margin = ggplot2::margin(9, 0, 9, 0)),
+          axis.text = element_text(family = 'Helvetica', size = 18, color = "#222222"),
+          axis.title.x = element_text(family = 'Helvetica', size = 18, color = "#222222"),
+          axis.title.y = element_text(family = 'Helvetica', size = 18, color = "#222222"),
+          legend.text=element_text(size=14),
+          legend.position = "top", legend.text.align = 0, legend.background = ggplot2::element_blank(),
+          legend.title = ggplot2::element_blank(), legend.key = ggplot2::element_blank()) +
+    labs(title="Minutes asleep",
+         subtitle = sprintf("From %s until %s", first.date, last.date)) +
+    ylab("Minutes") +
+    xlab("Date")
+print(p)
+```
+
+```{r}
+cor(df$minutesAwake, df$restlessCount)
+cor(df$minutesAsleep, df$restlessCount)
+```
+```{r}
+start.times <- select(df, weekday, decimal.start)
+start.times$weekday <- as.numeric(df$weekday)
+colnames(start.times) <- c('weekday', 'time')
+write.csv(start.times, file = 'data/start_times.csv', row.names = FALSE)
+
+p <- ggplot() +
+    geom_point(data=df ,aes(x=weekday,y=decimal.start)) +
+    scale_y_continuous(breaks = round(seq(min(df$decimal.start), 24, by = 2))) +
+    bbc_style() +
+    theme(axis.title = element_text(size = 18), 
+          plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"),
+          axis.text.x = element_text(angle = 45, hjust = 1)) +
+    labs(title="Starting sleeping time",
+         subtitle = sprintf("From %s until %s", first.date, last.date)) +
+    ylab("Hour") +
+    xlab("Date")
+print(p)
+```
+
+```{r}
+end.times <- select(df, weekday, decimal.end)
+end.times$weekday <- as.numeric(df$weekday)
+colnames(end.times) <- c('weekday', 'time')
+write.table(end.times, file = 'end_times.csv', row.names = FALSE)
+
+p <- ggplot() +
+    geom_point(data=df ,aes(x=weekday,y=decimal.end)) +
+    scale_y_continuous(breaks = round(seq(min(df$decimal.end), 24, by = 2))) +
+    bbc_style() +
+    theme(axis.title = element_text(size = 18), 
+          plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"),
+          axis.text.x = element_text(angle = 45, hjust = 1)) +
+    labs(title="End sleeping time",
+         subtitle = sprintf("From %s until %s", first.date, last.date)) +
+    ylab("Hour") +
+    xlab("Date")
+print(p)
+```
+
+```{r}
+p <- ggplot() +
+    geom_point(data=df ,aes(x=weekday,y=timeInBed)) +
+    bbc_style() +
+    theme(axis.title = element_text(size = 18), 
+          plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"),
+          axis.text.x = element_text(angle = 45, hjust = 1)) +
+    labs(title="Time in bed",
+         subtitle = sprintf("From %s until %s", first_date, last_date)) +
+    ylab("Hour") +
+    xlab("Date")
+print(p)
+```
+
+## Restless count per minute sleeping
+
+```{r}
+p <- ggplot(df, aes(x=restlessPerMinuteSleeping)) +
+  geom_histogram(bins = 30) +
+  geom_vline(xintercept=mean(df$restlessPerMinuteSleeping)) +
+  bbc_style() +
+  theme(axis.title = element_text(size = 18), 
+        plot.margin = unit(c(1.0, 1.0, 1.0, 0.5), 'cm'),
+        axis.text.x = element_text(hjust = 1)) +
+  labs(title="Time asleep histogram",
+       subtitle = sprintf("From %s until %s", first.date, last.date))
+
+print(p)
+```
+
+```{r}
+p <- ggplot(df, aes(x=restlessPerHourSleeping)) +
+  geom_histogram(bins = 30) +
+  geom_vline(xintercept=mean(df$restlessPerHourSleeping)) +
+  bbc_style() +
+  theme(axis.title = element_text(size = 18), 
+        plot.margin = unit(c(1.0, 1.0, 1.0, 0.5), 'cm'),
+        axis.text.x = element_text(hjust = 1)) +
+  labs(title="Restless moments per hour sleeping",
+       subtitle = sprintf("From %s until %s", first.date, last.date))
+
+print(p)
+```
+```{r}
+print(mean(df$restlessPerHourSleeping))
+print(mean(df$restlessPerMinuteSleeping))
+```
+
+
