@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name><![CDATA[Hong Kong & Macao]]></name>
+    <description/>
+    <Style id="icon-1899-0288D1-nodesc-normal">
+      <IconStyle>
+        <color>ffd18802</color>
+        <scale>1</scale>
+        <Icon>
+          <href>http://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-1899-0288D1-nodesc-highlight">
+      <IconStyle>
+        <color>ffd18802</color>
+        <scale>1</scale>
+        <Icon>
+          <href>http://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-1899-0288D1-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-0288D1-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-0288D1-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Folder>
+      <name>To download</name>
+      <Placemark>
+        <name>Hong Kong Space Museum - Stanley Ho Space Theatre</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.17187,22.29432,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Avenue of stars</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.1741491,22.2930098,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Kowloon Taproom</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.1704664,22.2969982,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Kowloon Park</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.1700059,22.3007333,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Sky 100 Hong Kong Observation Deck</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.160231,22.303381,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Temple Street Night Market</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.1699805,22.3065185,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Quarry Bay</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.2123009,22.2827206,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Yick Fat Building</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.2126656,22.2840542,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Chun Yeung Street</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.1968799,22.2910489,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI Hong Kong Flagship Store</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.1840027,22.2812878,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Victoria Peak</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.145532,22.2758835,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Lookout Point</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.1422371,22.2739977,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Choi Hung Estate</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.2056135,22.3360834,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Ping Shek Estate</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.2090864,22.3333511,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Mong Kok</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.169773,22.3203648,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>VictoriaPark</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.1886969,22.2823565,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Causeway Bay</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.1914919,22.2859787,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Times Square</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.1821587,22.2781357,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Victoria Harbour</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.1689867,22.2825275,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Kowloon Walled City Park</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.1903285,22.3321296,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Xiqu Centre (car park available)</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.1675199,22.3025422,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Lockhart Road</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.1822612,22.280372,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Tung Choi Street</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.1701978,22.3210731,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Fortress Hill</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.194839,22.2879159,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Man Mo Temple</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.1501902,22.28395,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Sunset Peak</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            113.9530215,22.2532696,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Temple Street</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.1696086,22.3048384,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name><![CDATA[Canon Showrooms & Care Center]]></name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.1718145,22.2971956,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Tim Ho Wan</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.1579736,22.2849499,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Ten Thousand Buddhas Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.1847775,22.3876093,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Aberdeen</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.1524398,22.2483068,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Central-Mid-Levels Escalators</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.1551419,22.2838219,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Chungking Mansions</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.1727721,22.2966364,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name><![CDATA[Victoria Peak's Lions Pavilion]]></name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.1507897,22.2709398,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Kowloon Peak</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.2166667,22.3333333,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Tai Mo Shan</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.1379499,22.4088464,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Rua Sul do Patane</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            113.5429202,22.2066583,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Grand Lisboa hotel</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            113.5433766,22.1909034,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name><![CDATA[Ruins of St. Paul's]]></name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            113.5408604,22.1976747,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Avenida de Demetrio Cinatti</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            113.5367378,22.1991911,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Taipa</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            113.563922,22.1596848,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Avenida de Venceslau de Morais</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            113.5521556,22.2069612,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>The Parisian Macao</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            113.5619583,22.143661,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>
