@@ -119,12 +119,13 @@ coordinates.plot <- ggplot(coordinates, aes(x = longitude, y = latitude)) +
   geom_point() +
   bbc_style() +
   theme(axis.title = element_text(size = 18), 
-      plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm")) +
-  xlab("Longitude") + ylab("Latitude") +
+      plot.margin = unit(c(1.0,1.0,1.0,0.5), 'cm')) +
+  xlab('Longitude') + ylab('Latitude') +
   ggtitle("Coordinates scatterplot",
           subtitle = "Of locations from Hong Kong and Macau")
 print(coordinates.plot)
 ```
+
 ```{r}
 ggsave('plots/coordinates_plot.jpg', plot = coordinates.plot, 
            width = 15, height = 8, units = 'in')
@@ -147,7 +148,7 @@ map <- get_googlemap(center=c(113.8629458, 22.2908493), zoom = 10, maptype = 'ro
 general.plot <- map %>% ggmap() +
   geom_point(data = df, 
              aes(x = df$longitude, y = df$latitude, color = df$cluster, size = 10)) +
-  scale_color_brewer(palette="Set1")+
+  scale_color_brewer(palette = 'Set1')+
   theme(legend.position = 'none',
         plot.title = element_text(size = 22),
         plot.subtitle = element_text(size = 18),
@@ -155,9 +156,9 @@ general.plot <- map %>% ggmap() +
         axis.text.y  = element_text(size = 14),
         axis.title.x = element_text(size = 14),
         axis.title.y = element_text(size = 14),
-        plot.margin = unit(c(1.0,1.5,1.0,0.5), "cm")) +
-  xlab("Longitude") + ylab("Latitude") +
-  ggtitle("Hong Kong and Macau Planning Clusters", subtitle = 'Where each cluster (color) represents one day')
+        plot.margin = unit(c(1.0,1.5,1.0,0.5), 'cm')) +
+  xlab('Longitude') + ylab('Latitude') +
+  ggtitle("Hong Kong and Macau Planning Clusters", subtitle = "Where each cluster (color) represents one day")
 print(general.plot)
 ```
 ```{r}
@@ -173,7 +174,7 @@ macau.map <- get_googlemap(center=c(113.5528549, 22.1791195),, zoom = 13, maptyp
 macau.plot <- macau.map %>% ggmap() +
   geom_point(data = df, 
              aes(x = longitude, y = latitude, color = cluster, size = 10)) +
-  scale_color_brewer(palette="Set1")+
+  scale_color_brewer(palette='Set1')+
   theme(legend.position = 'none',
         plot.title = element_text(size = 22),
         plot.subtitle = element_text(size = 18),
@@ -181,9 +182,9 @@ macau.plot <- macau.map %>% ggmap() +
         axis.text.y  = element_text(size = 14),
         axis.title.x = element_text(size = 14),
         axis.title.y = element_text(size = 14),
-        plot.margin = unit(c(1.0,1.5,1.0,0.5), "cm")) +
-  xlab("Longitude") + ylab("Latitude") +
-  ggtitle("Macau Clusters", subtitle = 'Where each cluster (color) represents one day')
+        plot.margin = unit(c(1.0,1.5,1.0,0.5), 'cm')) +
+  xlab('Longitude') + ylab('Latitude') +
+  ggtitle("Macau Clusters", subtitle = "Where each cluster (color) represents one day")
 print(macau.plot)
 ```
 
@@ -193,24 +194,24 @@ ggsave('plots/macau_plot.jpg', plot = macau.plot,
 ```
 
 ```{r}
-macau.peninsula.map <- get_googlemap(center=c(113.5411517, 22.1974949),, zoom = 15, maptype = 'roadmap', size = c(640, 640), scale = 2, style = c(feature = "all", element = "labels", visibility = "off")) 
+macau.peninsula.map <- get_googlemap(center=c(113.5411517, 22.1974949),, zoom = 15, maptype = 'roadmap', size = c(640, 640), scale = 2, style = c(feature = 'all', element = 'labels', visibility = 'off')) 
 ```
 
 ```{r}
 macau.plot.medoids <- macau.peninsula.map %>% ggmap() +
   geom_point(data = df, 
              aes(x = longitude, y = latitude, color = cluster, size = 10, shape = isMedoid)) +
-  scale_color_brewer(palette="Set1")+
+  scale_color_brewer(palette='Set1')+
   theme(plot.title = element_text(size = 22),
         plot.subtitle = element_text(size = 18),
         axis.text.x  = element_text(size = 14),
         axis.text.y  = element_text(size = 14),
         axis.title.x = element_text(size = 14),
         axis.title.y = element_text(size = 14),
-        plot.margin = unit(c(1.0,1.5,1.0,0.5), "cm")) +
-  xlab("Longitude") + ylab("Latitude") +
+        plot.margin = unit(c(1.0,1.5,1.0,0.5), 'cm')) +
+  xlab('Longitude') + ylab('Latitude') +
   guides(color = FALSE, size = FALSE) +
-  ggtitle("Macau Clusters", subtitle = 'Where each cluster (color) represents one day')
+  ggtitle("Macau Clusters", subtitle = "Where each cluster (color) represents one day")
 print(macau.plot.medoids)
 ```
 
@@ -227,7 +228,7 @@ hk.map <- get_googlemap(center=c(114.0835915, 22.3154898), zoom = 11, maptype = 
 hk.plot <- hk.map %>% ggmap() +
   geom_point(data = df, 
              aes(x = longitude, y = latitude, color = cluster, size = 10)) +
-  scale_color_brewer(palette="Set1")+
+  scale_color_brewer(palette='Set1')+
   theme(legend.position = 'none',
         plot.title = element_text(size = 22),
         plot.subtitle = element_text(size = 18),
@@ -235,9 +236,9 @@ hk.plot <- hk.map %>% ggmap() +
         axis.text.y  = element_text(size = 14),
         axis.title.x = element_text(size = 14),
         axis.title.y = element_text(size = 14),
-        plot.margin = unit(c(1.0,1.5,1.0,0.5), "cm")) +
-  xlab("Longitude") + ylab("Latitude") +
-  ggtitle("Hong Kong Clusters", subtitle = 'Where each cluster (color) represents one day')
+        plot.margin = unit(c(1.0,1.5,1.0,0.5), 'cm')) +
+  xlab('Longitude') + ylab('Latitude') +
+  ggtitle("Hong Kong Clusters", subtitle = "Where each cluster (color) represents one day")
 print(hk.plot)
 ```
 ```{r}
@@ -253,7 +254,7 @@ kowloon.map <- get_googlemap(center=c(114.2029068, 22.33404660), zoom = 14, mapt
 kowloon.plot <- kowloon.map %>% ggmap() +
   geom_point(data = df, 
              aes(x = longitude, y = latitude, color = cluster, size = 10)) +
-  scale_color_brewer(palette="Set1")+
+  scale_color_brewer(palette='Set1')+
   theme(legend.position = 'none',
         plot.title = element_text(size = 22),
         plot.subtitle = element_text(size = 18),
@@ -261,9 +262,9 @@ kowloon.plot <- kowloon.map %>% ggmap() +
         axis.text.y  = element_text(size = 14),
         axis.title.x = element_text(size = 14),
         axis.title.y = element_text(size = 14),
-        plot.margin = unit(c(1.0,1.5,1.0,0.5), "cm")) +
-  xlab("Longitude") + ylab("Latitude") +
-  ggtitle("Kowloon Area Clusters", subtitle = 'Where each cluster (color) represents one day')
+        plot.margin = unit(c(1.0,1.5,1.0,0.5), 'cm')) +
+  xlab('Longitude') + ylab('Latitude') +
+  ggtitle("Kowloon Area Clusters", subtitle = "Where each cluster (color) represents one day")
 print(kowloon.plot)
 ```
 
@@ -280,7 +281,7 @@ hk.island.map <- get_googlemap(center=c(114.1724631, 22.26), zoom = 13, maptype 
 hk.island.plot <- hk.island.map %>% ggmap() +
   geom_point(data = df, 
              aes(x = longitude, y = latitude, color = cluster, size = 10)) +
-  scale_color_brewer(palette="Set1")+
+  scale_color_brewer(palette='Set1')+
   theme(legend.position = 'none',
         plot.title = element_text(size = 22),
         plot.subtitle = element_text(size = 18),
@@ -288,8 +289,8 @@ hk.island.plot <- hk.island.map %>% ggmap() +
         axis.text.y  = element_text(size = 14),
         axis.title.x = element_text(size = 14),
         axis.title.y = element_text(size = 14),
-        plot.margin = unit(c(1.0,1.5,1.0,0.5), "cm")) +
-  xlab("Longitude") + ylab("Latitude") +
+        plot.margin = unit(c(1.0,1.5,1.0,0.5), 'cm')) +
+  xlab('Longitude') + ylab('Latitude') +
   ggtitle("Tsim Sha Tsui and Hong Kong Island Clusters", subtitle = 'Where each cluster (color) represents one day')
 print(hk.island.plot)
 ```
@@ -304,17 +305,17 @@ ggsave('plots/hk.island.plot.jpg', plot = hk.island.plot,
 hk.island.plot.medoids <- hk.island.map %>% ggmap() +
   geom_point(data = df, 
              aes(x = longitude, y = latitude, color = cluster, size = 10, shape = isMedoid)) +
-  scale_color_brewer(palette="Set1")+
+  scale_color_brewer(palette='Set1')+
   theme(plot.title = element_text(size = 22),
         plot.subtitle = element_text(size = 18),
         axis.text.x  = element_text(size = 14),
         axis.text.y  = element_text(size = 14),
         axis.title.x = element_text(size = 14),
         axis.title.y = element_text(size = 14),
-        plot.margin = unit(c(1.0,1.5,1.0,0.5), "cm")) +
+        plot.margin = unit(c(1.0,1.5,1.0,0.5), 'cm')) +
   guides(color = FALSE, size = FALSE) +
-  xlab("Longitude") + ylab("Latitude") +
-  ggtitle("Tsim Sha Tsui and Hong Kong Island Clusters", subtitle = 'Where each cluster (color) represents one day')
+  xlab('Longitude') + ylab('Latitude') +
+  ggtitle("Tsim Sha Tsui and Hong Kong Island Clusters", subtitle = "Where each cluster (color) represents one day")
 print(hk.island.plot.medoids)
 ```
 

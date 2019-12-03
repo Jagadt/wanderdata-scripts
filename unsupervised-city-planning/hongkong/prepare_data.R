@@ -2,7 +2,6 @@ require(readr)
 
 raw <- read_file('~/Development/wanderdata-scripts/unsupervised-city-planning/hongkong/data/raw.kml')
 
-
 # both functions are taken from https://gist.github.com/briatte/18a4d543d1ccca194b2a03ac512be2b4
 kml_points <- function(x, layer = "d1", verbose = TRUE) {
   
@@ -64,3 +63,4 @@ kml_coordinate <- function(x, coord, verbose = TRUE) {
 }
 
 df <- kml_points(raw)
+head(df)
