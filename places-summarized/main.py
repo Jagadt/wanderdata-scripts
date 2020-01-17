@@ -32,12 +32,12 @@ client = Client(key=key)
 summary = client.places_summary(location=location, radius=radius)
 
 # Get more results!
-for i in range(number_gets):
+for _ in range(number_gets):
     print(summary.nearby_results)
     time.sleep(5)
     client.get_more_results(summary)
-    r = summary.result()
 
+r = summary.result()
 
 # Plot histogram of ratings
 sns.distplot(r['ratings']).set_title(
