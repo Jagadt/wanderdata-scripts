@@ -22,4 +22,4 @@ WHERE
 df = pandas_gbq.read_gbq(query, project_id=sys.argv[2],
                          dialect='standard')
 
-df.to_csv('df.csv', index=False, encoding='utf-8')
+df.to_csv('data/df.csv', index=False, encoding='utf-8')

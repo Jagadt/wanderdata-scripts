@@ -12,7 +12,7 @@ require(viridis)
 require(lubridate)
 require(tidyr)
 
-df <- read.csv("~/Development/wanderdata-scripts/spotify/df.csv", stringsAsFactors=FALSE)
+df <- read.csv("~/Development/wanderdata-scripts/spotify/data/df.csv", stringsAsFactors=FALSE)
 
 plots_dir <- 'plots/'
 
@@ -45,7 +45,7 @@ print(sum(songs.by.day$n))
 p <- ggplot() +
   geom_line(data=songs.by.day, aes(x=date, y=n), linetype=1, color='#6d7d03') +
   geom_point(data=songs.by.day ,aes(x=date,y=n)) +
-  scale_x_date(date_labels = '%Y-%m-%d', date_breaks='1 day') +
+  scale_x_date(date_labels = '%Y-%m-%d', date_breaks='1 week') +
   labs(title="Number of songs I played on Spotify",
        subtitle = sprintf("From %s until %s", first.date, last.date)) +
   bbc_style() +
