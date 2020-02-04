@@ -7,3 +7,7 @@ fitbit/__pycache__/*
 fitbit_steps/Makefile
 swarmapp/Makefile
 fitbit-sleep/Makefile
+geckodriver.log
+places-summarized/Makefile
+fitbit-sleep/data/.Rhistory
+*notebook.nb.html
