@@ -17,4 +17,4 @@ client = fitbit.Fitbit(os.environ['FITBIT_KEY'], os.environ['FITBIT_SECRET'],
                        access_token=access_token, refresh_token=refresh_token,
                        system='en_DE')
 
-common.append_to_csv('data/steps_intraday', common.get_intraday_steps_data(client, '2019-07-09', '2019-08-02'))
+common.append_to_csv('data/steps_intraday', common.get_intraday_steps_data(client, '2019-12-01', '2019-12-31'))
