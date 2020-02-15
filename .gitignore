@@ -11,3 +11,5 @@ geckodriver.log
 places-summarized/Makefile
 fitbit-sleep/data/.Rhistory
 *notebook.nb.html
+.Rhistory
+7-eleven-swarm/Makefile

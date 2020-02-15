@@ -1,0 +1,469 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+require(jsonlite)
+require(maptools)
+require(ggmap)
+require(dplyr)
+require(tidyr)
+require(bbplot)
+require(lubridate)
+require(parsedate)
+require(skimr)
+require(tidyr)
+require(ggcal)
+```
+
+```{r}
+determine.tz <- function(location) {
+  switch (as.character(location),
+    'SG' = return('Asia/Singapore'),
+    'TH' = return('Asia/Bangkok'),
+    'MY' = return('Asia/Kuala_Lumpur'),
+    'JP' = return('Asia/Tokyo'),
+    'HK' = return('Asia/Hong_Kong'),
+  )
+  
+  return('Invalid')
+}
+
+
+extract.dateTime <- function(df, cc) {
+  c.df <- df[df$venue.location.cc == cc,]
+  c.df$dateTime <- as.character(as.POSIXct(c.df$createdAt,  origin="1970-01-01", tz=determine.tz(cc)))
+  return(c.df)
+}
+```
+
+```{r}
+df <- fromJSON('data/checkins.json')
+
+# json to dataframe
+df <- flatten(df)
+```
+
+```{r}
+# create a new category column by select the category from the nested structure 'venue.category'
+df$category <- sapply(df$venue.categories, function(x) x$name)
+
+
+```
+
+```{r}
+convenience.stores <- df[df$category == 'Convenience Store',]
+seven.elevens <- convenience.stores[grepl('7', convenience.stores$venue.name),]
+
+
+jp.df <- extract.dateTime(seven.elevens, 'JP')
+sg.df <- extract.dateTime(seven.elevens, 'SG')
+hk.df <- extract.dateTime(seven.elevens, 'HK')
+my.df <- extract.dateTime(seven.elevens, 'MY')
+th.df <- extract.dateTime(seven.elevens, 'TH')
+
+seven.elevens <- rbind(jp.df, sg.df, hk.df, my.df, th.df)
+seven.elevens$posixct <- as.POSIXct(seven.elevens$dateTime)
+seven.elevens$hour <- hour(seven.elevens$posixct)
+seven.elevens$date <- date(seven.elevens$posixct)
+seven.elevens$dateTimeNoSeconds <- format(seven.elevens$posixct, "%Y-%m-%d %H:%M")
+seven.elevens$weekday <- weekdays(seven.elevens$posixct)
+seven.elevens$weekday <- factor(seven.elevens$weekday, levels = c("Monday", "Tuesday", "Wednesday", "Thursday",  "Friday", 
+                                                 "Saturday", "Sunday"))
+```
+
+
+
+# Visits per day
+```{r}
+visits.per.day <- seven.elevens %>%
+  group_by(date) %>%
+  summarise(n = n())
+
+p <- ggplot(visits.per.day, aes(x = visits.per.day$n)) +
+  geom_histogram(bins = 10) +
+  geom_vline(xintercept=mean(visits.per.day$n)) +
+  bbc_style() +
+  theme(axis.title = element_text(size = 18), 
+        plot.margin = unit(c(1.0, 1.0, 1.0, 0.5), "cm"),
+        axis.text.x = element_text(hjust = 1)) +
+  ggtitle("Histogram of visits per day") +
+  xlab("Magnitude")
+print(p)
+```
+
+## Unique days
+```{r}
+length(visits.per.day$date)
+# we need the percentage of days_with_711/days_total
+```
+
+
+# Visits per hour
+```{r}
+p <- ggplot(seven.elevens, aes(x = seven.elevens$hour)) +
+  geom_histogram(bins = 10) +
+  geom_vline(xintercept=mean(seven.elevens$hour)) +
+  bbc_style() +
+  theme(axis.title = element_text(size = 18), 
+        plot.margin = unit(c(1.0, 1.0, 1.0, 0.5), "cm"),
+        axis.text.x = element_text(hjust = 1)) +
+  ggtitle("Visits per hour", subtitle = "From a sample of 99 visits") +
+  xlab("Time")
+print(p)
+```
+
+```{r}
+p <- ggplot(seven.elevens, aes(x = 1, y = seven.elevens$hour)) +
+  geom_violin() +
+  geom_jitter(shape=16, position=position_jitter(0.2)) +
+  bbc_style() +
+  theme(axis.title = element_text(size = 18), 
+        plot.margin = unit(c(1.0, 1.0, 1.0, 0.5), "cm"),
+        axis.text.x = element_text(hjust = 1)) +
+  ggtitle("Visits per hour", subtitle = "From a sample of 99 visits") +
+  xlab("Time")
+print(p)
+```
+
+```{r}
+locations <- unique(convenience.stores$venue.location.cc)
+```
+
+```{r}
+df <- df[df$venue.location.cc %in% locations,]
+```
+
+## Summary
+
+```{r}
+## percentage of 7-11 Eleven checkins
+(nrow(convenience.stores) / nrow(df)) * 100
+
+# total checkins per location
+checkins.location <- df %>%
+  select(venue.location.cc) %>%
+  group_by(venue.location.cc) %>%
+  summarize(total_checkins = n())
+
+se.checkins.location <- convenience.stores %>%
+  select(venue.location.cc) %>%
+  group_by(venue.location.cc) %>%
+  summarize(se.checkins.location = n())
+
+checkin.locations.df <- merge(checkins.location, se.checkins.location)
+checkin.locations.df$percentage <- (checkin.locations.df$se.checkins.location / checkin.locations.df$total_checkins) * 100
+
+```
+
+
+```{r}
+p <- ggplot(checkin.locations.df, aes(x=reorder(venue.location.cc, -se.checkins.location), y=se.checkins.location)) +
+  geom_bar(aes(fill = venue.location.cc), stat = "identity") +
+  scale_fill_brewer(palette="Set2") +
+  labs(title="7-Eleven's check ins by country",
+       subtitle = "From a sample of 99 visits") +
+  xlab('Country') + ylab('Count') +
+  bbc_style() +
+  theme(axis.title = element_text(size = 24), 
+        plot.margin = unit(c(1.0,1.5,1.0,1.0), 'cm'),
+        axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)))
+print(p)
+```
+
+```{r}
+p <- ggplot(checkin.locations.df, aes(x=reorder(venue.location.cc, -percentage), y=percentage)) +
+  geom_bar(aes(fill = venue.location.cc), stat = "identity") +
+  scale_fill_brewer(palette="Set2") +
+  labs(title="Percentage of 7-Eleven's check ins by country",
+       subtitle = "Compared to all the check ins") +
+  xlab('Object') + ylab('Percentage') +
+  bbc_style() +
+  theme(axis.title = element_text(size = 24), 
+        plot.margin = unit(c(1.0,1.5,1.0,1.0), 'cm'),
+        axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)))
+print(p)
+```
+
+
+
+```{r}
+# Group by location
+grouped.location <- convenience.stores %>%
+  select(venue.id) %>%
+  group_by(venue.id) %>%
+  summarise(n = n()) %>%
+  arrange(desc(n))
+print(grouped.location)
+```
+
+
+
+```{r}
+p <- ggplot(grouped.location, aes(x = grouped.location$n)) +
+  geom_histogram(bins = 10) +
+  geom_vline(xintercept=mean(grouped.location$n)) +
+  bbc_style() +
+  theme(axis.title = element_text(size = 18), 
+        plot.margin = unit(c(1.0, 1.0, 1.0, 0.5), "cm"),
+        axis.text.x = element_text(hjust = 1)) +
+  ggtitle("Histogram of the magnitudes", subtitle = "From 21-12-2019 to 19-01-2020") +
+  xlab("Magnitude")
+print(p)
+```
+
+```{r}
+p <- ggplot(grouped.location, aes(y = grouped.location$n)) +
+  geom_boxplot()+
+  bbc_style() +
+  theme(axis.title = element_text(size = 18), 
+        plot.margin = unit(c(1.0, 1.0, 1.0, 0.5), "cm"),
+        axis.text.x = element_text(hjust = 1)) +
+  ggtitle("Histogram of the magnitudes", subtitle = "From 21-12-2019 to 19-01-2020") +
+  xlab("Magnitude")
+print(p)
+
+```
+
+## Uniqueness
+```{r}
+unique(convenience.stores$venue.id)
+```
+
+```{r}
+# Unique places by country
+unique.per.country <- convenience.stores %>%
+  select(venue.id, venue.location.cc) %>%
+  group_by(venue.location.cc, venue.id) %>%
+  summarise(n = n()) %>%
+  group_by(venue.location.cc) %>%
+  summarise(n = n()) %>%
+  arrange(desc(n))
+
+
+p <- ggplot(unique.per.country, aes(x=reorder(venue.location.cc, -n), y=n)) +
+  geom_bar(aes(fill = venue.location.cc), stat = "identity") +
+  scale_fill_brewer(palette="Set2") +
+  labs(title="Unique visited 7-Eleven's by country",
+       subtitle = "From a sample of 99 visits") +
+  xlab('Country') + ylab('Country') +
+  bbc_style() +
+  theme(axis.title = element_text(size = 24), 
+        plot.margin = unit(c(1.0,1.5,1.0,1.0), 'cm'),
+        axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)))
+print(p)
+```
+
+
+## Maps
+
+### Singapore
+```{r}
+singapore.summary <- sg.df %>%
+  select(venue.id, venue.location.lat, venue.location.lng) %>%
+  group_by(venue.id) %>%
+  mutate(n = n()) %>%
+  distinct(venue.id, .keep_all=TRUE)
+
+# Singapore
+sg.map <- get_googlemap(center = c(103.8481362, 1.3169034), zoom = 13, maptype = 'roadmap', size = c(640, 640), scale = 2,
+                        style = c(feature = 'poi', element = 'labels', visibility = 'off')) 
+```
+
+
+```{r}
+sg.map %>% ggmap() +
+  geom_point(data = singapore.summary, aes(venue.location.lng, venue.location.lat, fill = n), size=4, shape=21, stroke=2) +
+  scale_fill_gradient(low='blue', high='red') +
+  theme(plot.title = element_text(size = 22),
+        plot.subtitle = element_text(size = 18),
+        axis.text.x  = element_text(size = 14),
+        axis.text.y  = element_text(size = 14),
+        axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14),
+        plot.margin = unit(c(1.0,1.5,1.0,0.5), 'cm')) +
+  xlab('Longitude') + ylab('Latitude') +
+  ggtitle('7-Eleven check ins from Singapore', subtitle = '')
+```
+
+### Kuala Lumpur
+```{r}
+kl.summary <- my.df %>%
+  select(venue.id, venue.location.lat, venue.location.lng) %>%
+  group_by(venue.id) %>%
+  mutate(n = n()) %>%
+  distinct(venue.id, .keep_all=TRUE)
+
+# Singapore
+kl.map <- get_googlemap(center = c(101.7054197, 3.1467908), zoom = 15, maptype = 'roadmap', size = c(640, 640), scale = 2,
+                        style = c(feature = 'poi', element = 'labels', visibility = 'off')) 
+```
+
+
+
+```{r, echo = T, results = 'hide'}
+kl.map %>% ggmap() +
+  geom_point(data = kl.summary, aes(venue.location.lng, venue.location.lat, fill = n), size=4, shape=21, stroke=2) +
+  scale_fill_gradient(low='blue', high='red') +
+  theme(plot.title = element_text(size = 22),
+        plot.subtitle = element_text(size = 18),
+        axis.text.x  = element_text(size = 14),
+        axis.text.y  = element_text(size = 14),
+        axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14),
+        plot.margin = unit(c(1.0,1.5,1.0,0.5), 'cm')) +
+  xlab('Longitude') + ylab('Latitude') +
+  ggtitle('7-Eleven check ins from Kuala Lumpur (Malaysia)', subtitle = '')
+```
+
+### Malaysia
+```{r}
+my.summary <- my.df %>%
+  select(venue.id, venue.location.lat, venue.location.lng) %>%
+  group_by(venue.id) %>%
+  mutate(n = n()) %>%
+  distinct(venue.id, .keep_all=TRUE)
+
+# Singapore
+my.map <- get_googlemap(center = c(101.4180969, 3.5988685), zoom = 7, maptype = 'roadmap', size = c(640, 640), scale = 2,
+                        style = c(feature = 'poi', element = 'labels', visibility = 'off')) 
+```
+
+
+
+```{r, echo = T, results = 'hide'}
+my.map %>% ggmap() +
+  geom_point(data = kl.summary, aes(venue.location.lng, venue.location.lat, fill = n), size=4, shape=21, stroke=2) +
+  scale_fill_gradient(low='blue', high='red') +
+  theme(plot.title = element_text(size = 22),
+        plot.subtitle = element_text(size = 18),
+        axis.text.x  = element_text(size = 14),
+        axis.text.y  = element_text(size = 14),
+        axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14),
+        plot.margin = unit(c(1.0,1.5,1.0,0.5), 'cm')) +
+  xlab('Longitude') + ylab('Latitude') +
+  ggtitle('7-Eleven check ins from Kuala Lumpur (Malaysia)', subtitle = '')
+```
+
+### Japan
+
+35.6627282,139.7313031
+139.7234481, 35.6713067)
+
+```{r}
+tokyo.summary <- jp.df %>%
+  select(venue.id, venue.location.lat, venue.location.lng) %>%
+  group_by(venue.id) %>%
+  mutate(n = n()) %>%
+  distinct(venue.id, .keep_all=TRUE)
+
+# Singapore
+tokyo.map <- get_googlemap(center = c(139.7313031,35.6627282), zoom = 13, maptype = 'roadmap', size = c(640, 640), scale = 2,
+                        style = c(feature = 'poi', element = 'labels', visibility = 'off')) 
+
+```
+
+```{r, echo = T, results = 'hide'}
+tokyo.map %>% ggmap() +
+  geom_point(data = tokyo.summary, aes(venue.location.lng, venue.location.lat, fill = n), size=4, shape=21, stroke=2) +
+  scale_fill_gradient(low='blue', high='red') +
+  theme(plot.title = element_text(size = 22),
+        plot.subtitle = element_text(size = 18),
+        axis.text.x  = element_text(size = 14),
+        axis.text.y  = element_text(size = 14),
+        axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14),
+        plot.margin = unit(c(1.0,1.5,1.0,0.5), 'cm')) +
+  xlab('Longitude') + ylab('Latitude') +
+  ggtitle('7-Eleven check ins from Tokyo', subtitle = '')
+```
+
+### Thailand
+
+```{r}
+th.summary <- th.df %>%
+  select(venue.id, venue.location.lat, venue.location.lng) %>%
+  group_by(venue.id) %>%
+  mutate(n = n()) %>%
+  distinct(venue.id, .keep_all=TRUE)
+
+th.map <- get_googlemap(center = c(101.4412404, 16.7307649), zoom = 7, maptype = 'roadmap', size = c(640, 640), scale = 2,
+                        style = c(feature = 'poi', element = 'labels', visibility = 'off')) 
+
+```
+
+
+
+```{r, echo = T, results = 'hide'}
+th.map %>% ggmap() +
+  geom_point(data = th.summary, aes(venue.location.lng, venue.location.lat, fill = n), size=3, shape=21, stroke=1) +
+  scale_fill_gradient(low='blue', high='red') +
+  theme(plot.title = element_text(size = 22),
+        plot.subtitle = element_text(size = 18),
+        axis.text.x  = element_text(size = 14),
+        axis.text.y  = element_text(size = 14),
+        axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14),
+        plot.margin = unit(c(1.0,1.5,1.0,0.5), 'cm')) +
+  xlab('Longitude') + ylab('Latitude') +
+  ggtitle('7-Eleven check ins from Thailand', subtitle = '')
+```
+
+## Correlation with steps
+
+## Prepare time series data
+```{r}
+ts.df <- visits.per.day %>%
+  select(date, n) %>%
+  complete(date = seq.Date(min(date), max(date), by="day"))
+```
+
+
+```{r}
+datetime.df <- tibble(ds = seven.elevens$dateTimeNoSeconds, y = 1)
+ts.df <- datetime.df %>%
+  select(ds, y) %>%
+  complete(ds = as.character(format(seq(min(as.POSIXct("2019-08-04 00:00")), max(as.POSIXct("2019-12-15 23:59")),
+                                        by="1 min"), "%Y-%m-%d %H:%M")))
+ts.df[is.na(ts.df)] <- 0
+colnames(ts.df) <- c('ds', 'y')
+write.csv(ts.df, "ts_df.csv", row.names = FALSE)
+```
+
+
+## Calendar
+```{r}
+complete.visits.per.day <- visits.per.day %>%
+  select(date, n) %>%
+  complete(date = seq.Date(min(date), max(date), by='day'))
+complete.visits.per.day[is.na(complete.visits.per.day)] <- 0
+complete.visits.per.day$visited <- ifelse(complete.visits.per.day$n > 0, TRUE, FALSE)
+
+p <- ggcal(complete.visits.per.day$date, complete.visits.per.day$visited) +
+  scale_fill_discrete(na.value='gray70') +
+  ggtitle("Days with visits to 7-Eleven") +
+  theme(plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"),
+        plot.title = element_text(family = 'Helvetica', size = 28, face = 'bold', color = '#222222'),
+        axis.text = element_text(family = 'Helvetica', size = 18, color = '#222222'),
+        strip.text.x = element_text(family = 'Helvetica', size = 14, color = '#222222', hjust=0, face='bold'))
+print(p)
+```
+
+
+## Clustering
+```{r}
+dist_mat <- dist(seven.elevens$hour, method = 'euclidean')
+hclust_avg <- hclust(dist_mat, method = 'average')
+plot(hclust_avg)
+rect.hclust(hclust_avg , k = 3, border = 2:4)
+
+
+cut_avg <- cutree(hclust_avg, k = 3)
+plot(cut_avg, seven.elevens$hour)
+```
+
+
+
