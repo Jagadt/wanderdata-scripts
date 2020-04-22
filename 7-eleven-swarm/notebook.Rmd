@@ -4,7 +4,8 @@ output: html_notebook
 ---
 
 
-```{r}
+```{r, include=FALSE}
+require(ggplot2)
 require(jsonlite)
 require(maptools)
 require(ggmap)
@@ -16,9 +17,11 @@ require(parsedate)
 require(skimr)
 require(tidyr)
 require(ggcal)
+require(gridExtra)
 ```
 
 ```{r}
+## This function returns the timezone
 determine.tz <- function(location) {
   switch (as.character(location),
     'SG' = return('Asia/Singapore'),
@@ -40,17 +43,17 @@ extract.dateTime <- function(df, cc) {
 ```
 
 ```{r}
-df <- fromJSON('data/checkins.json')
+df <- fromJSON("data/checkins.json")
 
 # json to dataframe
 df <- flatten(df)
+locations.df <- read.csv("~/Development/wanderdata-scripts/7-eleven-swarm/data/locations.csv", stringsAsFactors=FALSE)
+locations.df$Date <- date(locations.df$Date)
 ```
 
 ```{r}
 # create a new category column by select the category from the nested structure 'venue.category'
 df$category <- sapply(df$venue.categories, function(x) x$name)
-
-
 ```
 
 ```{r}
@@ -87,10 +90,11 @@ p <- ggplot(visits.per.day, aes(x = visits.per.day$n)) +
   geom_vline(xintercept=mean(visits.per.day$n)) +
   bbc_style() +
   theme(axis.title = element_text(size = 18), 
-        plot.margin = unit(c(1.0, 1.0, 1.0, 0.5), "cm"),
+        plot.margin = unit(c(1.0, 1.0, 1.0, 0.5), 'cm'),
         axis.text.x = element_text(hjust = 1)) +
   ggtitle("Histogram of visits per day") +
-  xlab("Magnitude")
+  xlab('Visits') +
+  ylab('Count')
 print(p)
 ```
 
@@ -104,15 +108,18 @@ length(visits.per.day$date)
 # Visits per hour
 ```{r}
 p <- ggplot(seven.elevens, aes(x = seven.elevens$hour)) +
-  geom_histogram(bins = 10) +
+  geom_histogram(bins = 30) +
   geom_vline(xintercept=mean(seven.elevens$hour)) +
   bbc_style() +
   theme(axis.title = element_text(size = 18), 
         plot.margin = unit(c(1.0, 1.0, 1.0, 0.5), "cm"),
         axis.text.x = element_text(hjust = 1)) +
   ggtitle("Visits per hour", subtitle = "From a sample of 99 visits") +
-  xlab("Time")
+  xlab('Count') +
+  ylab('Hour')
 print(p)
+ggsave('plots/visits_per_hour_hist.jpg', plot = p, 
+           width = 15, height = 8, units = 'in')
 ```
 
 ```{r}
@@ -155,7 +162,6 @@ se.checkins.location <- convenience.stores %>%
 
 checkin.locations.df <- merge(checkins.location, se.checkins.location)
 checkin.locations.df$percentage <- (checkin.locations.df$se.checkins.location / checkin.locations.df$total_checkins) * 100
-
 ```
 
 
@@ -171,6 +177,8 @@ p <- ggplot(checkin.locations.df, aes(x=reorder(venue.location.cc, -se.checkins.
         plot.margin = unit(c(1.0,1.5,1.0,1.0), 'cm'),
         axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)))
 print(p)
+ggsave('plots/checkins_country.jpg', plot = p, 
+           width = 15, height = 8, units = 'in')
 ```
 
 ```{r}
@@ -185,6 +193,8 @@ p <- ggplot(checkin.locations.df, aes(x=reorder(venue.location.cc, -percentage),
         plot.margin = unit(c(1.0,1.5,1.0,1.0), 'cm'),
         axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)))
 print(p)
+ggsave('plots/checkins_country_percentage.jpg', plot = p, 
+           width = 15, height = 8, units = 'in')
 ```
 
 
@@ -207,24 +217,21 @@ p <- ggplot(grouped.location, aes(x = grouped.location$n)) +
   geom_vline(xintercept=mean(grouped.location$n)) +
   bbc_style() +
   theme(axis.title = element_text(size = 18), 
-        plot.margin = unit(c(1.0, 1.0, 1.0, 0.5), "cm"),
+        plot.margin = unit(c(1.0, 1.0, 1.0, 0.5), 'cm'),
         axis.text.x = element_text(hjust = 1)) +
-  ggtitle("Histogram of the magnitudes", subtitle = "From 21-12-2019 to 19-01-2020") +
-  xlab("Magnitude")
+  labs(title = "Visits per unique store",
+       subtitle = "From a sample of 99 visits") +
+  xlab('Visits') +
+  ylab('Count')
 print(p)
+ggsave('plots/histogram.jpg', plot = p, 
+           width = 15, height = 8, units = 'in')
 ```
 
 ```{r}
-p <- ggplot(grouped.location, aes(y = grouped.location$n)) +
-  geom_boxplot()+
-  bbc_style() +
-  theme(axis.title = element_text(size = 18), 
-        plot.margin = unit(c(1.0, 1.0, 1.0, 0.5), "cm"),
-        axis.text.x = element_text(hjust = 1)) +
-  ggtitle("Histogram of the magnitudes", subtitle = "From 21-12-2019 to 19-01-2020") +
-  xlab("Magnitude")
-print(p)
-
+frequency.table <- as.data.frame(table(grouped.location$n))
+g <- tableGrob(frequency.table, rows = NULL, cols = c('Count', 'Freq'))
+grid.arrange(g)
 ```
 
 ## Uniqueness
@@ -254,6 +261,8 @@ p <- ggplot(unique.per.country, aes(x=reorder(venue.location.cc, -n), y=n)) +
         plot.margin = unit(c(1.0,1.5,1.0,1.0), 'cm'),
         axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)))
 print(p)
+ggsave('plots/unique_711.jpg', plot = p, 
+           width = 15, height = 8, units = 'in')
 ```
 
 
@@ -274,7 +283,7 @@ sg.map <- get_googlemap(center = c(103.8481362, 1.3169034), zoom = 13, maptype =
 
 
 ```{r}
-sg.map %>% ggmap() +
+p <- sg.map %>% ggmap() +
   geom_point(data = singapore.summary, aes(venue.location.lng, venue.location.lat, fill = n), size=4, shape=21, stroke=2) +
   scale_fill_gradient(low='blue', high='red') +
   theme(plot.title = element_text(size = 22),
@@ -286,6 +295,9 @@ sg.map %>% ggmap() +
         plot.margin = unit(c(1.0,1.5,1.0,0.5), 'cm')) +
   xlab('Longitude') + ylab('Latitude') +
   ggtitle('7-Eleven check ins from Singapore', subtitle = '')
+print(p)
+ggsave('plots/sg_map.jpg', plot = p, 
+           width = 15, height = 8, units = 'in')
 ```
 
 ### Kuala Lumpur
@@ -304,7 +316,7 @@ kl.map <- get_googlemap(center = c(101.7054197, 3.1467908), zoom = 15, maptype =
 
 
 ```{r, echo = T, results = 'hide'}
-kl.map %>% ggmap() +
+p <- kl.map %>% ggmap() +
   geom_point(data = kl.summary, aes(venue.location.lng, venue.location.lat, fill = n), size=4, shape=21, stroke=2) +
   scale_fill_gradient(low='blue', high='red') +
   theme(plot.title = element_text(size = 22),
@@ -316,6 +328,9 @@ kl.map %>% ggmap() +
         plot.margin = unit(c(1.0,1.5,1.0,0.5), 'cm')) +
   xlab('Longitude') + ylab('Latitude') +
   ggtitle('7-Eleven check ins from Kuala Lumpur (Malaysia)', subtitle = '')
+print(p)
+ggsave('plots/kl_map.jpg', plot = p, 
+           width = 15, height = 8, units = 'in')
 ```
 
 ### Malaysia
@@ -334,7 +349,7 @@ my.map <- get_googlemap(center = c(101.4180969, 3.5988685), zoom = 7, maptype = 
 
 
 ```{r, echo = T, results = 'hide'}
-my.map %>% ggmap() +
+p <- my.map %>% ggmap() +
   geom_point(data = kl.summary, aes(venue.location.lng, venue.location.lat, fill = n), size=4, shape=21, stroke=2) +
   scale_fill_gradient(low='blue', high='red') +
   theme(plot.title = element_text(size = 22),
@@ -345,13 +360,14 @@ my.map %>% ggmap() +
         axis.title.y = element_text(size = 14),
         plot.margin = unit(c(1.0,1.5,1.0,0.5), 'cm')) +
   xlab('Longitude') + ylab('Latitude') +
-  ggtitle('7-Eleven check ins from Kuala Lumpur (Malaysia)', subtitle = '')
+  ggtitle('7-Eleven check ins from Malaysia', subtitle = '')
+print(p)
+ggsave('plots/my_map.jpg', plot = p, 
+           width = 15, height = 8, units = 'in')
 ```
 
 ### Japan
 
-35.6627282,139.7313031
-139.7234481, 35.6713067)
 
 ```{r}
 tokyo.summary <- jp.df %>%
@@ -367,7 +383,7 @@ tokyo.map <- get_googlemap(center = c(139.7313031,35.6627282), zoom = 13, maptyp
 ```
 
 ```{r, echo = T, results = 'hide'}
-tokyo.map %>% ggmap() +
+p <- tokyo.map %>% ggmap() +
   geom_point(data = tokyo.summary, aes(venue.location.lng, venue.location.lat, fill = n), size=4, shape=21, stroke=2) +
   scale_fill_gradient(low='blue', high='red') +
   theme(plot.title = element_text(size = 22),
@@ -379,6 +395,9 @@ tokyo.map %>% ggmap() +
         plot.margin = unit(c(1.0,1.5,1.0,0.5), 'cm')) +
   xlab('Longitude') + ylab('Latitude') +
   ggtitle('7-Eleven check ins from Tokyo', subtitle = '')
+print(p)
+ggsave('plots/tokyo_map.jpg', plot = p, 
+           width = 15, height = 8, units = 'in')
 ```
 
 ### Thailand
@@ -389,16 +408,15 @@ th.summary <- th.df %>%
   group_by(venue.id) %>%
   mutate(n = n()) %>%
   distinct(venue.id, .keep_all=TRUE)
-
-th.map <- get_googlemap(center = c(101.4412404, 16.7307649), zoom = 7, maptype = 'roadmap', size = c(640, 640), scale = 2,
-                        style = c(feature = 'poi', element = 'labels', visibility = 'off')) 
-
 ```
 
-
+```{r}
+th.map <- get_googlemap(center = c(101.4412404, 16.7307649), zoom = 7, maptype = 'roadmap', size = c(640, 640), scale = 2,
+                        style = c(feature = 'poi', element = 'labels', visibility = 'off')) 
+```
 
 ```{r, echo = T, results = 'hide'}
-th.map %>% ggmap() +
+p <- th.map %>% ggmap() +
   geom_point(data = th.summary, aes(venue.location.lng, venue.location.lat, fill = n), size=3, shape=21, stroke=1) +
   scale_fill_gradient(low='blue', high='red') +
   theme(plot.title = element_text(size = 22),
@@ -410,6 +428,9 @@ th.map %>% ggmap() +
         plot.margin = unit(c(1.0,1.5,1.0,0.5), 'cm')) +
   xlab('Longitude') + ylab('Latitude') +
   ggtitle('7-Eleven check ins from Thailand', subtitle = '')
+print(p)
+ggsave('plots/th_map.jpg', plot = p, 
+           width = 15, height = 8, units = 'in')
 ```
 
 ## Correlation with steps
@@ -441,6 +462,8 @@ complete.visits.per.day <- visits.per.day %>%
   complete(date = seq.Date(min(date), max(date), by='day'))
 complete.visits.per.day[is.na(complete.visits.per.day)] <- 0
 complete.visits.per.day$visited <- ifelse(complete.visits.per.day$n > 0, TRUE, FALSE)
+complete.visits.per.day <- merge(complete.visits.per.day, locations.df, by.x = 'date', by.y = 'Date')
+complete.visits.per.day$weekday <- weekdays(complete.visits.per.day$date)
 
 p <- ggcal(complete.visits.per.day$date, complete.visits.per.day$visited) +
   scale_fill_discrete(na.value='gray70') +
@@ -450,20 +473,147 @@ p <- ggcal(complete.visits.per.day$date, complete.visits.per.day$visited) +
         axis.text = element_text(family = 'Helvetica', size = 18, color = '#222222'),
         strip.text.x = element_text(family = 'Helvetica', size = 14, color = '#222222', hjust=0, face='bold'))
 print(p)
+ggsave('plots/calendar.jpg', plot = p, 
+           width = 15, height = 8, units = 'in')
+```
+
+# Days spent in 7-Eleven countries
+```{r}
+nrow(complete.visits.per.day[complete.visits.per.day$CC %in%  c('SG', 'MY', 'HK', 'JP', 'TH'),])
 ```
 
 
+```{r}
+visits.weekday <- complete.visits.per.day %>%
+  select(n, weekday) %>%
+  group_by(weekday) %>%
+  summarise(n = sum(n))
+
+p <- ggplot(visits.weekday, aes(x=reorder(weekday, -n), y=n)) +
+  geom_bar(aes(fill = weekday), stat = 'identity') +
+  scale_fill_brewer(palette='Set2') +
+  labs(title="Visits by day of the week") +
+  xlab('Day') + ylab('Count') +
+  bbc_style() +
+  theme(axis.title = element_text(size = 24), 
+        plot.margin = unit(c(1.0,1.5,1.0,1.0), 'cm'),
+        axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)),
+        legend.position = 'none')
+print(p)
+ggsave('plots/visits_by_day.jpg', plot = p, 
+           width = 15, height = 8, units = 'in')
+```
+
+
+```{r}
+p <- ggplot(unique.per.country, aes(x=reorder(venue.location.cc, -n), y=n)) +
+  geom_bar(aes(fill = venue.location.cc), stat = "identity") +
+  scale_fill_brewer(palette="Set2") +
+  labs(title="Unique visited 7-Eleven's by country",
+       subtitle = "From a sample of 99 visits") +
+  xlab('Country') + ylab('Country') +
+  bbc_style() +
+  theme(axis.title = element_text(size = 24), 
+        plot.margin = unit(c(1.0,1.5,1.0,1.0), 'cm'),
+        axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)))
+print(p)
+```
+
+```{r}
+p <- ggplot(seven.elevens, aes(x = hour, y = weekday)) +
+  geom_point() +
+  scale_fill_brewer(palette="Set2") +
+  labs(title="Unique visited 7-Eleven's by country",
+       subtitle = "From a sample of 99 visits") +
+  xlab('Country') + ylab('Country') +
+  bbc_style() +
+  theme(axis.title = element_text(size = 24), 
+        plot.margin = unit(c(1.0,1.5,1.0,1.0), 'cm'),
+        axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)))
+print(p)
+```
+
+
+
+## Locations with 7-11
+```{r}
+locations.with.se <- complete.visits.per.day[complete.visits.per.day$CC %in% locations,]
+sum(locations.with.se$visited) / nrow(locations.with.se)
+```
+
+
+           
+           
 ## Clustering
 ```{r}
 dist_mat <- dist(seven.elevens$hour, method = 'euclidean')
 hclust_avg <- hclust(dist_mat, method = 'average')
 plot(hclust_avg)
-rect.hclust(hclust_avg , k = 3, border = 2:4)
+rect.hclust(hclust_avg , k = 5, border = 2:4)
+```
 
-
-cut_avg <- cutree(hclust_avg, k = 3)
+```{r}
+cut_avg <- cutree(hclust_avg, k = 5)
 plot(cut_avg, seven.elevens$hour)
 ```
+
+
+```{r}
+plot(hclust_avg)
+rect.hclust(hclust_avg , h = 3, border = 2:4)
+```
+
+```{r}
+cut_avg <- cutree(hclust_avg, k = 5)
+clusters.values <- data.frame(cluster = cut_avg, hour = seven.elevens$hour)
+clusters.values <- clusters.values %>% 
+  select(cluster, hour) %>%
+  group_by(cluster, hour) %>%
+  mutate(n = n())
+
+p <- ggplot(clusters.values, aes(x = cut_avg, y = seven.elevens$hour)) +
+  geom_point(aes(size = n)) +
+  labs(title="\"Visiting hours\" values per cluster") +
+  xlab('Cluster') + ylab('Hour') +
+  bbc_style() +
+  theme(axis.title = element_text(size = 24), 
+        plot.margin = unit(c(1.0,1.5,1.0,1.0), 'cm'),
+        axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)))
+print(p)
+ggsave('plots/hour_cluster.jpg', plot = p, 
+           width = 15, height = 8, units = 'in')
+```
+
+```{r}
+p <- ggplot(clusters.values, aes(x = seven.elevens$weekday, y = seven.elevens$hour)) +
+  geom_point(aes(size = n)) +
+  labs(title="\"Visiting hours\" values and weekday") +
+  xlab('Weekday') + ylab('Hour') +
+  bbc_style() +
+  theme(axis.title = element_text(size = 24), 
+        plot.margin = unit(c(1.0,1.5,1.0,1.0), 'cm'),
+        axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)))
+print(p)
+print(p)
+ggsave('plots/hours_weekdays.jpg', plot = p, 
+           width = 15, height = 8, units = 'in')
+```
+
+```{r}
+start.times <- select(seven.elevens, weekday, hour)
+start.times$weekday <- as.numeric(start.times$weekday) - 1
+
+start.times <- start.times %>%
+  select(weekday, hour) %>%
+  group_by(weekday, hour) %>%
+  mutate(n = n())
+
+write.csv(start.times, file = 'data/start_times.csv', row.names = FALSE)
+```
+
+
+
+
 
 
 
