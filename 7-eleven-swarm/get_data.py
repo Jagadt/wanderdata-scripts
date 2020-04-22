@@ -32,8 +32,10 @@ client.set_access_token(access_token)
 user = client.users()
 
 # Change the given times to the corresponding time zone
-start_ts = int(datetime.datetime.strptime(start_date, '%Y-%m-%d').replace(tzinfo=timezone('Asia/Singapore')).timestamp())
-end_ts = int(datetime.datetime.strptime(end_date, '%Y-%m-%d').replace(tzinfo=timezone('Asia/Singapore')).timestamp())
+start_ts = int(datetime.datetime.strptime(
+    start_date, '%Y-%m-%d').replace(tzinfo=timezone('Asia/Singapore')).timestamp())
+end_ts = int(datetime.datetime.strptime(
+    end_date, '%Y-%m-%d').replace(tzinfo=timezone('Asia/Singapore')).timestamp())
 
 offset = 0
 data = []
@@ -45,6 +47,7 @@ while True:
                                       'sort': 'newestfirst',
                                       'limit': 250,
                                       'offset': offset})
+    # Break if there are no items
     if len(c['checkins']['items']) == 0:
         break
 
@@ -52,7 +55,5 @@ while True:
         data.append(item)
     offset += 250
 
-
-fl = [item for sublist in data for item in sublist]
 with open('data/checkins.json', 'a+') as fp:
     json.dump(data, fp)
