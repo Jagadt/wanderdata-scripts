@@ -1,0 +1,134 @@
+---
+title: "The Sound of Places"
+output: html_notebook
+---
+
+```{r}
+require(tuneR)
+require(soundgen)
+require(ggplot2)
+require(bbplot)
+require(reshape2)
+```
+
+```{r}
+plotSpectrogram <- function(filename, area) {
+  filepath <- paste0("data/", filename)
+  
+  # I already knew the sampling rate; this is not a random number.
+  analysis <- analyze(filepath, samplingRate = 32000, pitchMethods = NULL,
+                      plot = TRUE, ylim = c(0, 10),
+                      main = paste0("Spectrogram of a sound sample from ", area))
+  
+}
+
+plotLoudness <- function(filename, area) {
+  filepath <- paste0("data/", filename)
+  
+  getLoudness(filepath, samplingRate = 32000, osc = FALSE, plot = TRUE,
+              main = paste0("Loudness value of a sound sample from ", area))
+}
+
+plotSSM <- function(filename, area) {
+  filepath <- paste0("data/", filename)
+  
+  ## Similarity matrix. Here I"m overwritting the complete ssmPars attribute just to change the plot"s title.
+  ssm(filepath, samplingRate = 32000,
+      ssmPars = list(
+        levels = seq(0, 1, length = 30), colorTheme = c("bw", "seewave", "heat.colors", "...")[2], 
+        xlab = "Time, s", ylab = "Time, s",
+        main = paste0("Self-similarity matrix of a sound sample from ", area)))
+}
+
+plotEntropy <- function(filename, area) {
+  filepath <- paste0("data/", filename)
+  
+  analysis <- analyze(filepath, 
+                      samplingRate = 32000, plot = TRUE, ylim = c(0, 4), 
+                      main = paste0("Spectrogram of sound from ", area))
+  
+
+}
+```
+
+# Camp
+
+```{r, echo=FALSE, message=FALSE, results="hide"}
+plotSpectrogram("camp.wav", "Camp")
+```
+
+```{r}
+plotLoudness("camp.wav", "Camp")
+```
+
+```{r}
+plotSSM("camp.wav", "Camp")
+```
+
+```{r}
+plotEntropy("camp.wav", "Camp")
+```
+
+# Cathedral Cove
+
+```{r, echo=FALSE, message=FALSE, results="hide"}
+plotSpectrogram("cc.wav", "Cathedral Cove")
+```
+
+```{r}
+plotLoudness("cc.wav", "Cathedral Cove")
+```
+
+```{r}
+plotSSM("cc.wav", "Cathedral Cove")
+```
+
+```{r}
+plotEntropy("cc.wav", "Cathedral Cove")
+```
+
+# Auckland
+
+```{r, echo=FALSE, message=FALSE, results="hide"}
+plotSpectrogram("auckland.wav", "Auckland")
+```
+
+```{r}
+plotLoudness("auckland.wav", "Auckland")
+```
+
+## Entropy
+
+```{r}
+camp <- analyze("data/camp.wav", 
+                     samplingRate = 32000, plot = FALSE)
+cc <- analyze("data/cc.wav", 
+                samplingRate = 32000, plot = FALSE)
+auckland <- analyze("data/auckland.wav", 
+                samplingRate = 32000, plot = FALSE)
+
+# The plan is to create a dataframe with all the entropy scores.
+# But, since the length of the clips differ, I need
+# to adjust the length.
+m <- max(nrow(camp), nrow(cc), nrow(auckland))
+camp.entropy <- c(camp$entropy, rep(NA, m - length(camp$entropy)))
+cc.entropy <- c(cc$entropy, rep(NA, m - length(cc$entropy)))
+ak.entropy <- c(auckland$entropy, rep(NA, m - length(auckland$entropy)))
+
+entropies.df <- data.frame(frame = 1: m, Camp = camp.entropy, CC = cc.entropy, Auckland = ak.entropy)
+entropies <- melt(entropies.df, id.vars = c("frame"))
+```
+
+```{r}
+ggplot(entropies, aes(x=frame, y=value, color=variable)) +
+  geom_point() +
+  bbc_style() +
+  theme(axis.title = element_text(size = 18), 
+        plot.margin = unit(c(1.0, 1.0, 1.0, 0.5), "cm")) +
+  ylim(0, 1) +
+  labs(title = "Entropy scores", subtitle = "From three audio samples") +
+  ylab("Entropy") +
+  xlab("Index")
+```
+
+
