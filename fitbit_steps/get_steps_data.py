@@ -55,5 +55,5 @@ if __name__ == "__main__":
                            refresh_token=refresh_token,
                            system='en_DE')
 
-    df = get_intraday_steps_data(client, '2019-05-28', '2019-07-08')
+    df = get_intraday_steps_data(client, '2020-06-02', '2020-07-01')
     append_to_csv('data/steps_intraday', df)
