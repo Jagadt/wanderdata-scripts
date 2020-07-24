@@ -1,0 +1,417 @@
+Date,Location,Country,CC
+2019-05-28,Tyrol,Austria,AT
+2019-05-29,Tyrol,Austria,AT
+2019-05-30,Tyrol,Austria,AT
+2019-05-31,Tyrol,Austria,AT
+2019-06-01,Tyrol,Austria,AT
+2019-06-02,Tyrol,Austria,AT
+2019-06-03,Tyrol,Austria,AT
+2019-06-04,Tyrol,Austria,AT
+2019-06-05,Tyrol,Austria,AT
+2019-06-06,Tyrol,Austria,AT
+2019-06-07,Tyrol,Austria,AT
+2019-06-08,Tyrol,Austria,AT
+2019-06-09,Tyrol,Austria,AT
+2019-06-10,Tyrol,Austria,AT
+2019-06-11,Tyrol,Austria,AT
+2019-06-12,Tyrol,Austria,AT
+2019-06-13,Tyrol,Austria,AT
+2019-06-14,Tyrol,Austria,AT
+2019-06-15,Tyrol,Austria,AT
+2019-06-16,Tyrol,Austria,AT
+2019-06-17,Tyrol,Austria,AT
+2019-06-18,Tyrol,Austria,AT
+2019-06-19,Tyrol,Austria,AT
+2019-06-20,Tyrol,Austria,AT
+2019-06-21,Tyrol,Austria,AT
+2019-06-22,Tyrol,Austria,AT
+2019-06-23,Tyrol,Austria,AT
+2019-06-24,Tyrol,Austria,AT
+2019-06-25,Tyrol,Austria,AT
+2019-06-26,Tyrol,Austria,AT
+2019-06-27,Tyrol,Austria,AT
+2019-06-28,Tyrol,Austria,AT
+2019-06-29,Saxony,Germany,DE
+2019-06-30,Saxony,Germany,DE
+2019-07-01,Saxony,Germany,DE
+2019-07-02,Saxony,Germany,DE
+2019-07-03,Saxony,Germany,DE
+2019-07-04,Singapore,Singapore,SG
+2019-07-05,Singapore,Singapore,SG
+2019-07-06,Singapore,Singapore,SG
+2019-07-07,Singapore,Singapore,SG
+2019-07-08,Singapore,Singapore,SG
+2019-07-09,Singapore,Singapore,SG
+2019-07-10,Kuala Kumpur,Malaysia,MY
+2019-07-11,Kuala Kumpur,Malaysia,MY
+2019-07-12,Kuala Kumpur,Malaysia,MY
+2019-07-13,Kuala Kumpur,Malaysia,MY
+2019-07-14,Kuala Kumpur,Malaysia,MY
+2019-07-15,Kuala Kumpur,Malaysia,MY
+2019-07-16,Kuala Kumpur,Malaysia,MY
+2019-07-17,Kuala Kumpur,Malaysia,MY
+2019-07-18,Cameron Highlands,Malaysia,MY
+2019-07-19,Cameron Highlands,Malaysia,MY
+2019-07-20,Cameron Highlands,Malaysia,MY
+2019-07-21,Cameron Highlands,Malaysia,MY
+2019-07-22,George Town,Malaysia,MY
+2019-07-23,George Town,Malaysia,MY
+2019-07-24,George Town,Malaysia,MY
+2019-07-25,George Town,Malaysia,MY
+2019-07-26,George Town,Malaysia,MY
+2019-07-27,Langkawi,Malaysia,MY
+2019-07-28,Langkawi,Malaysia,MY
+2019-07-29,Langkawi,Malaysia,MY
+2019-07-30,Langkawi,Malaysia,MY
+2019-07-31,Langkawi,Malaysia,MY
+2019-08-01,Langkawi,Malaysia,MY
+2019-08-02,Langkawi,Malaysia,MY
+2019-08-03,Koh Lanta,Thailand,TH
+2019-08-04,Koh Lanta,Thailand,TH
+2019-08-05,Koh Lanta,Thailand,TH
+2019-08-06,Koh Lanta,Thailand,TH
+2019-08-07,Koh Lanta,Thailand,TH
+2019-08-08,Koh Lanta,Thailand,TH
+2019-08-09,Koh Lanta,Thailand,TH
+2019-08-10,Chiang Mai,Thailand,TH
+2019-08-11,Chiang Mai,Thailand,TH
+2019-08-12,Chiang Mai,Thailand,TH
+2019-08-13,Chiang Mai,Thailand,TH
+2019-08-14,Chiang Mai,Thailand,TH
+2019-08-15,Chiang Mai,Thailand,TH
+2019-08-16,Chiang Mai,Thailand,TH
+2019-08-17,Chiang Rai,Thailand,TH
+2019-08-18,Chiang Rai,Thailand,TH
+2019-08-19,Chiang Rai,Thailand,TH
+2019-08-20,Chiang Rai,Thailand,TH
+2019-08-21,Chiang Rai,Thailand,TH
+2019-08-22,Chiang Rai,Thailand,TH
+2019-08-23,Ayuttaya,Thailand,TH
+2019-08-24,Ayuttaya,Thailand,TH
+2019-08-25,Ayuttaya,Thailand,TH
+2019-08-26,Ayuttaya,Thailand,TH
+2019-08-27,Ayuttaya,Thailand,TH
+2019-08-28,Bangkok,Thailand,TH
+2019-08-29,Bangkok,Thailand,TH
+2019-08-30,Bangkok,Thailand,TH
+2019-08-31,Siem Reap,Cambodia,KH
+2019-09-01,Siem Reap,Cambodia,KH
+2019-09-02,Siem Reap,Cambodia,KH
+2019-09-03,Siem Reap,Cambodia,KH
+2019-09-04,Siem Reap,Cambodia,KH
+2019-09-05,Siem Reap,Cambodia,KH
+2019-09-06,Kuala Lumpur,Malaysia,MY
+2019-09-07,Kuala Lumpur,Malaysia,MY
+2019-09-08,Kuala Lumpur,Malaysia,MY
+2019-09-09,Kuala Lumpur,Malaysia,MY
+2019-09-10,Kuala Lumpur,Malaysia,MY
+2019-09-11,Kuala Lumpur,Malaysia,MY
+2019-09-12,Kuala Lumpur,Malaysia,MY
+2019-09-13,Kuala Lumpur,Malaysia,MY
+2019-09-14,Kuala Lumpur,Malaysia,MY
+2019-09-15,Kuala Lumpur,Malaysia,MY
+2019-09-16,Kuala Lumpur,Malaysia,MY
+2019-09-17,Kuala Lumpur,Malaysia,MY
+2019-09-18,Kuala Lumpur,Malaysia,MY
+2019-09-19,Kuala Lumpur,Malaysia,MY
+2019-09-20,Kuala Lumpur,Malaysia,MY
+2019-09-21,Kuala Lumpur,Malaysia,MY
+2019-09-22,Kuala Lumpur,Malaysia,MY
+2019-09-23,Kuala Lumpur,Malaysia,MY
+2019-09-24,Kuala Lumpur,Malaysia,MY
+2019-09-25,Kuala Lumpur,Malaysia,MY
+2019-09-26,Kuala Lumpur,Malaysia,MY
+2019-09-27,Singapore,Singapore,SG
+2019-09-28,Singapore,Singapore,SG
+2019-09-29,Singapore,Singapore,SG
+2019-09-30,Singapore,Singapore,SG
+2019-10-01,Singapore,Singapore,SG
+2019-10-02,Singapore,Singapore,SG
+2019-10-03,Singapore,Singapore,SG
+2019-10-04,Singapore,Singapore,SG
+2019-10-05,Singapore,Singapore,SG
+2019-10-06,Singapore,Singapore,SG
+2019-10-07,Singapore,Singapore,SG
+2019-10-08,Singapore,Singapore,SG
+2019-10-09,Singapore,Singapore,SG
+2019-10-10,Singapore,Singapore,SG
+2019-10-11,Singapore,Singapore,SG
+2019-10-12,Singapore,Singapore,SG
+2019-10-13,Singapore,Singapore,SG
+2019-10-14,Singapore,Singapore,SG
+2019-10-15,Canggu,Indonesia,ID
+2019-10-16,Canggu,Indonesia,ID
+2019-10-17,Canggu,Indonesia,ID
+2019-10-18,Canggu,Indonesia,ID
+2019-10-19,Canggu,Indonesia,ID
+2019-10-20,Canggu,Indonesia,ID
+2019-10-21,Canggu,Indonesia,ID
+2019-10-22,Canggu,Indonesia,ID
+2019-10-23,Canggu,Indonesia,ID
+2019-10-24,Canggu,Indonesia,ID
+2019-10-25,Canggu,Indonesia,ID
+2019-10-26,Canggu,Indonesia,ID
+2019-10-27,Canggu,Indonesia,ID
+2019-10-28,Canggu,Indonesia,ID
+2019-10-29,Canggu,Indonesia,ID
+2019-10-30,Canggu,Indonesia,ID
+2019-10-31,Canggu,Indonesia,ID
+2019-11-01,Canggu,Indonesia,ID
+2019-11-02,Canggu,Indonesia,ID
+2019-11-03,Canggu,Indonesia,ID
+2019-11-04,Canggu,Indonesia,ID
+2019-11-05,Canggu,Indonesia,ID
+2019-11-06,Canggu,Indonesia,ID
+2019-11-07,Canggu,Indonesia,ID
+2019-11-08,Canggu,Indonesia,ID
+2019-11-09,Canggu,Indonesia,ID
+2019-11-10,Canggu,Indonesia,ID
+2019-11-11,Macao,Macao,MO
+2019-11-12,Macao,Macao,MO
+2019-11-13,Hong Kong,Hong Kong,HK
+2019-11-14,Hong Kong,Hong Kong,HK
+2019-11-15,Hong Kong,Hong Kong,HK
+2019-11-16,Hong Kong,Hong Kong,HK
+2019-11-17,Hong Kong,Hong Kong,HK
+2019-11-18,Hong Kong,Hong Kong,HK
+2019-11-19,Hong Kong,Hong Kong,HK
+2019-11-20,Hong Kong,Hong Kong,HK
+2019-11-21,Hong Kong,Hong Kong,HK
+2019-11-22,Singapore,Singapore,SG
+2019-11-23,Singapore,Singapore,SG
+2019-11-24,Singapore,Singapore,SG
+2019-11-25,Singapore,Singapore,SG
+2019-11-26,Singapore,Singapore,SG
+2019-11-27,Singapore,Singapore,SG
+2019-11-28,Singapore,Singapore,SG
+2019-11-29,Singapore,Singapore,SG
+2019-11-30,Singapore,Japan,JP
+2019-12-01,Tokyo,Japan,JP
+2019-12-02,Tokyo,Japan,JP
+2019-12-03,Tokyo,Japan,JP
+2019-12-04,Tokyo,Japan,JP
+2019-12-05,Tokyo,Japan,JP
+2019-12-06,Tokyo,Japan,JP
+2019-12-07,Tokyo,Japan,JP
+2019-12-08,Osaka,Japan,JP
+2019-12-09,Osaka,Japan,JP
+2019-12-10,Osaka,Japan,JP
+2019-12-11,Osaka,Japan,JP
+2019-12-12,Kyoto,Japan,JP
+2019-12-13,Kyoto,Japan,JP
+2019-12-14,Kyoto,Japan,JP
+2019-12-15,Kyoto,Japan,JP
+2019-12-16,Tokyo,Japan,JP
+2019-12-17,Roadtrip,New Zealand,NZ
+2019-12-18,Roadtrip,New Zealand,NZ
+2019-12-19,Roadtrip,New Zealand,NZ
+2019-12-20,Roadtrip,New Zealand,NZ
+2019-12-21,Roadtrip,New Zealand,NZ
+2019-12-22,Tauranga,New Zealand,NZ
+2019-12-23,Tauranga,New Zealand,NZ
+2019-12-24,Tauranga,New Zealand,NZ
+2019-12-25,Tauranga,New Zealand,NZ
+2019-12-26,Tauranga,New Zealand,NZ
+2019-12-27,Tauranga,New Zealand,NZ
+2019-12-28,Tauranga,New Zealand,NZ
+2019-12-29,Tauranga,New Zealand,NZ
+2019-12-30,Tauranga,New Zealand,NZ
+2019-12-31,Tauranga,New Zealand,NZ
+2020-01-01,Tauranga,New Zealand,NZ
+2020-01-02,Tauranga,New Zealand,NZ
+2020-01-03,Tauranga,New Zealand,NZ
+2020-01-04,Tauranga,New Zealand,NZ
+2020-01-05,Tauranga,New Zealand,NZ
+2020-01-06,Tauranga,New Zealand,NZ
+2020-01-07,Tauranga,New Zealand,NZ
+2020-01-08,Tauranga,New Zealand,NZ
+2020-01-09,Tauranga,New Zealand,NZ
+2020-01-10,Tauranga,New Zealand,NZ
+2020-01-11,Tauranga,New Zealand,NZ
+2020-01-12,Tauranga,New Zealand,NZ
+2020-01-13,Tauranga,New Zealand,NZ
+2020-01-14,Tauranga,New Zealand,NZ
+2020-01-15,Tauranga,New Zealand,NZ
+2020-01-16,Tauranga,New Zealand,NZ
+2020-01-17,Tauranga,New Zealand,NZ
+2020-01-18,Tauranga,New Zealand,NZ
+2020-01-19,Tauranga,New Zealand,NZ
+2020-01-20,Tauranga,New Zealand,NZ
+2020-01-21,Tauranga,New Zealand,NZ
+2020-01-22,Tauranga,New Zealand,NZ
+2020-01-23,Tauranga,New Zealand,NZ
+2020-01-24,Tauranga,New Zealand,NZ
+2020-01-25,Tauranga,New Zealand,NZ
+2020-01-26,Tauranga,New Zealand,NZ
+2020-01-27,Tauranga,New Zealand,NZ
+2020-01-28,Tauranga,New Zealand,NZ
+2020-01-29,Tauranga,New Zealand,NZ
+2020-01-30,Tauranga,New Zealand,NZ
+2020-01-31,Tauranga,New Zealand,NZ
+2020-02-01,Tauranga,New Zealand,NZ
+2020-02-02,Tauranga,New Zealand,NZ
+2020-02-03,Tauranga,New Zealand,NZ
+2020-02-04,Tauranga,New Zealand,NZ
+2020-02-05,Tauranga,New Zealand,NZ
+2020-02-06,Tauranga,New Zealand,NZ
+2020-02-07,Tauranga,New Zealand,NZ
+2020-02-08,Roadtrip,New Zealand,NZ
+2020-02-09,Roadtrip,New Zealand,NZ
+2020-02-10,Roadtrip,New Zealand,NZ
+2020-02-11,Roadtrip,New Zealand,NZ
+2020-02-12,Tauranga,New Zealand,NZ
+2020-02-13,Tauranga,New Zealand,NZ
+2020-02-14,Tauranga,New Zealand,NZ
+2020-02-15,Tauranga,New Zealand,NZ
+2020-02-16,Tauranga,New Zealand,NZ
+2020-02-17,Tauranga,New Zealand,NZ
+2020-02-18,Tauranga,New Zealand,NZ
+2020-02-19,Tauranga,New Zealand,NZ
+2020-02-20,Tauranga,New Zealand,NZ
+2020-02-21,Tauranga,New Zealand,NZ
+2020-02-22,Roadtrip,New Zealand,NZ
+2020-02-23,Roadtrip,New Zealand,NZ
+2020-02-24,Roadtrip,New Zealand,NZ
+2020-02-25,Tauranga,New Zealand,NZ
+2020-02-26,Tauranga,New Zealand,NZ
+2020-02-27,Tauranga,New Zealand,NZ
+2020-02-28,Tauranga,New Zealand,NZ
+2020-02-29,Tauranga,New Zealand,NZ
+2020-03-01,Wellington,New Zealand,NZ
+2020-03-02,Wellington,New Zealand,NZ
+2020-03-03,Wellington,New Zealand,NZ
+2020-03-04,Roadtrip,New Zealand,NZ
+2020-03-05,Roadtrip,New Zealand,NZ
+2020-03-06,Roadtrip,New Zealand,NZ
+2020-03-07,Roadtrip,New Zealand,NZ
+2020-03-08,Roadtrip,New Zealand,NZ
+2020-03-09,Roadtrip,New Zealand,NZ
+2020-03-10,Roadtrip,New Zealand,NZ
+2020-03-11,Roadtrip,New Zealand,NZ
+2020-03-12,Roadtrip,New Zealand,NZ
+2020-03-13,Roadtrip,New Zealand,NZ
+2020-03-14,Roadtrip,New Zealand,NZ
+2020-03-15,Roadtrip,New Zealand,NZ
+2020-03-16,Christchurch,New Zealand,NZ
+2020-03-17,Christchurch,New Zealand,NZ
+2020-03-18,Christchurch,New Zealand,NZ
+2020-03-19,Christchurch,New Zealand,NZ
+2020-03-20,Christchurch,New Zealand,NZ
+2020-03-21,Christchurch,New Zealand,NZ
+2020-03-22,Christchurch,New Zealand,NZ
+2020-03-23,Christchurch,New Zealand,NZ
+2020-03-24,Christchurch,New Zealand,NZ
+2020-03-25,Christchurch,New Zealand,NZ
+2020-03-26,Christchurch,New Zealand,NZ
+2020-03-27,Christchurch,New Zealand,NZ
+2020-03-28,Christchurch,New Zealand,NZ
+2020-03-29,Christchurch,New Zealand,NZ
+2020-03-30,Christchurch,New Zealand,NZ
+2020-03-31,Christchurch,New Zealand,NZ
+2020-04-01,Christchurch,New Zealand,NZ
+2020-04-02,Christchurch,New Zealand,NZ
+2020-04-03,Christchurch,New Zealand,NZ
+2020-04-04,Christchurch,New Zealand,NZ
+2020-04-05,Christchurch,New Zealand,NZ
+2020-04-06,Christchurch,New Zealand,NZ
+2020-04-07,Christchurch,New Zealand,NZ
+2020-04-08,Christchurch,New Zealand,NZ
+2020-04-09,Christchurch,New Zealand,NZ
+2020-04-10,Christchurch,New Zealand,NZ
+2020-04-11,Christchurch,New Zealand,NZ
+2020-04-12,Christchurch,New Zealand,NZ
+2020-04-13,Christchurch,New Zealand,NZ
+2020-04-14,Christchurch,New Zealand,NZ
+2020-04-15,Christchurch,New Zealand,NZ
+2020-04-16,Christchurch,New Zealand,NZ
+2020-04-17,Christchurch,New Zealand,NZ
+2020-04-18,Christchurch,New Zealand,NZ
+2020-04-19,Christchurch,New Zealand,NZ
+2020-04-20,Christchurch,New Zealand,NZ
+2020-04-21,Christchurch,New Zealand,NZ
+2020-04-22,Christchurch,New Zealand,NZ
+2020-04-23,Christchurch,New Zealand,NZ
+2020-04-24,Christchurch,New Zealand,NZ
+2020-04-25,Christchurch,New Zealand,NZ
+2020-04-26,Christchurch,New Zealand,NZ
+2020-04-27,Christchurch,New Zealand,NZ
+2020-04-28,Christchurch,New Zealand,NZ
+2020-04-29,Christchurch,New Zealand,NZ
+2020-04-30,Christchurch,New Zealand,NZ
+2020-05-01,Christchurch,New Zealand,NZ
+2020-05-02,Christchurch,New Zealand,NZ
+2020-05-03,Christchurch,New Zealand,NZ
+2020-05-04,Christchurch,New Zealand,NZ
+2020-05-05,Christchurch,New Zealand,NZ
+2020-05-06,Christchurch,New Zealand,NZ
+2020-05-07,Christchurch,New Zealand,NZ
+2020-05-08,Christchurch,New Zealand,NZ
+2020-05-09,Christchurch,New Zealand,NZ
+2020-05-10,Christchurch,New Zealand,NZ
+2020-05-11,Christchurch,New Zealand,NZ
+2020-05-12,Christchurch,New Zealand,NZ
+2020-05-13,Christchurch,New Zealand,NZ
+2020-05-14,Christchurch,New Zealand,NZ
+2020-05-15,Christchurch,New Zealand,NZ
+2020-05-16,Christchurch,New Zealand,NZ
+2020-05-17,Christchurch,New Zealand,NZ
+2020-05-18,Christchurch,New Zealand,NZ
+2020-05-19,Christchurch,New Zealand,NZ
+2020-05-20,Christchurch,New Zealand,NZ
+2020-05-21,Christchurch,New Zealand,NZ
+2020-05-22,Christchurch,New Zealand,NZ
+2020-05-23,Christchurch,New Zealand,NZ
+2020-05-24,Christchurch,New Zealand,NZ
+2020-05-25,Christchurch,New Zealand,NZ
+2020-05-26,Christchurch,New Zealand,NZ
+2020-05-27,Christchurch,New Zealand,NZ
+2020-05-28,Christchurch,New Zealand,NZ
+2020-05-29,Christchurch,New Zealand,NZ
+2020-05-30,Christchurch,New Zealand,NZ
+2020-05-31,Christchurch,New Zealand,NZ
+2020-06-01,Christchurch,New Zealand,NZ
+2020-06-02,Christchurch,New Zealand,NZ
+2020-06-03,Christchurch,New Zealand,NZ
+2020-06-04,Christchurch,New Zealand,NZ
+2020-06-05,Christchurch,New Zealand,NZ
+2020-06-06,Christchurch,New Zealand,NZ
+2020-06-07,Christchurch,New Zealand,NZ
+2020-06-08,Christchurch,New Zealand,NZ
+2020-06-09,Christchurch,New Zealand,NZ
+2020-06-10,Christchurch,New Zealand,NZ
+2020-06-11,Christchurch,New Zealand,NZ
+2020-06-12,Christchurch,New Zealand,NZ
+2020-06-13,Christchurch,New Zealand,NZ
+2020-06-14,Christchurch,New Zealand,NZ
+2020-06-15,Christchurch,New Zealand,NZ
+2020-06-16,Christchurch,New Zealand,NZ
+2020-06-17,Christchurch,New Zealand,NZ
+2020-06-18,Christchurch,New Zealand,NZ
+2020-06-19,Christchurch,New Zealand,NZ
+2020-06-20,Christchurch,New Zealand,NZ
+2020-06-21,Christchurch,New Zealand,NZ
+2020-06-22,Christchurch,New Zealand,NZ
+2020-06-23,Christchurch,New Zealand,NZ
+2020-06-24,Christchurch,New Zealand,NZ
+2020-06-25,Christchurch,New Zealand,NZ
+2020-06-26,Christchurch,New Zealand,NZ
+2020-06-27,Christchurch,New Zealand,NZ
+2020-06-28,Christchurch,New Zealand,NZ
+2020-06-29,Christchurch,New Zealand,NZ
+2020-06-30,Christchurch,New Zealand,NZ
+2020-07-01,Christchurch,New Zealand,NZ
+2020-07-02,Christchurch,New Zealand,NZ
+2020-07-03,Christchurch,New Zealand,NZ
+2020-07-04,Christchurch,New Zealand,NZ
+2020-07-05,Christchurch,New Zealand,NZ
+2020-07-06,Christchurch,New Zealand,NZ
+2020-07-07,Christchurch,New Zealand,NZ
+2020-07-08,Christchurch,New Zealand,NZ
+2020-07-09,Christchurch,New Zealand,NZ
+2020-07-10,Christchurch,New Zealand,NZ
+2020-07-11,Christchurch,New Zealand,NZ
+2020-07-12,Christchurch,New Zealand,NZ
+2020-07-13,Christchurch,New Zealand,NZ
+2020-07-14,Christchurch,New Zealand,NZ
+2020-07-15,Christchurch,New Zealand,NZ
+2020-07-16,Christchurch,New Zealand,NZ
