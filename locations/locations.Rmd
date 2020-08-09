@@ -1,0 +1,152 @@
+---
+title: "Wander Data: Locations recap"
+output: html_notebook
+---
+
+```{r}
+require(ggplot2)
+require(bbplot)
+require(ggcal)
+require(dplyr)
+require(sugrrants)
+require(tidyr)
+require(parsedate)
+require(lubridate)
+require(skimr)
+```
+
+```{r}
+df <- read.csv("~/Development/wanderdata-scripts/locations/data/places.csv")
+df$posixct <-parse_date(df$Date)
+df$date <- date(df$posixct)
+df$Country <- factor(df$Country, levels = c("Austria", "Germany", "Singapore", "Malaysia",  "Thailand", 
+                                                 "Cambodia", "Indonesia", "Macao", "Hong Kong", "Japan", "New Zealand"))
+```
+
+
+```{r}
+counts <- df %>% 
+  group_by(Country) %>%
+  summarise(n = n()) %>%
+  arrange(desc(n))
+
+p <- ggplot(counts, aes(x=reorder(Country, -n), y=n)) +
+  geom_bar(stat = "identity") +
+  labs(title="Days per country",
+       subtitle = "From a total of 416 days") +
+  xlab('Country') + ylab('# of days') +
+  bbc_style() +
+  theme(axis.title = element_text(size = 24), 
+        plot.margin = unit(c(1.0,1.5,1.0,1.0), 'cm'),
+        axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)))
+
+
+print(p)
+ggsave('plots/days_country.jpg', plot = p, 
+           width = 15, height = 8, units = 'in')
+```
+
+## Summary
+```{r}
+skim(counts)
+
+# Summary without NZ
+skim(counts[counts$Country != 'New Zealand',])
+```
+
+# Cities
+```{r}
+# Different cities
+str(df$Location)
+
+days.by.location <- df %>%
+  group_by(Country, Location) %>%
+  summarise(n = n()) %>%
+  arrange(desc(n))
+
+
+unique.locations.per.country <- df %>%
+  group_by(Country) %>%
+  summarise(n = n_distinct(Location)) %>%
+  arrange(desc(n))
+```
+
+```{r}
+p <- ggplot(unique.locations.per.country, aes(x=reorder(Country, -n), y=n)) +
+  geom_bar(stat = "identity") +
+  scale_fill_brewer(palette="Set3")+
+  labs(title="Unique locations per country",
+       subtitle = "From a total of 416 days") +
+  xlab('Country') + ylab('# of days') +
+  bbc_style() +
+  theme(axis.title = element_text(size = 24), 
+        plot.margin = unit(c(1.0,1.5,1.0,1.0), 'cm'),
+        axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)))
+print(p)
+```
+
+```{r}
+p <- ggplot(days.by.location, aes(x=reorder(Location, -n), y=n, fill=Country)) +
+  geom_bar(stat = "identity") +
+  scale_fill_brewer(palette="Set3")+
+  labs(title="Locations per country",
+       subtitle = "From a total of 416 days") +
+  xlab('Location') + ylab('# of days') +
+  bbc_style() +
+  theme(axis.title = element_text(size = 24), 
+        plot.margin = unit(c(1.0,1.5,1.0,1.0), 'cm'),
+        axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)),
+        axis.text.x = element_text(angle = 45, hjust = 1))
+print(p)
+```
+
+```{r}
+daily <- df %>%
+  group_by(date) %>%
+  summarise(n=n()) %>% mutate(date = as.Date(date)) %>%
+  complete(date = seq.Date(min(date), max(date), by="day"))
+daily[is.na(daily)] <- 0
+```
+
+```{r}
+calendar <- daily %>%
+  frame_calendar(x = 1, y = 1, date = date, calendar = "monthly")
+```
+
+
+```{r}
+# Split the dates to avoid having a huge vis.
+p <- ggcal(calendar[calendar$date < "2020-01-01",]$date, as.factor(df[df$date < "2020-01-01",]$Country)) +
+  scale_fill_brewer(palette="Set3", na.value="gray70")+
+  ggtitle("Visited countries") +
+  theme(plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"),
+        plot.title = element_text(family = "Helvetica", size = 28, face = "bold", color = "#222222"),
+        axis.text = element_text(family = "Helvetica", size = 18, color = "#222222"),
+        strip.text.x = element_text(family = "Helvetica", size = 14, color = "#222222", hjust=0, face="bold"),
+        legend.text=element_text(size=14))
+
+
+
+print(p)
+ggsave("calendar_asia.jpg", plot = p, 
+       width = 12, height = 6, units = "in")
+
+```
+
+```{r}
+p <- ggcal(calendar[calendar$date >= "2020-01-01",]$date, as.factor(df[df$date >= "2020-01-01",]$Country)) +
+  scale_fill_brewer(palette="Set3", na.value="gray70")+
+  ggtitle("Visited countries") +
+  theme(plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"),
+        plot.title = element_text(family = "Helvetica", size = 28, face = "bold", color = "#222222"),
+        axis.text = element_text(family = "Helvetica", size = 18, color = "#222222"),
+        strip.text.x = element_text(family = "Helvetica", size = 14, color = "#222222", hjust=0, face="bold"),
+        legend.text=element_text(size=14))
+print(p)
+ggsave("calendar_nz.jpg", plot = p, 
+       width = 12, height = 6, units = "in")
+
+```
+
+
+

@@ -53,7 +53,7 @@ calendar <- daily %>%
 
 
 ```{r}
-p <- ggcal(calendar$date, as.factor(potato.calendar$Country)) +
+p <- ggcal(calendar$date, as.factor(df$Country)) +
   scale_fill_discrete(na.value="gray70") +
   ggtitle("Visited countries") +
   theme(plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"),
