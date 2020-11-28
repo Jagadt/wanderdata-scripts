@@ -17,22 +17,23 @@ require(skimr)
 
 ```{r}
 df <- read.csv("~/Development/wanderdata-scripts/locations/data/places.csv")
+countries.iso.2 <- read.csv("~/Development/wanderdata-scripts/locations/data/countries_iso_2.csv")
 df$posixct <-parse_date(df$Date)
 df$date <- date(df$posixct)
 df$Country <- factor(df$Country, levels = c("Austria", "Germany", "Singapore", "Malaysia",  "Thailand", 
-                                                 "Cambodia", "Indonesia", "Macao", "Hong Kong", "Japan", "New Zealand"))
+                                                 "Cambodia", "Indonesia", "Macau", "Hong Kong", "Japan", "New Zealand"))
 ```
 
 
 ```{r}
 counts <- df %>% 
   group_by(Country) %>%
-  summarise(n = n()) %>%
+  summarise(n = n(), .groups="drop_last") %>%
   arrange(desc(n))
 
 p <- ggplot(counts, aes(x=reorder(Country, -n), y=n)) +
   geom_bar(stat = "identity") +
-  labs(title="Days per country",
+  labs(title="Days spent per country",
        subtitle = "From a total of 416 days") +
   xlab('Country') + ylab('# of days') +
   bbc_style() +
@@ -61,19 +62,24 @@ str(df$Location)
 
 days.by.location <- df %>%
   group_by(Country, Location) %>%
-  summarise(n = n()) %>%
+  summarise(n = n(), .groups="drop_last") %>%
   arrange(desc(n))
+
+days.by.location <- merge(x=days.by.location, y=countries.iso.2)
+days.by.location <- days.by.location[with(days.by.location, order(-n)), ]
 
 
 unique.locations.per.country <- df %>%
   group_by(Country) %>%
-  summarise(n = n_distinct(Location)) %>%
+  summarise(n = n_distinct(Location), .groups="drop_last") %>%
   arrange(desc(n))
 ```
 
 ```{r}
 p <- ggplot(unique.locations.per.country, aes(x=reorder(Country, -n), y=n)) +
   geom_bar(stat = "identity") +
+  geom_hline(yintercept=median(unique.locations.per.country$n), linetype="dashed", 
+              size=2) +
   scale_fill_brewer(palette="Set3")+
   labs(title="Unique locations per country",
        subtitle = "From a total of 416 days") +
@@ -86,17 +92,57 @@ print(p)
 ```
 
 ```{r}
-p <- ggplot(days.by.location, aes(x=reorder(Location, -n), y=n, fill=Country)) +
+p <- ggplot(days.by.location, aes(x=reorder(Location, -n), y=n, fill=Country, linetype=Country)) +
   geom_bar(stat = "identity") +
   scale_fill_brewer(palette="Set3")+
-  labs(title="Locations per country",
+  geom_hline(yintercept=median(days.by.location$n), linetype="dashed", 
+              size=2) +
+  labs(title="Days spent at each location",
        subtitle = "From a total of 416 days") +
   xlab('Location') + ylab('# of days') +
   bbc_style() +
   theme(axis.title = element_text(size = 24), 
         plot.margin = unit(c(1.0,1.5,1.0,1.0), 'cm'),
         axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)),
-        axis.text.x = element_text(angle = 45, hjust = 1))
+        axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_x_discrete(labels= paste0(days.by.location$Location," ", "(", days.by.location$ISO_2, ")")) +
+  annotate("text", x = nrow(days.by.location) - 3, y = 12, 
+           label = paste0("Median: ", median(days.by.location$n)), size = 5)
+print(p)
+```
+
+```{r}
+p <- ggplot(days.by.location, aes(y=n)) + 
+  geom_boxplot() +
+  stat_boxplot(geom = 'errorbar', width = 0.1) +
+  labs(title="Boxplot regarding the days spent at each location",
+       subtitle = "From a total of 416 days") +
+  ylab('Number of days') +
+  bbc_style() +
+  theme(axis.title = element_text(size = 24), 
+        plot.margin = unit(c(1.0,1.5,1.0,1.0), 'cm'),
+        axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank()) +
+  annotate("text", x = 0.05, y = 63, 
+           label = "Tauranga (NZ)", size = 5) +
+  annotate("text", x = 0.05, y = 123, 
+           label = "Christchurch (NZ)", size = 5)
+print(p)
+```
+```{r}
+p <- ggplot(days.by.location, aes(Country, n)) + 
+  geom_boxplot() +
+  stat_boxplot(geom = 'errorbar', width = 0.1) +
+  labs(title="Boxplot regarding the days spent at each location",
+       subtitle = "Grouped by country") +
+  ylab('Number of days') +
+  bbc_style() +
+  theme(axis.title = element_text(size = 24), 
+        plot.margin = unit(c(1.0,1.5,1.0,1.0), 'cm'),
+        axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0))) +
+  annotate("text", x = 4.7, y = 29, 
+           label = "Kuala Lumpur (MY)", size = 5)
 print(p)
 ```
 
