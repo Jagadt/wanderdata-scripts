@@ -86,11 +86,11 @@ Date,Location,Country,CC
 2019-08-20,Chiang Rai,Thailand,TH
 2019-08-21,Chiang Rai,Thailand,TH
 2019-08-22,Chiang Rai,Thailand,TH
-2019-08-23,Ayuttaya,Thailand,TH
-2019-08-24,Ayuttaya,Thailand,TH
-2019-08-25,Ayuttaya,Thailand,TH
-2019-08-26,Ayuttaya,Thailand,TH
-2019-08-27,Ayuttaya,Thailand,TH
+2019-08-23,Ayutthaya,Thailand,TH
+2019-08-24,Ayutthaya,Thailand,TH
+2019-08-25,Ayutthaya,Thailand,TH
+2019-08-26,Ayutthaya,Thailand,TH
+2019-08-27,Ayutthaya,Thailand,TH
 2019-08-28,Bangkok,Thailand,TH
 2019-08-29,Bangkok,Thailand,TH
 2019-08-30,Bangkok,Thailand,TH
@@ -166,8 +166,8 @@ Date,Location,Country,CC
 2019-11-08,Canggu,Indonesia,ID
 2019-11-09,Canggu,Indonesia,ID
 2019-11-10,Canggu,Indonesia,ID
-2019-11-11,Macao,Macao,MO
-2019-11-12,Macao,Macao,MO
+2019-11-11,Macau,Macau,MO
+2019-11-12,Macau,Macau,MO
 2019-11-13,Hong Kong,Hong Kong,HK
 2019-11-14,Hong Kong,Hong Kong,HK
 2019-11-15,Hong Kong,Hong Kong,HK
@@ -202,11 +202,11 @@ Date,Location,Country,CC
 2019-12-14,Kyoto,Japan,JP
 2019-12-15,Kyoto,Japan,JP
 2019-12-16,Tokyo,Japan,JP
-2019-12-17,Roadtrip,New Zealand,NZ
-2019-12-18,Roadtrip,New Zealand,NZ
-2019-12-19,Roadtrip,New Zealand,NZ
-2019-12-20,Roadtrip,New Zealand,NZ
-2019-12-21,Roadtrip,New Zealand,NZ
+2019-12-17,Road trip,New Zealand,NZ
+2019-12-18,Road trip,New Zealand,NZ
+2019-12-19,Road trip,New Zealand,NZ
+2019-12-20,Road trip,New Zealand,NZ
+2019-12-21,Road trip,New Zealand,NZ
 2019-12-22,Tauranga,New Zealand,NZ
 2019-12-23,Tauranga,New Zealand,NZ
 2019-12-24,Tauranga,New Zealand,NZ
@@ -255,10 +255,10 @@ Date,Location,Country,CC
 2020-02-05,Tauranga,New Zealand,NZ
 2020-02-06,Tauranga,New Zealand,NZ
 2020-02-07,Tauranga,New Zealand,NZ
-2020-02-08,Roadtrip,New Zealand,NZ
-2020-02-09,Roadtrip,New Zealand,NZ
-2020-02-10,Roadtrip,New Zealand,NZ
-2020-02-11,Roadtrip,New Zealand,NZ
+2020-02-08,Road trip,New Zealand,NZ
+2020-02-09,Road trip,New Zealand,NZ
+2020-02-10,Road trip,New Zealand,NZ
+2020-02-11,Road trip,New Zealand,NZ
 2020-02-12,Tauranga,New Zealand,NZ
 2020-02-13,Tauranga,New Zealand,NZ
 2020-02-14,Tauranga,New Zealand,NZ
@@ -269,9 +269,9 @@ Date,Location,Country,CC
 2020-02-19,Tauranga,New Zealand,NZ
 2020-02-20,Tauranga,New Zealand,NZ
 2020-02-21,Tauranga,New Zealand,NZ
-2020-02-22,Roadtrip,New Zealand,NZ
-2020-02-23,Roadtrip,New Zealand,NZ
-2020-02-24,Roadtrip,New Zealand,NZ
+2020-02-22,Road trip,New Zealand,NZ
+2020-02-23,Road trip,New Zealand,NZ
+2020-02-24,Road trip,New Zealand,NZ
 2020-02-25,Tauranga,New Zealand,NZ
 2020-02-26,Tauranga,New Zealand,NZ
 2020-02-27,Tauranga,New Zealand,NZ
@@ -280,18 +280,18 @@ Date,Location,Country,CC
 2020-03-01,Wellington,New Zealand,NZ
 2020-03-02,Wellington,New Zealand,NZ
 2020-03-03,Wellington,New Zealand,NZ
-2020-03-04,Roadtrip,New Zealand,NZ
-2020-03-05,Roadtrip,New Zealand,NZ
-2020-03-06,Roadtrip,New Zealand,NZ
-2020-03-07,Roadtrip,New Zealand,NZ
-2020-03-08,Roadtrip,New Zealand,NZ
-2020-03-09,Roadtrip,New Zealand,NZ
-2020-03-10,Roadtrip,New Zealand,NZ
-2020-03-11,Roadtrip,New Zealand,NZ
-2020-03-12,Roadtrip,New Zealand,NZ
-2020-03-13,Roadtrip,New Zealand,NZ
-2020-03-14,Roadtrip,New Zealand,NZ
-2020-03-15,Roadtrip,New Zealand,NZ
+2020-03-04,Road trip,New Zealand,NZ
+2020-03-05,Road trip,New Zealand,NZ
+2020-03-06,Road trip,New Zealand,NZ
+2020-03-07,Road trip,New Zealand,NZ
+2020-03-08,Road trip,New Zealand,NZ
+2020-03-09,Road trip,New Zealand,NZ
+2020-03-10,Road trip,New Zealand,NZ
+2020-03-11,Road trip,New Zealand,NZ
+2020-03-12,Road trip,New Zealand,NZ
+2020-03-13,Road trip,New Zealand,NZ
+2020-03-14,Road trip,New Zealand,NZ
+2020-03-15,Road trip,New Zealand,NZ
 2020-03-16,Christchurch,New Zealand,NZ
 2020-03-17,Christchurch,New Zealand,NZ
 2020-03-18,Christchurch,New Zealand,NZ
