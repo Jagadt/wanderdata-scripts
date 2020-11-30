@@ -2,13 +2,14 @@ import foursquare
 import argparse
 import datetime
 import json
+import time
 from pytz import timezone
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--start_date', '-bd', help='Starting date', type=str,
-                    default='2019-07-04')
+                    default='2019-05-28')
 parser.add_argument('--end_date', '-ed', help='End date', type=str,
-                    default='2019-07-04')
+                    default='2020-07-17')  # the end date is not inclusive.
 parser.add_argument('--client_id', '-ci', help='Client id', type=str)
 parser.add_argument('--client_secret', '-cs', help='Client secret', type=str)
 parser.add_argument('--access_code', type=str)
@@ -32,8 +33,10 @@ client.set_access_token(access_token)
 user = client.users()
 
 # Change the given times to the corresponding time zone
-start_ts = int(datetime.datetime.strptime(start_date, '%Y-%m-%d').replace(tzinfo=timezone('Asia/Singapore')).timestamp())
-end_ts = int(datetime.datetime.strptime(end_date, '%Y-%m-%d').replace(tzinfo=timezone('Asia/Singapore')).timestamp())
+start_ts = int(datetime.datetime.strptime(
+    start_date, '%Y-%m-%d').replace(tzinfo=timezone('Asia/Singapore')).timestamp())
+end_ts = int(datetime.datetime.strptime(
+    end_date, '%Y-%m-%d').replace(tzinfo=timezone('Asia/Singapore')).timestamp())
 
 offset = 0
 data = []
@@ -51,6 +54,9 @@ while True:
     for item in c['checkins']['items']:
         data.append(item)
     offset += 250
+
+    print("Sleeping after offset {}. Data size: {}.".format(offset, len(data)))
+    time.sleep(15)
 
 
 fl = [item for sublist in data for item in sublist]
