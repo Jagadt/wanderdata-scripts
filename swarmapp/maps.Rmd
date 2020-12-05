@@ -1,0 +1,230 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+require(OpenStreetMap)
+require(ggplot2)
+```
+
+```{r}
+df.2 <- fromJSON('~/Development/wanderdata-scripts/swarmapp/data/checkins.json')
+
+# json to dataframe
+coordinates <- flatten(df.2)
+
+# create a new category column by select the category from the nested structure 'venue.category'
+coordinates$category <- sapply(coordinates$venue.categories, function(x) x$name)
+coordinates$posixct <- parsedate::parse_date(coordinates$createdAt)
+coordinates$date <- date(coordinates$posixct)
+coordinates$hour <- hour(coordinates$posixct)
+coordinates <- data.frame(id = coordinates$venue.id, lat = coordinates$venue.location.lat, lon = coordinates$venue.location.lng,
+                          country = df.2$venue.location.cc, state = df.2$venue.location.state, city = df.2$venue.location.city)
+```
+
+# Singapore
+
+```{r}
+sg.data <- coordinates[coordinates$venue.location.cc == 'SG',]
+
+coordinates <- data.frame(id = sg.data$venue.id, lat = sg.data$venue.location.lat, lon = sg.data$venue.location.lng)
+coordinates$category <- sg.data$category
+
+
+# c(up, left), c(down,right)
+singapore.map <- openmap(c(1.4885,103.6059),
+                         c(1.1899,104.0625),
+                         minNumTiles=40)
+
+map_longlat <- openproj(singapore.map)
+```
+
+```{r}
+p <- autoplot(map_longlat) +
+  geom_point(data = coordinates, 
+             aes(x = coordinates$lon, y = coordinates$lat)) +
+  stat_density2d(data=coordinates, aes(x=coordinates$lon, y=coordinates$lat, fill=..level.., alpha=..level..),
+                 geom='polygon', size=0.01, bins=5) +
+  scale_color_brewer(palette='Set1')+
+  theme(legend.position = 'none',
+        plot.title = element_text(size = 22),
+        plot.subtitle = element_text(size = 18),
+        axis.text.x  = element_text(size = 14),
+        axis.text.y  = element_text(size = 14),
+        axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14),
+        plot.margin = unit(c(1.0,1.5,1.0,0.5), 'cm')) +
+  xlab('Longitude') + ylab('Latitude') +
+  ggtitle('My Swarm check-ins', subtitle = 'From July 4, 2019 until July 10, 2019')
+print(p)
+```
+
+# Osaka
+```{r}
+osaka.data <- coordinates[coordinates$state == 'Ōsaka' & coordinates$city != 'Kadoma',]
+osaka.data <- osaka.data[complete.cases(osaka.data), ]
+
+
+
+# c(up, left), c(down,right)
+osaka.map <- openmap(c(34.7396, 135.3716),
+                     c(34.6151, 135.6000),
+                     minNumTiles = 50, # minNumTiles = 50
+                     type="osm")
+
+map_longlat <- openproj(osaka.map)
+```
+
+```{r}
+p <- autoplot(map_longlat) +
+  geom_point(data = osaka.data, 
+             aes(x = osaka.data$lon, y = osaka.data$lat)) +
+  stat_density2d(data=osaka.data, aes(x=osaka.data$lon, y=osaka.data$lat, fill=..level.., alpha=..level..),
+                 geom='polygon', size=0.01, bins=5) +
+  scale_color_brewer(palette='Set1')+
+  theme(legend.position = 'none',
+        plot.title = element_text(size = 22),
+        plot.subtitle = element_text(size = 18),
+        axis.text.x  = element_text(size = 14),
+        axis.text.y  = element_text(size = 14),
+        axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14),
+        plot.margin = unit(c(1.0,1.5,1.0,0.5), 'cm')) +
+  xlab('Longitude') + ylab('Latitude') +
+  ggtitle('Osaka check-ins', subtitle = 'From July 4, 2019 until July 10, 2019')
+print(p)
+```
+
+
+# Kuala Lumpur
+```{r}
+kl.data <- coordinates[coordinates$city == 'Kuala Lumpur' & coordinates$id != '4c6e4cddd5c3a1cdcfe9c72b',]
+kl.data <- kl.data[complete.cases(kl.data), ]
+
+# c(up, left), c(down,right)
+kl.map <- openmap(c(3.1618, 101.6716),
+                     c(3.1245, 101.7286),
+                     minNumTiles = 40, # minNumTiles = 50
+                     type="osm")
+
+map_longlat.kl <- openproj(kl.map)
+```
+
+```{r}
+p <- autoplot(map_longlat.kl) +
+  geom_point(data = kl.data, 
+             aes(x = kl.data$lon, y = kl.data$lat)) +
+  stat_density2d(data=kl.data, aes(x=kl.data$lon, y=kl.data$lat, fill=..level.., alpha=..level..),
+                 geom='polygon', size=0.01, bins=5) +
+  scale_color_brewer(palette='Set1')+
+  theme(legend.position = 'none',
+        plot.title = element_text(size = 22),
+        plot.subtitle = element_text(size = 18),
+        axis.text.x  = element_text(size = 14),
+        axis.text.y  = element_text(size = 14),
+        axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14),
+        plot.margin = unit(c(1.0,1.5,1.0,0.5), 'cm')) +
+  xlab('Longitude') + ylab('Latitude') +
+  ggtitle('Kuala Lumpur check-ins', subtitle = 'From July 4, 2019 until July 10, 2019')
+print(p)
+```
+
+
+# Siem Reap
+```{r}
+sr.data <- coordinates[coordinates$city == "Siem Reap",]
+sr.data <- sr.data[complete.cases(sr.data), ]
+
+# c(up, left), c(down,right)
+sr.map <- openmap(c(13.4754, 103.7554),
+                     c(13.3302, 103.9837),
+                     minNumTiles = 40, # minNumTiles = 50
+                     type="osm")
+
+map_longlat.sr <- openproj(sr.map)
+```
+
+```{r}
+p <- autoplot(map_longlat.sr) +
+  geom_point(data = sr.data, 
+             aes(x = sr.data$lon, y = sr.data$lat)) +
+  stat_density2d(data=sr.data, aes(x=sr.data$lon, y=sr.data$lat, fill=..level.., alpha=..level..),
+                 geom='polygon', size=0.01, bins=5) +
+  scale_color_brewer(palette='Set1')+
+  theme(legend.position = 'none',
+        plot.title = element_text(size = 22),
+        plot.subtitle = element_text(size = 18),
+        axis.text.x  = element_text(size = 14),
+        axis.text.y  = element_text(size = 14),
+        axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14),
+        plot.margin = unit(c(1.0,1.5,1.0,0.5), 'cm')) +
+  xlab('Longitude') + ylab('Latitude') +
+  ggtitle('Siem Reap check-ins', subtitle = 'From July 4, 2019 until July 10, 2019')
+print(p)
+```
+
+# New Zealand
+```{r}
+nz.data <- coordinates[coordinates$country == "NZ",]
+nz.data <- nz.data[complete.cases(nz.data), ]
+
+# c(up, left), c(down,right)
+nz.map <- openmap(c(-33.541, 165.938),
+                     c(-48.980, 179.033),
+                    minNumTiles = 40,
+                     type="osm")
+
+#autoplot(nz.map)
+
+map_longlat.nz <- openproj(nz.map)
+
+#autoplot(map_longlat.nz)
+```
+
+```{r}
+p <- autoplot(map_longlat.nz) +
+  geom_point(data = nz.data, 
+             aes(x = lon, y = lat)) +
+  geom_density_2d_filled(data=nz.data, aes(x=lon, y=lat,  alpha=..level..),
+                 size=0.001, bins=10) +
+  scale_color_brewer(palette='Set1')+
+  theme(legend.position = 'none',
+        plot.title = element_text(size = 22),
+        plot.subtitle = element_text(size = 18),
+        axis.text.x  = element_text(size = 14),
+        axis.text.y  = element_text(size = 14),
+        axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14),
+        plot.margin = unit(c(1.0,1.5,1.0,0.5), 'cm')) +
+  xlab('Longitude') + ylab('Latitude') +
+  ggtitle('New Zealand check-ins', subtitle = 'From July 4, 2019 until July 10, 2019')
+print(p)
+```
+
+
+```{r}
+p <- autoplot(map_longlat.nz) +
+  geom_point(data = nz.data, 
+             aes(x = lon, y = lat)) +
+  # stat_density2d(data=nz.data, aes(x=lon, y=lat, fill=..level.., alpha=..level..), geom='polygon', size=0.001, bins=10) +
+  # stat_density2d(data=nz.data, aes(x=lon, y=lat, fill=..level.., alpha=..level..), geom='polygon', size=0.001, bins=10) +
+  geom_density_2d(data=nz.data, aes(x=lon, y=lat), size = 0.4, bins = 10) +
+  scale_color_brewer(palette='Set1')+
+  theme(legend.position = 'none',
+        plot.title = element_text(size = 22),
+        plot.subtitle = element_text(size = 18),
+        axis.text.x  = element_text(size = 14),
+        axis.text.y  = element_text(size = 14),
+        axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14),
+        plot.margin = unit(c(1.0,1.5,1.0,0.5), 'cm')) +
+  xlab('Longitude') + ylab('Latitude') +
+  ggtitle('New Zealand checked-in locations', subtitle = 'From July 4, 2019 until July 10, 2019')
+print(p)
+```
+
+
+

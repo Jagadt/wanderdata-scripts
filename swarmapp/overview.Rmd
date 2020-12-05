@@ -1,0 +1,212 @@
+---
+title: "Overview"
+output: html_notebook
+---
+
+```{r}
+require(jsonlite)
+require(maptools)
+require(ggmap)
+require(dplyr)
+require(tidyr)
+require(bbplot)
+require(lubridate)
+require(parsedate)
+require(skimr)
+library(OpenStreetMap)
+```
+
+
+```{r}
+df <- fromJSON('~/Development/wanderdata-scripts/swarmapp/data/checkins.json')
+
+# JSON to dataframe.
+df <- flatten(df)
+```
+
+```{r}
+countries.iso.2 <- read.csv("~/Development/wanderdata-scripts/locations/data/countries_iso_2.csv")
+# Create a new category column by selecting the category from the nested structure 'venue.category'
+df$category <- sapply(df$venue.categories, function(x) x$name)
+df$posixct <- parsedate::parse_date(df$createdAt)
+df$date <- date(df$posixct)
+df$hour <- hour(df$posixct)
+df$weekday <- weekdays(df$posixct)
+```
+
+## Number of places
+
+```{r}
+places.by.country <- df %>%
+  group_by(venue.location.cc) %>%
+  summarize(n = n()) %>%
+  arrange(desc(n))
+
+colnames(places.by.country) <- c("ISO_2", "n")
+
+places.by.country <- merge(x=places.by.country, y=countries.iso.2)
+
+places.by.country <- places.by.country %>%
+  arrange(desc(n))
+```
+
+
+```{r}
+## Places by country
+p <- ggplot(places.by.country, aes(x=reorder(Country, -n), y=n)) +
+  geom_bar(stat = "identity") +
+  scale_fill_brewer(palette="Set3")+
+  labs(title="Locations checked in by country",
+       subtitle = "From a total of 784 check ins.") +
+  xlab('Country') + ylab('Number of locations') +
+  bbc_style() +
+  theme(axis.title = element_text(size = 24), 
+        plot.margin = unit(c(1.0,1.5,0.5,1.0), 'cm'),
+        axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0))) +
+  scale_x_discrete(labels=places.by.country$Country) +
+  geom_hline(yintercept=median(places.by.country$n), linetype="dashed", 
+              size=2) +
+  annotate("text", x = nrow(places.by.country) - 3, y = 55, 
+           label = paste0("Median: ", median(places.by.country$n)), size = 5) +
+  geom_hline(yintercept=mean(places.by.country$n), linetype="dashed", 
+              size=1) +
+  annotate("text", x = nrow(places.by.country) - 3, y = 85, 
+           label = paste0("Mean: ", mean(places.by.country$n)), size = 5)
+print(p)
+```
+
+```{r}
+places.by.date <- df %>%
+  select(venue.location.cc, date) %>%
+  group_by(venue.location.cc, date) %>%
+  summarize(n = n()) %>%
+  rename(ISO_2 = venue.location.cc)
+
+places.by.date <- merge(x=places.by.date, y=countries.iso.2)
+```
+
+```{r}
+# Places by date ratio
+skim(places.by.date)
+```
+
+```{r}
+p <- ggplot(places.by.date, aes(reorder(Country, -n, median), n)) + 
+  geom_boxplot() +
+  stat_boxplot(geom = 'errorbar', width = 0.1) +
+  labs(title="Boxplot of the check-ins by date",
+       subtitle = "Grouped by country") +
+  ylab('Number of check-ins') +
+  bbc_style() +
+  theme(axis.title = element_text(size = 24), 
+        plot.margin = unit(c(1.0,1.5,1.0,1.0), 'cm'),
+        axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0))) +
+  xlab("Country") +
+  expand_limits(x = 0, y = 0)
+print(p)
+```
+
+```{r}
+places.by.weekday <- df %>%
+  select(venue.location.cc, weekday) %>%
+  group_by(venue.location.cc, weekday) %>%
+  summarize(n = n()) %>%
+  rename(ISO_2 = venue.location.cc)
+
+places.by.weekday <- merge(x=places.by.weekday, y=countries.iso.2)
+places.by.weekday$weekday <- factor(places.by.weekday$weekday, levels=c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))
+```
+
+```{r}
+## Places by country
+p <- ggplot(places.by.weekday[places.by.weekday$ISO_2 %in% c('AT', 'SG', 'MY'),], aes(x=weekday, y=n)) +
+  geom_bar(stat = "identity") +
+  facet_grid(vars(Country)) +
+  scale_fill_brewer(palette="Set3")+
+  labs(title="Locations checked in by country",
+       subtitle = "From a total of 784 check ins.") +
+  xlab('Country') + ylab('Number of locations') +
+  theme(plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"), 
+          plot.title = element_text(family = "Helvetica", size = 28, face = "bold", color = "#222222"),
+          plot.subtitle = element_text(family = "Helvetica", size = 22, margin = ggplot2::margin(9, 0, 9, 0)),
+          axis.text = element_text(family = "Helvetica", size = 18, color = "#222222"),
+          axis.title.x = element_text(family = "Helvetica", size = 18, color = "#222222"),
+          axis.title.y = element_text(family = "Helvetica", size = 18, color = "#222222"),
+          legend.text=element_text(size=14),
+          legend.position = "top", legend.text.align = 0, legend.background = ggplot2::element_blank(),
+          legend.title = ggplot2::element_blank(), legend.key = ggplot2::element_blank())
+print(p)
+```
+
+```{r}
+p <- ggplot(places.by.weekday[places.by.weekday$ISO_2 %in% c('TH', 'KH', 'ID'),], aes(x=weekday, y=n)) +
+  geom_bar(stat = "identity") +
+  facet_grid(vars(Country)) +
+  scale_fill_brewer(palette="Set3")+
+  labs(title="Locations checked in by country",
+       subtitle = "From a total of 784 check ins.") +
+  xlab('Country') + ylab('Number of locations') +
+  theme(plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"), 
+          plot.title = element_text(family = "Helvetica", size = 28, face = "bold", color = "#222222"),
+          plot.subtitle = element_text(family = "Helvetica", size = 22, margin = ggplot2::margin(9, 0, 9, 0)),
+          axis.text = element_text(family = "Helvetica", size = 18, color = "#222222"),
+          axis.title.x = element_text(family = "Helvetica", size = 18, color = "#222222"),
+          axis.title.y = element_text(family = "Helvetica", size = 18, color = "#222222"),
+          legend.text=element_text(size=14),
+          legend.position = "top", legend.text.align = 0, legend.background = ggplot2::element_blank(),
+          legend.title = ggplot2::element_blank(), legend.key = ggplot2::element_blank())
+print(p)
+```
+
+```{r}
+p <- ggplot(places.by.weekday[places.by.weekday$ISO_2 %in% c('HK', 'JP', 'NZ'),], aes(x=weekday, y=n)) +
+  geom_bar(stat = "identity") +
+  facet_grid(vars(Country)) +
+  scale_fill_brewer(palette="Set3")+
+  labs(title="Locations checked in by country",
+       subtitle = "From a total of 784 check ins.") +
+  xlab('Country') + ylab('Number of locations') +
+  theme(plot.margin = unit(c(1.0,1.0,1.0,0.5), "cm"), 
+          plot.title = element_text(family = "Helvetica", size = 28, face = "bold", color = "#222222"),
+          plot.subtitle = element_text(family = "Helvetica", size = 22, margin = ggplot2::margin(9, 0, 9, 0)),
+          axis.text = element_text(family = "Helvetica", size = 18, color = "#222222"),
+          axis.title.x = element_text(family = "Helvetica", size = 18, color = "#222222"),
+          axis.title.y = element_text(family = "Helvetica", size = 18, color = "#222222"),
+          legend.text=element_text(size=14),
+          legend.position = "top", legend.text.align = 0, legend.background = ggplot2::element_blank(),
+          legend.title = ggplot2::element_blank(), legend.key = ggplot2::element_blank())
+print(p)
+```
+
+```{r}
+
+places.by.date <- places.by.date %>%
+  arrange(date)
+
+places.by.date$cumsum <- cumsum(places.by.date$n)
+
+places.by.date <- places.by.date %>%
+  arrange(cumsum)
+```
+
+```{r}
+regression <- data.frame(x = 1:nrow(places.by.date), y = places.by.date$cumsum)
+
+p <- ggplot(places.by.date, aes(x=date, y=cumsum)) +
+  geom_line(aes(group = 1)) +
+  geom_smooth(aes(x = places.by.date$date, y = places.by.date$cumsum) , method = lm) +
+  scale_fill_brewer(palette="Set3")+
+  labs(title="Locations checked in by country",
+       subtitle = "From a total of 784 check ins.") +
+  xlab('Country') + ylab('Number of locations') +
+  bbc_style() +
+  theme(axis.title = element_text(size = 24), 
+        plot.margin = unit(c(1.0,1.5,0.5,1.0), 'cm'),
+        axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)))
+print(p)
+```
+
+
+
+
+
