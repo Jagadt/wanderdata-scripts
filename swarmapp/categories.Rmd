@@ -1,0 +1,157 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+require(jsonlite)
+require(maptools)
+require(ggmap)
+require(dplyr)
+require(tidyr)
+require(bbplot)
+require(lubridate)
+require(parsedate)
+require(skimr)
+```
+
+```{r}
+df <- fromJSON('~/Development/wanderdata-scripts/swarmapp/data/checkins.json')
+
+# JSON to dataframe.
+df <- flatten(df)
+```
+
+```{r}
+countries.iso.2 <- read.csv("~/Development/wanderdata-scripts/locations/data/countries_iso_2.csv")
+
+# Create a new category column by selecting the category from the nested structure 'venue.category'
+df$category <- sapply(df$venue.categories, function(x) x$name)
+# Convert the NULL categories to NA
+df$category[sapply(df$category, is.null)] <- NA
+df$category <- unlist(df$category)
+
+df$posixct <- parsedate::parse_date(df$createdAt)
+```
+
+```{r}
+#timezones
+determine.tz <- function(location) {
+  switch (as.character(location),
+    'DE' = return('CET'),
+    'AT' = return('CET'),
+    'SG' = return('Asia/Singapore'),
+    'MY' = return('Asia/Kuala_Lumpur'),
+    'TH' = return('Asia/Bangkok'),
+    'KH' = return('Asia/Phnom_Penh'),
+    'ID' = return('Asia/Makassar'),
+    'HK' = return('Asia/Hong_Kong'),
+    'JP' = return('Asia/Tokyo'),
+    'NZ' = return('Pacific/Auckland'),
+  )
+  
+  return('Invalid')
+}
+
+z <- df %>%
+  rowwise() %>%
+  do(local.posixct = with_tz(.$posixct, tzone = determine.tz(.$venue.location.cc)))
+
+# timeZoneOffset: The offset in minutes between when this check-in occurred and the same time in UTC. For example, a check-in that happened at -0500 UTC will have a timeZoneOffset of -300.
+df$local.posixct <- parsedate::parse_date(df$createdAt + (df$timeZoneOffset * 60))
+df$date <- date(df$local.posixct)
+df$hour <- hour(df$local.posixct)
+df$weekday <- weekdays(df$local.posixct)
+```
+
+```{r}
+checkins.per.category <- df %>%
+  group_by(category) %>%
+  summarise(n = n()) %>%
+  arrange(desc(n))
+print(checkins.per.category)
+top.15.categories <- head(checkins.per.category$category, 15)
+```
+
+# Top categories per country
+```{r}
+# only the top 3 per group
+category.per.country <- df %>%
+  select(venue.location.cc, category) %>%
+  group_by(venue.location.cc, category) %>%
+  summarise(n = n()) %>%
+  top_n(3)
+```
+
+```{r}
+categories <- df %>%
+  select(weekday, hour, category, venue.location.cc)
+
+# Create subcategories
+get_subcategories <- function(cat) {
+  
+  if (is.na(cat)) {
+    return('Invalid')
+  }
+  
+  if (cat == 'Convenience Store' || cat == 'Shopping Mall' || cat == 'Supermarket' ||  cat == 'Market' || cat == 'Grocery Store' || cat == 'Electronics Store' || grepl('Shop', cat)) {
+    return ('Shopping')
+  }
+  
+  if (grepl('Restaurant', cat) || cat == 'Noodle House' || cat == 'Bakery'  || cat == 'Pizza Place' || cat == 'Burger Joint' || cat == 'Pie Shop' || cat == 'Food Court' || cat == 'Food Truck') {
+    return ('Food')
+  }
+  
+  if (cat == 'Coffee Shop' || cat == 'Café' || cat == 'Tea Room') {
+    return ('Coffee')
+  }
+  
+  if (cat == 'Bar' || cat == 'Pub' || cat == 'Cocktail Bar' | grepl('Bar', cat) || cat == 'Beer Garden') {
+    return ('Drinks')
+  }
+  
+  if (grepl('Library', cat)) {
+    return ('Library')
+  }
+  
+  return('Invalid')
+}
+
+z <- categories %>%
+  rowwise() %>%
+  do(subcategory = get_subcategories(.$category))
+
+categories$subcategory <- unlist(z$subcategory)
+
+table(categories$subcategory)
+
+categories$weekday <- factor(categories$weekday, levels = c("Monday", "Tuesday", "Wednesday", "Thursday",  "Friday",
+                                                          "Saturday", "Sunday"))
+
+
+categories <- categories[categories$subcategory != 'Invalid',]
+```
+
+
+
+# Categories by weekday and hour
+```{r}
+p <- ggplot(categories[categories$subcategory != "Coffee" & categories$subcategory != "Food" & categories$subcategory != "Shopping",], aes(y=weekday, x=hour)) +
+          geom_count() +
+          facet_grid(vars(subcategory))+
+          xlab('Date') + 
+          ylab('Pressure') +
+          theme(axis.title = element_text(size = 24), 
+                plot.margin = unit(c(1.0,1.5,0.5,1.0), 'cm'),
+                axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0))) +
+          guides(colour = guide_legend(nrow = 1)) 
+print(p)
+```
+
+
+```{r}
+categories.to.print <- categories
+categories.to.print$category <- NULL
+write.csv(categories.to.print, file = 'subcategories.csv', row.names = FALSE)
+```
+

@@ -130,6 +130,7 @@ p <- ggplot(days.by.location, aes(y=n)) +
            label = "Christchurch (NZ)", size = 5)
 print(p)
 ```
+
 ```{r}
 p <- ggplot(days.by.location, aes(Country, n)) + 
   geom_boxplot() +
