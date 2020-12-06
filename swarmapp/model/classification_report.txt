@@ -1,0 +1,11 @@
+              precision    recall  f1-score   support
+
+      Coffee       0.79      0.85      0.81        26
+      Drinks       0.68      1.00      0.81        19
+        Food       0.72      0.94      0.82       178
+     Library       0.90      0.79      0.84        47
+    Shopping       0.94      0.68      0.79       211
+
+    accuracy                           0.81       481
+   macro avg       0.81      0.85      0.81       481
+weighted avg       0.84      0.81      0.81       481
