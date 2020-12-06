@@ -32,6 +32,9 @@ df$posixct <- parsedate::parse_date(df$createdAt)
 df$date <- date(df$posixct)
 df$hour <- hour(df$posixct)
 df$weekday <- weekdays(df$posixct)
+df$local.posixct <- parsedate::parse_date(df$createdAt + (df$timeZoneOffset * 60))
+
+df <- df[df$date >= '2019-05-29',]
 ```
 
 ## Number of places
@@ -50,6 +53,19 @@ places.by.country <- places.by.country %>%
   arrange(desc(n))
 ```
 
+## Locations by places
+
+```{r}
+# ratio of check-ins by day, per country
+places <- read.csv("~/Development/wanderdata-scripts/locations/data/places.csv")
+counts <- places %>% 
+  group_by(Country) %>%
+  summarise(days = n()) %>%
+  arrange(desc(days))
+
+counts <- merge(counts, places.by.country)
+counts$ratio <- counts$n / counts$days
+```
 
 ```{r}
 ## Places by country
@@ -139,6 +155,33 @@ print(p)
 ```
 
 ```{r}
+places.by.weekday.summary <- df %>%
+  select(weekday) %>%
+  group_by(weekday) %>%
+  summarize(n = n())
+
+places.by.weekday.summary$weekday <- factor(places.by.weekday.summary$weekday, levels=c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))
+```
+
+```{r}
+p <- ggplot(places.by.weekday.summary, aes(x=weekday, y=n)) +
+  geom_bar(stat = "identity") +
+  scale_fill_brewer(palette="Set3")+
+  labs(title="Check-ins per day of the week",
+       subtitle = "From a total of 784 check ins.") +
+  xlab('Day of the week') + ylab('Number of check-ins') +
+  bbc_style() +
+  theme(axis.title = element_text(size = 24), 
+        plot.margin = unit(c(1.0,1.5,0.5,1.0), 'cm'),
+        axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0))) +
+  geom_hline(yintercept=mean(places.by.weekday.summary$n), linetype="dashed", 
+              size=1) +
+  annotate("text", x = 3, y = 105, 
+           label = paste0("Mean: ", round(mean(places.by.weekday.summary$n), 2)), size = 5)
+print(p)
+```
+
+```{r}
 p <- ggplot(places.by.weekday[places.by.weekday$ISO_2 %in% c('TH', 'KH', 'ID'),], aes(x=weekday, y=n)) +
   geom_bar(stat = "identity") +
   facet_grid(vars(Country)) +
@@ -159,7 +202,7 @@ print(p)
 ```
 
 ```{r}
-p <- ggplot(places.by.weekday[places.by.weekday$ISO_2 %in% c('HK', 'JP', 'NZ'),], aes(x=weekday, y=n)) +
+p <- ggplot(places.by.weekday[places.by.weekday$ISO_2 %in% c('MY', 'ID', 'NZ'),], aes(x=weekday, y=n)) +
   geom_bar(stat = "identity") +
   facet_grid(vars(Country)) +
   scale_fill_brewer(palette="Set3")+
@@ -207,6 +250,11 @@ print(p)
 ```
 
 
+## For the screenshot
+```{r}
+for.screenie <- df %>%
+  select(createdAt, venue.name, venue.location.cc, venue.location.lat, venue.location.lng, category)
+```
 
 
 
