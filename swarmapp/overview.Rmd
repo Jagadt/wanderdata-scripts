@@ -222,7 +222,6 @@ print(p)
 ```
 
 ```{r}
-
 places.by.date <- places.by.date %>%
   arrange(date)
 
@@ -232,12 +231,13 @@ places.by.date <- places.by.date %>%
   arrange(cumsum)
 ```
 
-```{r}
+
+```{r, message=FALSE}
 regression <- data.frame(x = 1:nrow(places.by.date), y = places.by.date$cumsum)
 
 p <- ggplot(places.by.date, aes(x=date, y=cumsum)) +
-  geom_line(aes(group = 1)) +
-  geom_smooth(aes(x = places.by.date$date, y = places.by.date$cumsum) , method = lm) +
+  geom_line(aes(group = 1), size = 2) +
+  geom_smooth(aes(x = date, y = cumsum, alpha = 0.4) , method = lm) +
   scale_fill_brewer(palette="Set3")+
   labs(title="Locations checked in by country",
        subtitle = "From a total of 784 check ins.") +
@@ -245,7 +245,44 @@ p <- ggplot(places.by.date, aes(x=date, y=cumsum)) +
   bbc_style() +
   theme(axis.title = element_text(size = 24), 
         plot.margin = unit(c(1.0,1.5,0.5,1.0), 'cm'),
-        axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)))
+        axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)),
+        legend.position = "none") +
+  geom_vline(xintercept=as.Date('2019-07-04'), size=1, linetype="dashed") +
+  annotate("text", x = as.Date('2019-07-07'), y = 320, 
+           label = 'Singapore', size = 5, angle = 90) +
+  geom_vline(xintercept=as.Date('2019-07-10'), size=1, linetype="dashed") +
+  annotate("text", x = as.Date('2019-07-15'), y = 320, 
+           label = 'Malaysia', size = 5, angle = 90) +
+  geom_vline(xintercept=as.Date('2019-08-03'), size=1, linetype="dashed") +
+  annotate("text", x = as.Date('2019-08-08'), y = 320, 
+           label = 'Thailand', size = 5, angle = 90) +
+  geom_vline(xintercept=as.Date('2019-08-31'), size=1, linetype="dashed") +
+  annotate("text", x = as.Date('2019-09-03'), y = 340, 
+           label = 'Cambodia', size = 5, angle = 90) +
+  geom_vline(xintercept=as.Date('2019-09-06'), size=1, linetype="dashed") +
+  annotate("text", x = as.Date('2019-09-11'), y = 360, 
+           label = 'Malaysia', size = 5, angle = 90) +
+  geom_vline(xintercept=as.Date('2019-09-27'), size=1, linetype="dashed") +
+  annotate("text", x = as.Date('2019-10-01'), y = 420, 
+           label = 'Singapore', size = 5, angle = 90) +
+  geom_vline(xintercept=as.Date('2019-10-15'), size=1, linetype="dashed") +
+  annotate("text", x = as.Date('2019-10-20'), y = 470, 
+           label = 'Indonesia', size = 5, angle = 90) +
+  geom_vline(xintercept=as.Date('2019-11-13'), size=1, linetype="dashed") +
+  annotate("text", x = as.Date('2019-11-17'), y = 540, 
+           label = 'Hong Kong', size = 5, angle = 90) +
+  geom_vline(xintercept=as.Date('2019-11-22'), size=1, linetype="dashed") +
+  annotate("text", x = as.Date('2019-11-26'), y = 600, 
+           label = 'Singapore', size = 5, angle = 90) +
+  geom_vline(xintercept=as.Date('2019-11-30'), size=1, linetype="dashed") +
+  annotate("text", x = as.Date('2019-12-04'), y = 650, 
+           label = 'Japan', size = 5, angle = 90) +
+  geom_vline(xintercept=as.Date('2019-12-17'), size=1, linetype="dashed") +
+  annotate("text", x = as.Date('2019-12-22'), y = 700, 
+           label = 'New Zealand', size = 5, angle = 90) +
+  geom_vline(xintercept=as.Date('2020-03-25'), size=1, linetype="dashed") +
+  annotate("text", x = as.Date('2020-03-30'), y = 550, 
+           label = 'Beginning of lockdown (NZ)', size = 5, angle = 90)
 print(p)
 ```
 

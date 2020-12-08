@@ -20,33 +20,29 @@ coordinates$posixct <- parsedate::parse_date(coordinates$createdAt)
 coordinates$date <- date(coordinates$posixct)
 coordinates$hour <- hour(coordinates$posixct)
 coordinates <- data.frame(id = coordinates$venue.id, lat = coordinates$venue.location.lat, lon = coordinates$venue.location.lng,
-                          country = df.2$venue.location.cc, state = df.2$venue.location.state, city = df.2$venue.location.city)
+                          country = coordinates$venue.location.cc, state = coordinates$venue.location.state, city = coordinates$venue.location.city)
 ```
 
 # Singapore
-
 ```{r}
-sg.data <- coordinates[coordinates$venue.location.cc == 'SG',]
-
-coordinates <- data.frame(id = sg.data$venue.id, lat = sg.data$venue.location.lat, lon = sg.data$venue.location.lng)
-coordinates$category <- sg.data$category
-
+sg.data <- coordinates[coordinates$country == 'SG',]
 
 # c(up, left), c(down,right)
 singapore.map <- openmap(c(1.4885,103.6059),
                          c(1.1899,104.0625),
-                         minNumTiles=40)
+                         minNumTiles=40,
+                         type='osm')
 
 map_longlat <- openproj(singapore.map)
 ```
 
 ```{r}
 p <- autoplot(map_longlat) +
-  geom_point(data = coordinates, 
-             aes(x = coordinates$lon, y = coordinates$lat)) +
-  stat_density2d(data=coordinates, aes(x=coordinates$lon, y=coordinates$lat, fill=..level.., alpha=..level..),
-                 geom='polygon', size=0.01, bins=5) +
-  scale_color_brewer(palette='Set1')+
+  geom_point(data = sg.data, 
+             aes(x = lon, y = lat, fill="black", color = "black"), colour ="black", pch=21, size=5, stroke = 2) +
+  # stat_density2d(data=coordinates, aes(x=coordinates$lon, y=coordinates$lat, fill=..level.., alpha=..level..), geom='polygon', size=0.01, bins=5) +
+  #geom_density_2d(data=sg.data, aes(x=lon, y=lat), size = 0.4, bins = 10) +
+  #scale_color_brewer(palette='Set1')+
   theme(legend.position = 'none',
         plot.title = element_text(size = 22),
         plot.subtitle = element_text(size = 18),
@@ -56,7 +52,7 @@ p <- autoplot(map_longlat) +
         axis.title.y = element_text(size = 14),
         plot.margin = unit(c(1.0,1.5,1.0,0.5), 'cm')) +
   xlab('Longitude') + ylab('Latitude') +
-  ggtitle('My Swarm check-ins', subtitle = 'From July 4, 2019 until July 10, 2019')
+  ggtitle('Check-ins from Singapore')
 print(p)
 ```
 
@@ -65,23 +61,19 @@ print(p)
 osaka.data <- coordinates[coordinates$state == 'Ōsaka' & coordinates$city != 'Kadoma',]
 osaka.data <- osaka.data[complete.cases(osaka.data), ]
 
-
-
 # c(up, left), c(down,right)
 osaka.map <- openmap(c(34.7396, 135.3716),
                      c(34.6151, 135.6000),
                      minNumTiles = 50, # minNumTiles = 50
                      type="osm")
 
-map_longlat <- openproj(osaka.map)
+osaka.map.longlat <- openproj(osaka.map)
 ```
 
 ```{r}
-p <- autoplot(map_longlat) +
+p <- autoplot(osaka.map.longlat) +
   geom_point(data = osaka.data, 
-             aes(x = osaka.data$lon, y = osaka.data$lat)) +
-  stat_density2d(data=osaka.data, aes(x=osaka.data$lon, y=osaka.data$lat, fill=..level.., alpha=..level..),
-                 geom='polygon', size=0.01, bins=5) +
+             aes(x = lon, y = lat, fill="black", color = "black"), colour ="black", pch=21, size=3, stroke = 2) +
   scale_color_brewer(palette='Set1')+
   theme(legend.position = 'none',
         plot.title = element_text(size = 22),
@@ -92,7 +84,7 @@ p <- autoplot(map_longlat) +
         axis.title.y = element_text(size = 14),
         plot.margin = unit(c(1.0,1.5,1.0,0.5), 'cm')) +
   xlab('Longitude') + ylab('Latitude') +
-  ggtitle('Osaka check-ins', subtitle = 'From July 4, 2019 until July 10, 2019')
+  ggtitle('Check-ins from Osaka (Japan)')
 print(p)
 ```
 
@@ -114,10 +106,7 @@ map_longlat.kl <- openproj(kl.map)
 ```{r}
 p <- autoplot(map_longlat.kl) +
   geom_point(data = kl.data, 
-             aes(x = kl.data$lon, y = kl.data$lat)) +
-  stat_density2d(data=kl.data, aes(x=kl.data$lon, y=kl.data$lat, fill=..level.., alpha=..level..),
-                 geom='polygon', size=0.01, bins=5) +
-  scale_color_brewer(palette='Set1')+
+             aes(x = lon, y = lat, fill="black", color = "black"), colour ="black", pch=21, size=3, stroke = 2) +
   theme(legend.position = 'none',
         plot.title = element_text(size = 22),
         plot.subtitle = element_text(size = 18),
@@ -127,7 +116,7 @@ p <- autoplot(map_longlat.kl) +
         axis.title.y = element_text(size = 14),
         plot.margin = unit(c(1.0,1.5,1.0,0.5), 'cm')) +
   xlab('Longitude') + ylab('Latitude') +
-  ggtitle('Kuala Lumpur check-ins', subtitle = 'From July 4, 2019 until July 10, 2019')
+  ggtitle('Check-ins from Kuala Lumpur (Malaysia)')
 print(p)
 ```
 
@@ -149,9 +138,7 @@ map_longlat.sr <- openproj(sr.map)
 ```{r}
 p <- autoplot(map_longlat.sr) +
   geom_point(data = sr.data, 
-             aes(x = sr.data$lon, y = sr.data$lat)) +
-  stat_density2d(data=sr.data, aes(x=sr.data$lon, y=sr.data$lat, fill=..level.., alpha=..level..),
-                 geom='polygon', size=0.01, bins=5) +
+             aes(x = lon, y = lat, fill="black", color = "black"), colour ="black", pch=21, size=3, stroke = 2) +
   scale_color_brewer(palette='Set1')+
   theme(legend.position = 'none',
         plot.title = element_text(size = 22),
@@ -162,7 +149,7 @@ p <- autoplot(map_longlat.sr) +
         axis.title.y = element_text(size = 14),
         plot.margin = unit(c(1.0,1.5,1.0,0.5), 'cm')) +
   xlab('Longitude') + ylab('Latitude') +
-  ggtitle('Siem Reap check-ins', subtitle = 'From July 4, 2019 until July 10, 2019')
+  ggtitle('Check-ins from Siem Reap (Cambodia)')
 print(p)
 ```
 
@@ -208,10 +195,10 @@ print(p)
 ```{r}
 p <- autoplot(map_longlat.nz) +
   geom_point(data = nz.data, 
-             aes(x = lon, y = lat)) +
+             aes(x = lon, y = lat, fill="black", color = "black"), colour ="black", pch=21, size=2, stroke = 1) +
   # stat_density2d(data=nz.data, aes(x=lon, y=lat, fill=..level.., alpha=..level..), geom='polygon', size=0.001, bins=10) +
   # stat_density2d(data=nz.data, aes(x=lon, y=lat, fill=..level.., alpha=..level..), geom='polygon', size=0.001, bins=10) +
-  geom_density_2d(data=nz.data, aes(x=lon, y=lat), size = 0.4, bins = 10) +
+  # geom_density_2d(data=nz.data, aes(x = lon,y = lat, color = 'red'), size = 0.4, bins = 10) +
   scale_color_brewer(palette='Set1')+
   theme(legend.position = 'none',
         plot.title = element_text(size = 22),
@@ -222,7 +209,7 @@ p <- autoplot(map_longlat.nz) +
         axis.title.y = element_text(size = 14),
         plot.margin = unit(c(1.0,1.5,1.0,0.5), 'cm')) +
   xlab('Longitude') + ylab('Latitude') +
-  ggtitle('New Zealand checked-in locations', subtitle = 'From July 4, 2019 until July 10, 2019')
+  ggtitle('Check-ins from New Zealand')
 print(p)
 ```
 
