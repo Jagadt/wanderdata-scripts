@@ -20,8 +20,6 @@ dump(clf, 'decision_tree_051220.joblib')
 y_pred = clf.predict(X)
 print(classification_report(y, y_pred))
 
-#tree.plot_tree(clf, filled=True)
-
 
 fig, ax = plt.subplots(figsize=(50, 24))
 tree.plot_tree(clf, fontsize=6)

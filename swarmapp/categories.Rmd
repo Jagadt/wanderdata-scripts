@@ -32,6 +32,12 @@ df$category[sapply(df$category, is.null)] <- NA
 df$category <- unlist(df$category)
 
 df$posixct <- parsedate::parse_date(df$createdAt)
+df$date <- date(df$posixct)
+df$hour <- hour(df$posixct)
+df$weekday <- weekdays(df$posixct)
+df$local.posixct <- parsedate::parse_date(df$createdAt + (df$timeZoneOffset * 60))
+
+df <- df[df$date >= '2019-05-29',]
 ```
 
 ```{r}
@@ -139,12 +145,19 @@ categories <- categories[categories$subcategory != 'Invalid',]
 p <- ggplot(categories[categories$subcategory != "Coffee" & categories$subcategory != "Food" & categories$subcategory != "Shopping",], aes(y=weekday, x=hour)) +
           geom_count() +
           facet_grid(vars(subcategory))+
-          xlab('Date') + 
-          ylab('Pressure') +
+          xlab('Hour') + 
+          ylab('Day of the week') +
           theme(axis.title = element_text(size = 24), 
                 plot.margin = unit(c(1.0,1.5,0.5,1.0), 'cm'),
-                axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0))) +
-          guides(colour = guide_legend(nrow = 1)) 
+                axis.text.x  = element_text(size = 14),
+                axis.text.y  = element_text(size = 14),
+                axis.title.x = element_text(size = 14),
+                axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0), 
+                                            size = 14),
+                legend.position = "none") +
+          guides(colour = guide_legend(nrow = 1)) +
+  labs(title="Date and day of the week of check-ins of joint category \"Drinks\" and \"Library\"",
+       subtitle = "Where the size of the point is proportional to the number of check-ins.") 
 print(p)
 ```
 
@@ -153,5 +166,11 @@ print(p)
 categories.to.print <- categories
 categories.to.print$category <- NULL
 write.csv(categories.to.print, file = 'subcategories.csv', row.names = FALSE)
+```
+
+```{r}
+sm <- df[df$category == 'Shopping Mall',]
+sm <- sm %>%
+  select(venue.location.cc, category, hour, weekday)
 ```
 
